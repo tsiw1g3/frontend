@@ -1,22 +1,38 @@
 import React, { useContext, useState } from "react";
 import { MyContext } from "../../Context";
-import "./styles.css";
 
-function Login() {
-  const { toggleNav, loginUser, isLoggedIn } = useContext(MyContext);
-
+function Register() {
+  const { toggleNav, registerUser } = useContext(MyContext);
   const initialState = {
     userInfo: {
-      username: "",
+      name: "",
+      email: "",
       password: "",
     },
     errorMsg: "",
     successMsg: "",
   };
-
   const [state, setState] = useState(initialState);
 
-  // On change input value (email & password)
+  // On Submit the Registration Form
+  const submitForm = async (event) => {
+    event.preventDefault();
+    const data = await registerUser(state.userInfo);
+    if (data.success) {
+      setState({
+        ...initialState,
+        successMsg: data.message,
+      });
+    } else {
+      setState({
+        ...state,
+        successMsg: "",
+        errorMsg: data.message,
+      });
+    }
+  };
+
+  // On change the Input Value (name, email, password)
   const onChangeValue = (e) => {
     setState({
       ...state,
@@ -27,25 +43,7 @@ function Login() {
     });
   };
 
-  // On Submit Login From
-  const submitForm = async (event) => {
-    event.preventDefault();
-    const data = await loginUser(state.userInfo);
-    if (data.data) {
-      setState({
-        ...initialState,
-      });
-      localStorage.setItem("loginToken", data.data);
-      await isLoggedIn();
-    } else {
-      setState({
-        ...state,
-        successMsg: "",
-      });
-    }
-  };
-
-  // Show Message on Error or Success
+  // Show Message on Success or Error
   let successMsg = "";
   let errorMsg = "";
   if (state.errorMsg) {
@@ -66,42 +64,53 @@ function Login() {
         />
       </div>
       <div className="column right">
-        <h1>Login</h1>
+        <h1>Registre-se</h1>
         <form onSubmit={submitForm} noValidate>
           <div className="form-control">
-            <label>Usuário</label>
+            <label>Nome Completo</label>
             <input
-              name="username"
-              type="text"
+              name="name"
               required
-              placeholder="Usuário"
-              value={state.userInfo.email}
+              type="text"
+              value={state.userInfo.name}
               onChange={onChangeValue}
+              placeholder="Enter your name"
             />
           </div>
           <div className="form-control">
-            <label>Senha</label>
+            <label>Email</label>
+            <input
+              name="email"
+              required
+              type="email"
+              value={state.userInfo.email}
+              onChange={onChangeValue}
+              placeholder="Enter your email"
+            />
+          </div>
+          <div className="form-control">
+            <label>Password</label>
             <input
               name="password"
-              type="password"
               required
-              placeholder="Digite sua senha"
+              type="password"
               value={state.userInfo.password}
               onChange={onChangeValue}
+              placeholder="Enter your password"
             />
           </div>
           {errorMsg}
           {successMsg}
           <div className="form-control">
-            <button type="submit">Login</button>
+            <button type="submit">Sign Up</button>
           </div>
         </form>
         <div className="_navBtn">
-          <button onClick={toggleNav}>Register</button>
+          <button onClick={toggleNav}>Login</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Register;

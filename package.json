@@ -2,7 +2,7 @@
   "name": "moon-monografia_online",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://tsiw1g3.github.io/",
+  "homepage": "https://tsiw1g3.github.io/frontend",
   "dependencies": {
     "@date-io/date-fns": "1.x",
     "@fullcalendar/daygrid": "^5.9.0",
