@@ -1,0 +1,10 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(65, 97, 108, 255);
+}
+
+.logo {
+  color: aliceblue;
+  margin-left: 1rem;
+}
