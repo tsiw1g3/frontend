@@ -1,35 +1,35 @@
 import React, { useContext, useState } from "react";
 import { MyContext } from "../../Context";
+import { useHistory } from "react-router-dom";
 
 function Register() {
   const { toggleNav, registerUser } = useContext(MyContext);
+  // academic_title = nome
   const initialState = {
     userInfo: {
-      name: "",
+      academic_title: "",
       email: "",
+      username: "",
       password: "",
+      universidade: "",
     },
     errorMsg: "",
     successMsg: "",
   };
   const [state, setState] = useState(initialState);
 
+  const history = useHistory();
+
+  const goToLogin = () => {
+    let path = `login`;
+    history.push(path);
+  }
+
   // On Submit the Registration Form
   const submitForm = async (event) => {
     event.preventDefault();
     const data = await registerUser(state.userInfo);
-    if (data.success) {
-      setState({
-        ...initialState,
-        successMsg: data.message,
-      });
-    } else {
-      setState({
-        ...state,
-        successMsg: "",
-        errorMsg: data.message,
-      });
-    }
+    goToLogin();
   };
 
   // On change the Input Value (name, email, password)
@@ -69,13 +69,14 @@ function Register() {
           <div className="form-control">
             <label>Nome Completo</label>
             <input
-              name="name"
+              name="academic_title"
               required
               type="text"
-              value={state.userInfo.name}
+              value={state.userInfo.academic_title}
               onChange={onChangeValue}
-              placeholder="Enter your name"
+              placeholder="Insira seu nome"
             />
+            <p></p>
           </div>
           <div className="form-control">
             <label>Email</label>
@@ -85,29 +86,52 @@ function Register() {
               type="email"
               value={state.userInfo.email}
               onChange={onChangeValue}
-              placeholder="Enter your email"
+              placeholder="Insira seu email"
             />
+            <p></p>
           </div>
           <div className="form-control">
-            <label>Password</label>
+            <label>Username</label>
+            <input
+              name="username"
+              required
+              type="username"
+              value={state.userInfo.username}
+              onChange={onChangeValue}
+              placeholder="Insira seu username"
+            />
+            <p></p>
+          </div>
+          <div className="form-control">
+            <label>Senha</label>
             <input
               name="password"
               required
               type="password"
               value={state.userInfo.password}
               onChange={onChangeValue}
-              placeholder="Enter your password"
+              placeholder="Insira sua senha"
             />
+            <p></p>
+          </div>
+          <div className="form-control">
+            <label>Universidade</label>
+            <input
+              name="universidade"
+              required
+              type="universidade"
+              value={state.userInfo.universidade}
+              onChange={onChangeValue}
+              placeholder="Insira sua universidade"
+            />
+            <p></p>
           </div>
           {errorMsg}
           {successMsg}
           <div className="form-control">
-            <button type="submit">Sign Up</button>
+            <button type="submit" onClick={submitForm}>Registrar</button>
           </div>
         </form>
-        <div className="_navBtn">
-          <button onClick={toggleNav}>Login</button>
-        </div>
       </div>
     </div>
   );

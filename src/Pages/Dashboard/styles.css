@@ -89,5 +89,5 @@
   transform: translate(-50%, -50%);
 }
 
-.left-btn { float: left; color: white}
+.left-btn { float: left; }
 .right-btn { float: right; }

@@ -6,7 +6,7 @@ import axios from "axios";
 import ReactLoading from "react-loading";
 import { Button } from "@material-ui/core";
 
-function Home() {
+function Dashboard() {
   const { toggleNav, registerUser } = useContext(MyContext);
 
   const [data, setData] = useState([]);
@@ -45,21 +45,11 @@ function Home() {
       var bodyFormData = new FormData();
       axios({
         method: "get",
-        url: "https://organizacao-de-defesas.herokuapp.com/banca",
+        url: "https://organizacao-de-defesas.herokuapp.com/usuario/" + userId + "/banca",
         data: bodyFormData,
-        headers: { "Accept": "application/json" },
+        headers: { "Content-Type": "multipart/form-data", "Authorization": loginToken, "Accept": "application/json" },
       }).then(function (response) {
-        var events = response.data.data;
-        if (events) {
-          events.forEach(e => {
-            e.data = new Date(e.data_realizacao);
-          });
-          const dt = new Date();
-          events.sort((a, b) => a.data_realizacao < b.data_realizacao ? -1 : 1);
-          events = events.filter((a) => a.data > dt);
-          events.slice(0, 5);
-          setData(events);
-        }
+        setData(response.data.data);
         setDone(true);
         return response;
       });
@@ -79,22 +69,39 @@ function Home() {
         </div>
       ) : (
         <div className="container">
-          <h3 className="left-btn">
-            Proximos eventos
-          </h3>
+          <div class="left-btn">
+            <Button
+              type="button"
+              variant="contained"
+              color="primary"
+              onClick={addBanca}
+            >
+              Adicionar banca
+            </Button>
+          </div>
+          <div class="right-btn">
+            <Button
+              type="button"
+              variant="contained"
+              color="primary"
+              onClick={logout}
+            >
+              Logout
+            </Button>
+          </div>
           <div className="user-list">
             {data && data.length > 0 ? (
               data.map((banca) => (
                 <div key={banca.id} className="user">
                   <span className="user-id">{banca.id}</span>
-                  <span className="user-name">{banca.titulo_trabalho}</span>
+                  <button onClick={() => editBanca(banca)} className="user-name">{banca.titulo_trabalho}</button>
                   <div className="user-right">
-                    <span className="user-role">{banca.local}</span>
-                    <span className="user-role">{banca.data.toLocaleString("pt-BR")}</span>
+                    <button onClick={() => addUser(banca.id)} className="user-role">Adicionar Usuário</button>
                   </div>
                 </div>
               ))
-            ) : (<p></p>
+            ) : (
+              <h1></h1>
             )}
           </div>
         </div>
@@ -104,4 +111,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Dashboard;

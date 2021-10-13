@@ -1,5 +1,7 @@
 import React, { createContext, Component } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom"
+
 export const MyContext = createContext();
 
 // Define the base URL
@@ -8,8 +10,13 @@ const Axios = axios.create({
 });
 
 class MyContextProvider extends Component {
+
   constructor() {
     super();
+    this.state = {
+      loading: true,
+      data: [],
+    }
     this.isLoggedIn();
   }
 
@@ -40,45 +47,56 @@ class MyContextProvider extends Component {
 
   registerUser = async (user) => {
     // Sending the user registration request
-    const register = await Axios.post("register.php", {
-      name: user.name,
+    const register = await Axios.post("usuario", {
+      nome: user.nome,
       email: user.email,
+      username: user.username,
       password: user.password,
+      school: user.universidade,
+      academic_title: "Bacharelado",
+      status: "user",
     });
 
     return register.data;
   };
 
   loginUser = async (user) => {
-    // Sending the user Login request
-    const login = await Axios.post("login", {
-      username: user.username,
-      password: user.password,
-    });
-    return login.data;
+
+    // const history = useHistory();
+
+    // function handleClick() {
+    //   history.push("/banca/criar");
+    // }
+
+    var bodyFormData = new FormData();
+    bodyFormData.append('username', user.username);
+    bodyFormData.append('password', user.password);
+
+
+    const res = await axios({
+      method: "post",
+      url: "https://organizacao-de-defesas.herokuapp.com/login",
+      // url: "http://organizacao-de-defesas.herokuapp.com/login",
+      data: bodyFormData,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then(function (response) {
+        //handle success
+        // handleClick();
+        return response;
+      })
+      .catch(function (response) {
+        //handle error
+        return 0;
+      });
+
+    return res;
+    // return login.data;
   };
 
   // Checking user logged in or not
   isLoggedIn = async () => {
-    const loginToken = localStorage.getItem("loginToken");
 
-    // If inside the local-storage has the JWT token
-    if (loginToken) {
-      //Adding JWT token to axios default header
-      Axios.defaults.headers.common["Authorization"] = "bearer " + loginToken;
-
-      // Fetching the user information
-      const { data } = await Axios.get("user-info.php");
-
-      // If user information is successfully received
-      if (data.success && data.user) {
-        this.setState({
-          ...this.state,
-          isAuth: true,
-          theUser: data.user,
-        });
-      }
-    }
   };
 
   render() {

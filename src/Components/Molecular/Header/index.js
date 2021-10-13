@@ -50,6 +50,9 @@ function Header() {
           <MenuItem component={Link} to="/register">
             Registre-se
           </MenuItem>
+          <MenuItem component={Link} to="/dashboard">
+            Dashboard
+          </MenuItem>
         </Menu>
       </div>
     </div>

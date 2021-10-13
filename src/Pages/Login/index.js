@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { MyContext } from "../../Context";
+import { useHistory } from "react-router-dom";
 import "./styles.css";
 
 function Login() {
@@ -13,6 +14,13 @@ function Login() {
     errorMsg: "",
     successMsg: "",
   };
+
+  const history = useHistory();
+
+  const routeChange = () => {
+    let path = `dashboard`;
+    history.push(path);
+  }
 
   const [state, setState] = useState(initialState);
 
@@ -35,8 +43,10 @@ function Login() {
       setState({
         ...initialState,
       });
-      localStorage.setItem("loginToken", data.data);
-      await isLoggedIn();
+      localStorage.setItem("userId", data.data.id);
+      localStorage.setItem("loginToken", data.data.token);
+      routeChange();
+      // await isLoggedIn();
     } else {
       setState({
         ...state,
@@ -79,6 +89,7 @@ function Login() {
               onChange={onChangeValue}
             />
           </div>
+          <p></p>
           <div className="form-control">
             <label>Senha</label>
             <input
@@ -92,13 +103,11 @@ function Login() {
           </div>
           {errorMsg}
           {successMsg}
+          <p></p>
           <div className="form-control">
-            <button type="submit">Login</button>
+            <button /* onClick={routeChange}  */ type="submit">Login</button>
           </div>
         </form>
-        <div className="_navBtn">
-          <button onClick={toggleNav}>Register</button>
-        </div>
       </div>
     </div>
   );
