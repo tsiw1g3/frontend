@@ -87,6 +87,7 @@ function ExaminingBoard() {
     var date = new Date(values.data_realizacao);
     const loginToken = localStorage.getItem("loginToken");
 
+    hour.setHours(hour.getHours() - 3);
     hour.setDate(date.getDate());
     hour.setMonth(date.getMonth());
     hour.setFullYear(date.getFullYear());
