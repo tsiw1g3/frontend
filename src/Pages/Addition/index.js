@@ -17,9 +17,8 @@ function Addition() {
 
   const history = useHistory();
 
-  const goToDashboard = () => {
-    let path = `dashboard`;
-    history.push(path);
+  const reload = () => {
+    window.location.reload();
   }
 
   const loginToken = localStorage.getItem("loginToken");
@@ -32,7 +31,7 @@ function Addition() {
       url: `https://organizacao-de-defesas.herokuapp.com/banca/${bancaId}/user/${id}`,
       headers: { "Content-Type": "multipart/form-data", "Authorization": loginToken, "Accept": "application/json" },
     }).then(function (response) {
-      goToDashboard();
+      reload();
     });
   }
 
@@ -46,7 +45,7 @@ function Addition() {
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data", "Authorization": loginToken, "Accept": "application/json" },
     }).then(function (response) {
-      goToDashboard();
+      reload();
     });
   }
 

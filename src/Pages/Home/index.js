@@ -90,7 +90,7 @@ function Home() {
                   <span className="user-name">{banca.titulo_trabalho}</span>
                   <div className="user-right">
                     <span className="user-role">{banca.local}</span>
-                    <span className="user-role">{banca.data.toLocaleString("pt-BR")}</span>
+                    <span className="user-role">{banca.data.toLocaleString("pt-BR", { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                 </div>
               ))
