@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import "./styles.css";
 
 function Login() {
-  const { toggleNav, loginUser, isLoggedIn } = useContext(MyContext);
+  const { loginUser } = useContext(MyContext);
 
   const initialState = {
     userInfo: {
@@ -20,7 +20,7 @@ function Login() {
   const routeChange = () => {
     let path = `dashboard`;
     history.push(path);
-  }
+  };
 
   const [state, setState] = useState(initialState);
 

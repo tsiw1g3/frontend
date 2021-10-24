@@ -3,22 +3,26 @@ import { createTheme } from "@material-ui/core/styles";
 // A custom theme for this app
 const theme = createTheme({
   palette: {
-    type: "light",
+    type: "dark",
     primary: {
-      main: "#61dafb",
-      light: "#61dafb",
-      dark: "#21a1c4",
+      main: "#fff",
+      light: "#fff",
+      dark: "#fff",
     },
     secondary: {
-      main: "#b5ecfb",
-      light: "#61dafb",
-      dark: "#21a1c4",
+      main: "#fff",
+      light: "#fff",
+      dark: "#fff",
+    },
+    input: {
+      color: "white",
     },
     error: {
       main: red.A400,
     },
     background: {
-      default: "#282c34",
+      default: "#DCE3E9",
+      image: "url(/img/bg.png)",
     },
   },
   overrides: {

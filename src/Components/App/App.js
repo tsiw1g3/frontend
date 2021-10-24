@@ -11,10 +11,22 @@ function App() {
     <HashRouter>
       <Context>
         <Header />
-        <body style={{ minHeight: 500 }}>
-          <Routes />
-        </body>
-        <Footer />
+        <div
+          className="app-container"
+          style={{
+            minHeight: 500,
+            backgroundImage: `url(/frontend/img/bg.png)`,
+          }}
+        >
+          <div
+            style={{
+              minHeight: 500,
+            }}
+          >
+            <Routes />
+          </div>
+          <Footer />
+        </div>
       </Context>
     </HashRouter>
   );
