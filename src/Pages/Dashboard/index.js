@@ -96,7 +96,9 @@ function Dashboard() {
                   <span className="user-id">{banca.id}</span>
                   <button onClick={() => editBanca(banca)} className="user-name">{banca.titulo_trabalho}</button>
                   <div className="user-right">
-                    <button onClick={() => addUser(banca.id)} className="user-role">Adicionar Usuário</button>
+                  <a  href="javascript:onClick={() => addUser(banca.id)}" onClick={() => addUser(banca.id)}> 
+                     <img  src='/img/adicionar-usuario.png'/>
+                     </a> 
                   </div>
                 </div>
               ))
