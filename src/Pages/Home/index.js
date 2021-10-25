@@ -78,27 +78,32 @@ const Home = () => {
         </div>
       ) : (
         <div className="container">
-          <h3 className="left-btn">Proximos eventos</h3>
+          <h3 className="left-btn" style={{ color: "#000" }}>
+            Próximos eventos
+          </h3>
           <div className="user-list">
             {data && data.length > 0 ? (
-              data.map((banca) => (
-                <div key={banca.id} className="user">
-                  <span className="user-id">{banca.id}</span>
-                  <span className="user-name">{banca.titulo_trabalho}</span>
-                  <div className="user-right">
-                    <span className="user-role">{banca.local}</span>
-                    <span className="user-role">
-                      {banca.data.toLocaleString("pt-BR", {
-                        year: "numeric",
-                        month: "numeric",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </span>
+              data.map((banca) => {
+                console.log(banca);
+                return (
+                  <div key={banca.id} className="user">
+                    <span className="user-id">Defesa de TCC</span>
+                    <span className="user-name">{banca.titulo_trabalho}</span>
+                    <div className="user-right">
+                      <span className="user-role">{banca.local}</span>
+                      <span className="user-role">
+                        {banca.data.toLocaleString("pt-BR", {
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <p></p>
             )}
