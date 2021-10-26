@@ -84,7 +84,6 @@ const Home = () => {
           <div className="user-list">
             {data && data.length > 0 ? (
               data.map((banca) => {
-                console.log(banca);
                 return (
                   <div key={banca.id} className="user">
                     <span className="user-id">Defesa de TCC</span>

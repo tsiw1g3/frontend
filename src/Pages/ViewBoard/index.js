@@ -54,6 +54,7 @@ function ViewBoard() {
       <DatePicker
         {...rest}
         name={name}
+        format="dd/MM/yyyy"
         helperText={showError ? meta.error || meta.submitError : undefined}
         error={showError}
         inputProps={restInput}
@@ -148,6 +149,22 @@ function ViewBoard() {
     }
     return errors;
   };
+
+  const generateReport = async () => {
+    fetch(`https://organizacao-de-defesas.herokuapp.com/documento/${banca.id}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': loginToken,
+      }
+    }) // FETCH BLOB FROM IT
+      .then((response) => response.blob())
+      .then((blob) => { // RETRIEVE THE BLOB AND CREATE LOCAL URL
+        var _url = window.URL.createObjectURL(blob);
+        window.open(_url, "_blank").focus(); // window.open + focus
+      }).catch((err) => {
+        console.log(err);
+      });
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -318,6 +335,18 @@ function ViewBoard() {
                           >
                             Editar
                           </Button>
+                          {
+                            role == 'orientador' ?
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => { generateReport(); }}
+                              >
+                                Gerar relatório
+                              </Button>
+                              :
+                              <p></p>
+                          }
                         </Grid>
                       </Grid>
                     </Paper>
