@@ -63,17 +63,27 @@
 
 .user-name {
   color: rgb(65, 97, 108);
+  margin-left: 20px; 
+  text-transform:capitalize;
 }
 
 .user-right {
   color: rgb(65, 97, 108);
   margin-left: auto; 
-  padding-right: 20px;
+}
+
+.role {
+  color: rgb(0, 0, 0);
+  text-transform: capitalize;
 }
 
 .user-role {
   color: rgb(65, 97, 108);
   margin-left: 20px; 
+}
+
+.hide {
+  margin-right: 215px;
 }
 
 .user-age {

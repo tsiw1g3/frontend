@@ -4,13 +4,13 @@ import { useHistory } from "react-router-dom";
 
 function Register() {
   const { toggleNav, registerUser } = useContext(MyContext);
-  // academic_title = nome
   const initialState = {
     userInfo: {
-      academic_title: "",
+      nome: "",
       email: "",
       username: "",
       password: "",
+      academic_title: "",
       universidade: "",
     },
     errorMsg: "",
@@ -69,10 +69,10 @@ function Register() {
           <div className="form-control">
             <label>Nome Completo</label>
             <input
-              name="academic_title"
+              name="nome"
               required
               type="text"
-              value={state.userInfo.academic_title}
+              value={state.userInfo.nome}
               onChange={onChangeValue}
               placeholder="Insira seu nome"
             />
