@@ -55,7 +55,7 @@ function Addition() {
       var bodyFormData = new FormData();
       const users = axios({
         method: "get",
-        url: "https://organizacao-de-defesas.herokuapp.com/banca/" + bancaId + "/users",
+        url: "https://organizacao-de-defesas.herokuapp.com/usuario-banca/usuarios/" + bancaId,
         data: bodyFormData,
         headers: { "Content-Type": "multipart/form-data", "Authorization": loginToken, "Accept": "application/json" },
       }).then(function (response) {
@@ -63,7 +63,7 @@ function Addition() {
         setDone2(true);
         let ids = [];
         for (var i = 0; i < response.data.data.length; ++i) {
-          ids.push(response.data.data[i].id);
+          ids.push(parseInt(response.data.data[i].id));
         }
         setUserIds(ids);
         return response;
@@ -104,10 +104,15 @@ function Addition() {
             {inn && inn.length > 0 ? (
               inn.map((user) => (
                 <div key={user.id} className="user">
-                  <span className="user-id">{user.id}</span>
-                  <span className="user-name">{user.username}</span>
+                  <span className="user-name">{user.nome}</span>
                   <div className="user-right">
-                    <button onClick={() => removeUser(user.id)} className="user-role">Remover da banca</button>
+                    <span className="role">{user.role}</span>
+                    {
+                      user.role != "orientador" ?
+                        <button onClick={() => removeUser(user.id)} className="user-role">Remover da banca</button>
+                        :
+                        <div className="hide"></div>
+                    }
                   </div>
                 </div>
               ))
@@ -117,10 +122,9 @@ function Addition() {
           </div>
           <div className="user-list">
             {data && data.length > 0 ? (
-              data.filter(function (e) { return !userIds.includes(e.id) && e.titulo_academico != 'admin'; }).map((user) => ((
+              data.filter(function (e) { return !userIds.includes(e.id); }).map((user) => ((
                 <div key={user.id} className="user">
-                  <span className="user-id">{user.id}</span>
-                  <span className="user-name">{user.username}</span>
+                  <span className="user-name">{user.nome}</span>
                   <div className="user-right">
                     <button onClick={() => addUser(user.id, 'avaliador')} className="user-role">Adicionar como avaliador</button>
                     <button onClick={() => addUser(user.id, 'aluno')} className="user-role">Adicionar como aluno</button>

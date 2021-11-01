@@ -76,7 +76,7 @@ function Dashboard() {
         </div>
       ) : (
         <div className="container">
-          <div class="left-btn">
+          <div className="left-btn">
             <Button
               type="button"
               variant="contained"

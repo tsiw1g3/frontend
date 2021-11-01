@@ -54,6 +54,7 @@ function ViewBoard() {
       <DatePicker
         {...rest}
         name={name}
+        format="dd/MM/yyyy"
         helperText={showError ? meta.error || meta.submitError : undefined}
         error={showError}
         inputProps={restInput}
@@ -149,6 +150,24 @@ function ViewBoard() {
     return errors;
   };
 
+  const generateReport = async () => {
+    fetch(`https://organizacao-de-defesas.herokuapp.com/documento/${banca.id}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': loginToken,
+      }
+    }) // FETCH BLOB FROM IT
+      .then((response) => response.blob())
+      .then((blob) => { // RETRIEVE THE BLOB AND CREATE LOCAL URL
+        setDone(true);
+        var _url = window.URL.createObjectURL(blob);
+        window.open(_url, "_blank").focus(); // window.open + focus
+      }).catch((err) => {
+        setDone(true);
+        console.log(err);
+      });
+  }
+
   useEffect(() => {
     setTimeout(() => {
       axios({
@@ -212,6 +231,7 @@ function ViewBoard() {
                 render={({ handleSubmit, reset, submitting, pristine, values }) => (
                   <form onSubmit={handleSubmit} noValidate>
                     <Paper style={{ padding: 16 }}>
+                      <div className="cargo">Cargo: {role}</div>
                       <Grid container alignItems="flex-start" spacing={2}>
                         <Grid item xs={12}>
                           <Field
@@ -318,6 +338,18 @@ function ViewBoard() {
                           >
                             Editar
                           </Button>
+                          {
+                            role == 'orientador' ?
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => { setDone(false); generateReport(); }}
+                              >
+                                Gerar relatório
+                              </Button>
+                              :
+                              <p></p>
+                          }
                         </Grid>
                       </Grid>
                     </Paper>
