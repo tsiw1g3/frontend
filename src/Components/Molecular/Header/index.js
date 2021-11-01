@@ -80,43 +80,35 @@ const Header = () => {
         </div>
 
         {isUserLogged ? (
-          <div>
+          <div className="login-form">
             <Button
-              id="basic-button"
-              aria-controls="basic-menu"
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-              style={{ marginTop: 20 }}
+              className="login-button"
+              component={Link}
+              to="/"
+              style={{ marginTop: -20, marginLeft: 20 }}
             >
-              <MenuIcon />
+              Home
             </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
+            <Button
+              className="login-button"
+              component={Link}
+              to="/dashboard"
+              style={{ marginTop: -20, marginLeft: 20 }}
             >
-              <MenuItem component={Link} to="/">
-                Home
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  logoutUser();
-                  setIsUserLogged(false);
-                  setUser(initialUser);
-                  redirectTo("/");
-                }}
-              >
-                Logout
-              </MenuItem>
-              <MenuItem component={Link} to="/dashboard">
-                Dashboard
-              </MenuItem>
-            </Menu>
+              Dashboard
+            </Button>
+            <Button
+              className="login-button"
+              onClick={() => {
+                logoutUser();
+                setIsUserLogged(false);
+                setUser(initialUser);
+                redirectTo("/");
+              }}
+              style={{ marginTop: -20, marginLeft: 20 }}
+            >
+              Logout
+            </Button>
           </div>
         ) : (
           <form className="login-form" onSubmit={submitForm}>
@@ -126,6 +118,7 @@ const Header = () => {
               label="Usuário"
               variant="outlined"
               size="small"
+              style={{ marginLeft: 20 }}
               onChange={onChangeValue}
             />
             <TextField
@@ -135,12 +128,13 @@ const Header = () => {
               variant="outlined"
               size="small"
               type="password"
+              style={{ marginLeft: 20 }}
               onChange={onChangeValue}
             />
             <Button
               className="login-button"
               type="submit"
-              style={{ marginTop: -20 }}
+              style={{ marginTop: -20, marginLeft: 20 }}
             >
               Entrar
             </Button>
