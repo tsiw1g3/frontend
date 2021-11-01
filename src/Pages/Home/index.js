@@ -1,10 +1,7 @@
-import React, { useEffect, useContext, useState } from "react";
-import { MyContext } from "../../Context";
-import { useHistory } from "react-router-dom";
-import "./styles.css";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ReactLoading from "react-loading";
-import { Button } from "@material-ui/core";
+import DataTable from "../../Components/Molecular/Table";
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -50,14 +47,17 @@ const Home = () => {
         if (events) {
           events.forEach((e) => {
             e.data = new Date(e.data_realizacao);
+            e.autor = "Fred Durão";
+            e.tipo = "TCC";
           });
           const dt = new Date();
           events.sort((a, b) =>
             a.data_realizacao < b.data_realizacao ? -1 : 1
           );
           events = events.filter((a) => a.data > dt);
-          events.slice(0, 5);
+          // events.slice(0, 5);
           setData(events);
+          console.log(data);
         }
         setDone(true);
         return response;
@@ -81,8 +81,9 @@ const Home = () => {
           <h3 className="left-btn" style={{ color: "#000" }}>
             Próximas defesas
           </h3>
+          {/* TODO Remover código de tabela legado */}
           <div className="user-list">
-            {data && data.length > 0 ? (
+            {/* {data && data.length > 0 ? (
               data.map((banca) => {
                 return (
                   <div key={banca.id} className="user">
@@ -105,8 +106,10 @@ const Home = () => {
               })
             ) : (
               <p></p>
-            )}
+            )} */}
           </div>
+          <DataTable rows={data} />
+          {console.log(data)}
         </div>
       )}
     </>

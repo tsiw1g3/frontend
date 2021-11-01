@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useHistory } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
-import { ThemeProvider } from "@material-ui/core/styles";
 import "./styles.css";
 
 const Header = () => {
