@@ -3,9 +3,15 @@ import axios from "axios";
 import ReactLoading from "react-loading";
 import DataTable from "../../Components/Molecular/Table";
 
+/*
+  Componente responsável pela homepage
+*/
+
 const Home = () => {
   const [data, setData] = useState([]);
   const [done, setDone] = useState(undefined);
+
+  //TODO Remover código legado
 
   // const { isLoggedIn } = useContext(MyContext);
 
@@ -47,6 +53,7 @@ const Home = () => {
         if (events) {
           events.forEach((e) => {
             e.data = new Date(e.data_realizacao);
+            //TODO Pegar valores reais de autor e tipo de defesa
             e.autor = "Fred Durão";
             e.tipo = "TCC";
           });

@@ -2,6 +2,10 @@ import React from "react";
 
 import "./styles.css";
 
+/*
+  Componente responsável pela renderização do rodapé da aplicação
+*/
+
 function Footer() {
   return (
     <div className="footer" bg="light" expand="lg" fixed="bottom">

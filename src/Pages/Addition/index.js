@@ -6,6 +6,10 @@ import axios from "axios";
 import ReactLoading from "react-loading";
 import { Button } from "@material-ui/core";
 
+/*
+  Componente responsável pela página de adição de usuários à bancas
+*/
+
 function Addition() {
   const { toggleNav, registerUser } = useContext(MyContext);
 
@@ -19,7 +23,7 @@ function Addition() {
 
   const reload = () => {
     window.location.reload();
-  }
+  };
 
   const loginToken = localStorage.getItem("loginToken");
   const userId = localStorage.getItem("userId");
@@ -29,35 +33,48 @@ function Addition() {
     axios({
       method: "delete",
       url: `https://organizacao-de-defesas.herokuapp.com/banca/${bancaId}/user/${id}`,
-      headers: { "Content-Type": "multipart/form-data", "Authorization": loginToken, "Accept": "application/json" },
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: loginToken,
+        Accept: "application/json",
+      },
     }).then(function (response) {
       reload();
     });
-  }
+  };
 
   const addUser = (id, role) => {
     var bodyFormData = new FormData();
-    bodyFormData.append('id_usuario', id);
-    bodyFormData.append('role', role);
+    bodyFormData.append("id_usuario", id);
+    bodyFormData.append("role", role);
     axios({
       method: "post",
       url: `https://organizacao-de-defesas.herokuapp.com/usuario-banca/${bancaId}`,
       data: bodyFormData,
-      headers: { "Content-Type": "multipart/form-data", "Authorization": loginToken, "Accept": "application/json" },
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: loginToken,
+        Accept: "application/json",
+      },
     }).then(function (response) {
       reload();
     });
-  }
-
+  };
 
   useEffect(() => {
     setTimeout(() => {
       var bodyFormData = new FormData();
       const users = axios({
         method: "get",
-        url: "https://organizacao-de-defesas.herokuapp.com/usuario-banca/usuarios/" + bancaId,
+        url:
+          "https://organizacao-de-defesas.herokuapp.com/usuario-banca/usuarios/" +
+          bancaId,
         data: bodyFormData,
-        headers: { "Content-Type": "multipart/form-data", "Authorization": loginToken, "Accept": "application/json" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: loginToken,
+          Accept: "application/json",
+        },
       }).then(function (response) {
         setInn(response.data.data);
         setDone2(true);
@@ -78,7 +95,11 @@ function Addition() {
         method: "get",
         url: "https://organizacao-de-defesas.herokuapp.com/usuario",
         data: bodyFormData,
-        headers: { "Content-Type": "multipart/form-data", "Authorization": loginToken, "Accept": "application/json" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: loginToken,
+          Accept: "application/json",
+        },
       }).then(function (response) {
         setData(response.data.data);
         setDone(true);
@@ -107,12 +128,16 @@ function Addition() {
                   <span className="user-name">{user.nome}</span>
                   <div className="user-right">
                     <span className="role">{user.role}</span>
-                    {
-                      user.role != "orientador" ?
-                        <button onClick={() => removeUser(user.id)} className="user-role">Remover da banca</button>
-                        :
-                        <div className="hide"></div>
-                    }
+                    {user.role != "orientador" ? (
+                      <button
+                        onClick={() => removeUser(user.id)}
+                        className="user-role"
+                      >
+                        Remover da banca
+                      </button>
+                    ) : (
+                      <div className="hide"></div>
+                    )}
                   </div>
                 </div>
               ))
@@ -122,22 +147,35 @@ function Addition() {
           </div>
           <div className="user-list">
             {data && data.length > 0 ? (
-              data.filter(function (e) { return !userIds.includes(e.id); }).map((user) => ((
-                <div key={user.id} className="user">
-                  <span className="user-name">{user.nome}</span>
-                  <div className="user-right">
-                    <button onClick={() => addUser(user.id, 'avaliador')} className="user-role">Adicionar como avaliador</button>
-                    <button onClick={() => addUser(user.id, 'aluno')} className="user-role">Adicionar como aluno</button>
+              data
+                .filter(function (e) {
+                  return !userIds.includes(e.id);
+                })
+                .map((user) => (
+                  <div key={user.id} className="user">
+                    <span className="user-name">{user.nome}</span>
+                    <div className="user-right">
+                      <button
+                        onClick={() => addUser(user.id, "avaliador")}
+                        className="user-role"
+                      >
+                        Adicionar como avaliador
+                      </button>
+                      <button
+                        onClick={() => addUser(user.id, "aluno")}
+                        className="user-role"
+                      >
+                        Adicionar como aluno
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )))
+                ))
             ) : (
               <div></div>
             )}
           </div>
         </div>
-      )
-      }
+      )}
     </>
   );
 }

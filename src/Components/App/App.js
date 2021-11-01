@@ -6,6 +6,10 @@ import Header from "../Molecular/Header";
 import Footer from "../Molecular/Footer";
 import Context from "../../Context";
 
+/*
+  Componente responsável pela renderização do 'invólucro' da aplicação
+*/
+
 function App() {
   return (
     <HashRouter>

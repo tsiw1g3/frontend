@@ -2,6 +2,10 @@ import React, { useContext, useState } from "react";
 import { MyContext } from "../../Context";
 import { useHistory } from "react-router-dom";
 
+/*
+  Componente responsável pela página de registro de usuários
+*/
+
 function Register() {
   const { toggleNav, registerUser } = useContext(MyContext);
   const initialState = {
@@ -23,7 +27,7 @@ function Register() {
   const goToLogin = () => {
     let path = `login`;
     history.push(path);
-  }
+  };
 
   // On Submit the Registration Form
   const submitForm = async (event) => {
@@ -129,7 +133,9 @@ function Register() {
           {errorMsg}
           {successMsg}
           <div className="form-control">
-            <button type="submit" onClick={submitForm}>Registrar</button>
+            <button type="submit" onClick={submitForm}>
+              Registrar
+            </button>
           </div>
         </form>
       </div>

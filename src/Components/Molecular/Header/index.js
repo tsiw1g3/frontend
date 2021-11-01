@@ -5,6 +5,10 @@ import { useHistory } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
 import "./styles.css";
 
+/*
+  Componente responsável pela renderização do cabeçalho da aplicação
+*/
+
 const Header = () => {
   const { loginUser, logoutUser, isLoggedIn } = useContext(MyContext);
   const [isUserLogged, setIsUserLogged] = useState(isLoggedIn());

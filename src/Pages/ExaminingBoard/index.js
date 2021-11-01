@@ -6,12 +6,7 @@ import axios from "axios";
 
 import { Form, Field } from "react-final-form";
 import { TextField, Checkbox, Radio, Select } from "final-form-material-ui";
-import {
-  Paper,
-  Grid,
-  Button,
-  CssBaseline,
-} from "@material-ui/core";
+import { Paper, Grid, Button, CssBaseline } from "@material-ui/core";
 // Picker
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -19,6 +14,10 @@ import {
   TimePicker,
   DatePicker,
 } from "@material-ui/pickers";
+
+/*
+  Componente responsável pela página de criação de bancas
+*/
 
 function ExaminingBoard() {
   //
@@ -28,7 +27,7 @@ function ExaminingBoard() {
   const goToDashboard = () => {
     let path = `dashboard`;
     history.push(path);
-  }
+  };
 
   function DatePickerWrapper(props) {
     const {
@@ -78,7 +77,7 @@ function ExaminingBoard() {
 
   function getFormData(object) {
     const formData = new FormData();
-    Object.keys(object).forEach(key => formData.append(key, object[key]));
+    Object.keys(object).forEach((key) => formData.append(key, object[key]));
     return formData;
   }
 
@@ -97,7 +96,11 @@ function ExaminingBoard() {
       method: "post",
       url: `https://organizacao-de-defesas.herokuapp.com/banca`,
       data: getFormData(values),
-      headers: { "Content-Type": "multipart/form-data", "Authorization": loginToken, "Accept": "application/json" },
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: loginToken,
+        Accept: "application/json",
+      },
     }).then(function (response) {
       goToDashboard();
     });

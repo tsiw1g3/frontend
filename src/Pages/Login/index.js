@@ -3,6 +3,10 @@ import { MyContext } from "../../Context";
 import { useHistory } from "react-router-dom";
 import "./styles.css";
 
+/*
+  Componente responsável pela antiga página de login
+*/
+
 function Login() {
   const { loginUser } = useContext(MyContext);
 

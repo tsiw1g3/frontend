@@ -1,6 +1,10 @@
 import React, { createContext, Component } from "react";
 import axios from "axios";
 
+/*
+  Componente que guarda as informações de login
+*/
+
 export const MyContext = createContext();
 
 // Define the base URL

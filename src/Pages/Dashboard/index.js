@@ -6,6 +6,10 @@ import axios from "axios";
 import ReactLoading from "react-loading";
 import { Button } from "@material-ui/core";
 
+/*
+  Componente responsável pela página de gerenciamento das minhas defesas
+*/
+
 function Dashboard() {
   const { toggleNav, registerUser } = useContext(MyContext);
 

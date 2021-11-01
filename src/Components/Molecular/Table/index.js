@@ -1,6 +1,10 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 
+/*
+  Componente responsável pela renderização da tabela de defesas
+*/
+
 const columns = [
   { field: "tipo", headerName: "Defesa", width: 130 },
   { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 390 },
