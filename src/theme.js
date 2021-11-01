@@ -5,14 +5,14 @@ const theme = createTheme({
   palette: {
     type: "light",
     primary: {
-      main: "#fff",
-      light: "#fff",
-      dark: "#fff",
+      main: "#000",
+      light: "#000",
+      dark: "#000",
     },
     secondary: {
-      main: "#fff",
-      light: "#fff",
-      dark: "#fff",
+      main: "#000",
+      light: "#000",
+      dark: "#000",
     },
     input: {
       color: "white",
@@ -22,7 +22,6 @@ const theme = createTheme({
     },
     background: {
       default: "#DCE3E9",
-      image: "url(/img/bg.png)",
     },
   },
   overrides: {

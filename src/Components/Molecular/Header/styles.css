@@ -1,11 +1,12 @@
 .header {
   display: flex;
   justify-content: space-between;
-  background-color: #373038;
+  /* background-color: #373038;
+  background-image: "url(/frontend/img/bg_head_white.png)"; */
 }
 
 .logo {
-  color: aliceblue;
+  color: black;
   margin-left: 1rem;
 }
 

@@ -7,19 +7,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { useHistory } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
-import { createTheme } from "@material-ui/core/styles";
 import "./styles.css";
-
-const theme = createTheme({
-  palette: {
-    type: "dark",
-    primary: {
-      main: "#fff",
-      light: "#fff",
-      dark: "#fff",
-    },
-  },
-});
 
 const Header = () => {
   const { loginUser, logoutUser, isLoggedIn } = useContext(MyContext);
@@ -71,82 +59,86 @@ const Header = () => {
   };
 
   return (
-    <div className="header" bg="light" expand="lg">
-      <ThemeProvider theme={theme}>
-        <div className="logo-container">
-          <Link to="/" style={{ textDecoration: "none" }}>
-            <h1 className="logo">moon</h1>
-          </Link>
-        </div>
+    <div
+      className="header"
+      expand="lg"
+      style={{
+        backgroundImage: `url(/frontend/img/bg_head_white.png)`,
+      }}
+    >
+      <div className="logo-container">
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <h1 className="logo">sisdef</h1>
+        </Link>
+      </div>
 
-        {isUserLogged ? (
-          <div>
-            <Button
-              id="basic-button"
-              aria-controls="basic-menu"
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-              style={{ marginTop: 20 }}
-            >
-              <MenuIcon />
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
+      {isUserLogged ? (
+        <div>
+          <Button
+            id="basic-button"
+            aria-controls="basic-menu"
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+            style={{ marginTop: 20 }}
+          >
+            <MenuIcon />
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem component={Link} to="/">
+              Home
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                logoutUser();
+                setIsUserLogged(false);
+                setUser(initialUser);
+                redirectTo("/");
               }}
             >
-              <MenuItem component={Link} to="/">
-                Home
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  logoutUser();
-                  setIsUserLogged(false);
-                  setUser(initialUser);
-                  redirectTo("/");
-                }}
-              >
-                Logout
-              </MenuItem>
-              <MenuItem component={Link} to="/dashboard">
-                Dashboard
-              </MenuItem>
-            </Menu>
-          </div>
-        ) : (
-          <form className="login-form" onSubmit={submitForm}>
-            <TextField
-              className="login-input"
-              name="username"
-              label="Usuário"
-              variant="outlined"
-              size="small"
-              onChange={onChangeValue}
-            />
-            <TextField
-              className="login-input"
-              name="password"
-              label="Senha"
-              variant="outlined"
-              size="small"
-              type="password"
-              onChange={onChangeValue}
-            />
-            <Button
-              className="login-button"
-              type="submit"
-              style={{ marginTop: -20 }}
-            >
-              Entrar
-            </Button>
-          </form>
-        )}
-      </ThemeProvider>
+              Logout
+            </MenuItem>
+            <MenuItem component={Link} to="/dashboard">
+              Dashboard
+            </MenuItem>
+          </Menu>
+        </div>
+      ) : (
+        <form className="login-form" onSubmit={submitForm}>
+          <TextField
+            className="login-input"
+            name="username"
+            label="Usuário"
+            variant="outlined"
+            size="small"
+            onChange={onChangeValue}
+          />
+          <TextField
+            className="login-input"
+            name="password"
+            label="Senha"
+            variant="outlined"
+            size="small"
+            type="password"
+            onChange={onChangeValue}
+          />
+          <Button
+            className="login-button"
+            type="submit"
+            style={{ marginTop: -20 }}
+          >
+            Entrar
+          </Button>
+        </form>
+      )}
     </div>
   );
 };

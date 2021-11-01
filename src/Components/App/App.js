@@ -15,7 +15,6 @@ function App() {
           className="app-container"
           style={{
             minHeight: 500,
-            backgroundImage: `url(/frontend/img/bg.png)`,
           }}
         >
           <div

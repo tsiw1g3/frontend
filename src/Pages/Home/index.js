@@ -79,7 +79,7 @@ const Home = () => {
       ) : (
         <div className="container">
           <h3 className="left-btn" style={{ color: "#000" }}>
-            Próximos eventos
+            Próximas defesas
           </h3>
           <div className="user-list">
             {data && data.length > 0 ? (
