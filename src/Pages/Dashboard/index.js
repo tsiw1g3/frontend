@@ -94,20 +94,12 @@ function Dashboard() {
             {data && data.length > 0 ? (
               data.map((banca) => (
                 <div key={banca.id} className="user">
-                  <span className="user-id">{banca.id}</span>
-                  <button
-                    onClick={() => editBanca(banca)}
-                    className="user-name"
-                  >
+                  <div className="user-name">
                     {banca.titulo_trabalho}
-                  </button>
+                  </div>
                   <div className="user-right">
-                    <button
-                      onClick={() => addUser(banca.id)}
-                      className="user-role"
-                    >
-                      Adicionar Usuário
-                    </button>
+                    <button name="edit-board" type="submit" id="edit-board" onClick={() => editBanca(banca)}></button>
+                    <button name="add-user" type="submit" id="add-user" onClick={() => addUser(banca.id)}></button>
                   </div>
                 </div>
               ))
@@ -116,7 +108,8 @@ function Dashboard() {
             )}
           </div>
         </div>
-      )}
+      )
+      }
     </>
   );
 }

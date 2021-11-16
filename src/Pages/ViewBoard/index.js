@@ -307,7 +307,7 @@ function ViewBoard() {
                           component={TextField}
                           required
                           multiline
-                          label="Local"
+                          label="Local ou link"
                         />
                       </Grid>
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>

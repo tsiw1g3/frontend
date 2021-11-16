@@ -63,7 +63,7 @@ const Header = () => {
       className="header"
       expand="lg"
       style={{
-        backgroundImage: `url(/frontend/img/bg_head_white.png)`,
+        backgroundImage: `url(/frontend/img/header.png)`,
       }}
     >
       <div className="logo-container">
@@ -130,6 +130,15 @@ const Header = () => {
             style={{ marginTop: -20, marginLeft: 20 }}
           >
             Entrar
+          </Button>
+          <Button
+            className="login-button"
+            style={{ marginTop: -20, marginLeft: 0 }}
+            onClick={() => {
+              redirectTo("/register");
+            }}
+          >
+            Registrar
           </Button>
         </form>
       )}

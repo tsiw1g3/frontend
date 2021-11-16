@@ -7,10 +7,10 @@ import { DataGrid } from "@mui/x-data-grid";
 
 const columns = [
   { field: "tipo", headerName: "Defesa", width: 130 },
-  { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 390 },
-  { field: "autor", headerName: "Autor", width: 260 },
-  { field: "data_realizacao", headerName: "Data de realização", width: 260 },
-  { field: "local", headerName: "Local ou link", width: 200 },
+  { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 650 },
+  // { field: "autor", headerName: "Autor", width: 260 },
+  { field: "formatedData", headerName: "Data de realização", width: 150 },
+  { field: "local", headerName: "Local ou link", width: 350 },
 ];
 
 export default function DataTable(params) {

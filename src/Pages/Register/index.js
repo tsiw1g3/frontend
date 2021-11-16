@@ -2,6 +2,14 @@ import React, { useContext, useState } from "react";
 import { MyContext } from "../../Context";
 import { useHistory } from "react-router-dom";
 
+import "./styles.css";
+import Container from "@material-ui/core/Container";
+
+import { Form, Field } from "react-final-form";
+import { TextField } from "final-form-material-ui";
+import { Paper, Grid, Button, CssBaseline } from "@material-ui/core";
+// Picker
+
 /*
   Componente responsável pela página de registro de usuários
 */
@@ -24,16 +32,16 @@ function Register() {
 
   const history = useHistory();
 
-  const goToLogin = () => {
-    let path = `login`;
+  const goToHome = () => {
+    let path = ``;
     history.push(path);
   };
 
   // On Submit the Registration Form
   const submitForm = async (event) => {
-    event.preventDefault();
-    const data = await registerUser(state.userInfo);
-    goToLogin();
+    // event.preventDefault();
+    const data = await registerUser(event);
+    goToHome();
   };
 
   // On change the Input Value (name, email, password)
@@ -57,89 +65,116 @@ function Register() {
     successMsg = <div className="success-msg">{state.successMsg}</div>;
   }
 
+  const validate = (values) => {
+    const errors = {};
+    if (!values.nome) {
+      errors.nome = "Required";
+    }
+    if (!values.email) {
+      errors.email = "Required";
+    }
+    if (!values.username) {
+      errors.username = "Required";
+    }
+    if (!values.password) {
+      errors.password = "Required";
+    }
+    if (!values.universidade) {
+      errors.universidade = "Required";
+    }
+    return errors;
+  };
+
   return (
-    <div className="_loginRegister">
-      <div className="column">
-        <img
-          width="70%"
-          height="70%"
-          alt="Logo Ufba"
-          src="https://www.ufba.br/sites/portal.ufba.br/files/brasao_ufba.jpg"
+    <Container className="App">
+      <div style={{ padding: 16, margin: "auto", maxWidth: 2000 }}>
+        <CssBaseline />
+        <Form
+          onSubmit={submitForm}
+          initialValues={{}}
+          validate={validate}
+          render={({
+            handleSubmit,
+            submitting,
+          }) => (
+            <form onSubmit={handleSubmit} noValidate>
+              <Paper style={{ padding: 16 }}>
+                <Grid container alignItems="flex-start" spacing={2}>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      required
+                      name="nome"
+                      value={state.userInfo.nome}
+                      component={TextField}
+                      type="text"
+                      label="Nome"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      required
+                      multiline
+                      name="email"
+                      value={state.userInfo.email}
+                      component={TextField}
+                      type="text"
+                      label="Email"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      required
+                      multiline
+                      name="username"
+                      value={state.userInfo.username}
+                      component={TextField}
+                      type="text"
+                      label="Username"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      required
+                      name="password"
+                      value={state.userInfo.password}
+                      component={TextField}
+                      type="password"
+                      label="Senha"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      required
+                      multiline
+                      name="universidade"
+                      value={state.userInfo.universidade}
+                      component={TextField}
+                      type="text"
+                      label="Universidade"
+                    />
+                  </Grid>
+                  <Grid item style={{ marginTop: 16 }}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      disabled={submitting}
+                    >
+                      Registrar
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </form>
+          )}
         />
       </div>
-      <div className="column right">
-        <h1>Registre-se</h1>
-        <form onSubmit={submitForm} noValidate>
-          <div className="form-control">
-            <label>Nome Completo</label>
-            <input
-              name="nome"
-              required
-              type="text"
-              value={state.userInfo.nome}
-              onChange={onChangeValue}
-              placeholder="Insira seu nome"
-            />
-            <p></p>
-          </div>
-          <div className="form-control">
-            <label>Email</label>
-            <input
-              name="email"
-              required
-              type="email"
-              value={state.userInfo.email}
-              onChange={onChangeValue}
-              placeholder="Insira seu email"
-            />
-            <p></p>
-          </div>
-          <div className="form-control">
-            <label>Username</label>
-            <input
-              name="username"
-              required
-              type="username"
-              value={state.userInfo.username}
-              onChange={onChangeValue}
-              placeholder="Insira seu username"
-            />
-            <p></p>
-          </div>
-          <div className="form-control">
-            <label>Senha</label>
-            <input
-              name="password"
-              required
-              type="password"
-              value={state.userInfo.password}
-              onChange={onChangeValue}
-              placeholder="Insira sua senha"
-            />
-            <p></p>
-          </div>
-          <div className="form-control">
-            <label>Universidade</label>
-            <input
-              name="universidade"
-              required
-              type="universidade"
-              value={state.userInfo.universidade}
-              onChange={onChangeValue}
-              placeholder="Insira sua universidade"
-            />
-            <p></p>
-          </div>
-          {errorMsg}
-          {successMsg}
-          <div className="form-control">
-            <button type="submit" onClick={submitForm}>
-              Registrar
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    </Container>
   );
 }
 

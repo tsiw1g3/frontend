@@ -53,8 +53,15 @@ const Home = () => {
         if (events) {
           events.forEach((e) => {
             e.data = new Date(e.data_realizacao);
-            //TODO Pegar valores reais de autor e tipo de defesa
-            e.autor = "Fred Durão";
+            e.data.setSeconds(0);
+            e.formatedData = e.data.toLocaleString("pt-BR", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            console.log(e.formatedData);
             e.tipo = "TCC";
           });
           const dt = new Date();
@@ -62,7 +69,6 @@ const Home = () => {
             a.data_realizacao < b.data_realizacao ? -1 : 1
           );
           events = events.filter((a) => a.data > dt);
-          // events.slice(0, 5);
           setData(events);
           console.log(data);
         }

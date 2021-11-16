@@ -8,7 +8,13 @@ import "./styles.css";
 
 function Footer() {
   return (
-    <div className="footer" bg="light" expand="lg" fixed="bottom">
+    <div className="footer"
+      bg="light"
+      expand="lg"
+      fixed="bottom"
+      style={{
+        backgroundImage: `url(/frontend/img/header.png)`,
+      }}>
       <div>
         <strong>INSTITUTO DE COMPUTAÇÃO</strong>
         <p>Avenida Adhemar de Barros, s/n - Campus de Ondina</p>

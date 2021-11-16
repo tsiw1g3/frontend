@@ -43,6 +43,7 @@ function ExaminingBoard() {
       <DatePicker
         {...rest}
         name={name}
+        format="dd/MM/yyyy"
         helperText={showError ? meta.error || meta.submitError : undefined}
         error={showError}
         inputProps={restInput}
@@ -192,7 +193,7 @@ function ExaminingBoard() {
                       fullWidth
                       required
                       component={TextField}
-                      label="Local"
+                      label="Local ou link"
                     />
                   </Grid>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
