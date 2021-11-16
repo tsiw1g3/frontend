@@ -15,7 +15,7 @@ function Footer() {
         <p>CEP: 40.170-110 Salvador-Bahia Telefone: 3283-6164</p>
       </div>
       <img
-        src="https://dcc.ufba.br/sites/computacao.ufba.br/files/logos_ufba.png"
+        src="https://dcc.ufba.br/sites/computacao.ufba.br/files/logos_ufba_rodape.png"
         alt="Logos IC"
       />
     </div>
