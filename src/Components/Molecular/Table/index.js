@@ -6,9 +6,9 @@ import { DataGrid } from "@mui/x-data-grid";
 */
 
 const columns = [
-  { field: "tipo", headerName: "Defesa", width: 130 },
+  { field: "tipo_banca", headerName: "Defesa", width: 130 },
   { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 650 },
-  // { field: "autor", headerName: "Autor", width: 260 },
+  // { field: "autor", headerName: "Discente", width: 260 },
   { field: "formatedData", headerName: "Data de realização", width: 200 },
   { field: "local", headerName: "Local ou link", width: 350 },
 ];

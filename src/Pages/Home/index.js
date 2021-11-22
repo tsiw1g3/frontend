@@ -62,7 +62,7 @@ const Home = () => {
               minute: "2-digit",
             });
             console.log(e.formatedData);
-            e.tipo = "TCC";
+            e.autor = "Frederico Durão";
           });
           const dt = new Date();
           events.sort((a, b) =>

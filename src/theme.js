@@ -21,7 +21,7 @@ const theme = createTheme({
       main: red.A400,
     },
     background: {
-      default: "white",
+      default: "#FFF",
     },
   },
   overrides: {
