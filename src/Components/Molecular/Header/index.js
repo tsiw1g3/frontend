@@ -109,6 +109,7 @@ const Header = () => {
             className="login-input"
             name="username"
             label="Usuário"
+            data-testid="username-input"
             variant="outlined"
             size="small"
             style={{ marginLeft: 20 }}
@@ -118,6 +119,7 @@ const Header = () => {
             className="login-input"
             name="password"
             label="Senha"
+            data-testid="password-input"
             variant="outlined"
             size="small"
             type="password"
