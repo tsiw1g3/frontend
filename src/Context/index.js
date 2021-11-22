@@ -1,6 +1,9 @@
 import React, { createContext, Component } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom"
+
+/*
+  Componente que guarda as informações de login
+*/
 
 export const MyContext = createContext();
 
@@ -10,30 +13,18 @@ const Axios = axios.create({
 });
 
 class MyContextProvider extends Component {
-
   constructor() {
     super();
     this.state = {
       loading: true,
       data: [],
-    }
+    };
     this.isLoggedIn();
   }
 
   // Root State
   state = {
-    showLogin: true,
     isAuth: false,
-    theUser: null,
-  };
-
-  // Toggle between Login & Signup page
-  toggleNav = () => {
-    const showLogin = !this.state.showLogin;
-    this.setState({
-      ...this.state,
-      showLogin,
-    });
   };
 
   // On Click the Log out button
@@ -61,22 +52,13 @@ class MyContextProvider extends Component {
   };
 
   loginUser = async (user) => {
-
-    // const history = useHistory();
-
-    // function handleClick() {
-    //   history.push("/banca/criar");
-    // }
-
     var bodyFormData = new FormData();
-    bodyFormData.append('username', user.username);
-    bodyFormData.append('password', user.password);
-
+    bodyFormData.append("username", user.username);
+    bodyFormData.append("password", user.password);
 
     const res = await axios({
       method: "post",
       url: "https://organizacao-de-defesas.herokuapp.com/login",
-      // url: "http://organizacao-de-defesas.herokuapp.com/login",
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
     })
@@ -95,8 +77,8 @@ class MyContextProvider extends Component {
   };
 
   // Checking user logged in or not
-  isLoggedIn = async () => {
-
+  isLoggedIn = () => {
+    return localStorage.getItem("loginToken") !== null;
   };
 
   render() {

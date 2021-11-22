@@ -5,20 +5,23 @@ const theme = createTheme({
   palette: {
     type: "light",
     primary: {
-      main: "#61dafb",
-      light: "#61dafb",
-      dark: "#21a1c4",
+      main: "#000",
+      light: "#000",
+      dark: "#000",
     },
     secondary: {
-      main: "#b5ecfb",
-      light: "#61dafb",
-      dark: "#21a1c4",
+      main: "#000",
+      light: "#000",
+      dark: "#000",
+    },
+    input: {
+      color: "white",
     },
     error: {
       main: red.A400,
     },
     background: {
-      default: "#282c34",
+      default: "#FFF",
     },
   },
   overrides: {

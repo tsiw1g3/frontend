@@ -6,15 +6,30 @@ import Header from "../Molecular/Header";
 import Footer from "../Molecular/Footer";
 import Context from "../../Context";
 
+/*
+  Componente responsável pela renderização do 'invólucro' da aplicação
+*/
+
 function App() {
   return (
     <HashRouter>
       <Context>
         <Header />
-        <body style={{ minHeight: 500 }}>
-          <Routes />
-        </body>
-        <Footer />
+        <div
+          className="app-container"
+          style={{
+            minHeight: 500,
+          }}
+        >
+          <div
+            style={{
+              minHeight: 500,
+            }}
+          >
+            <Routes />
+          </div>
+          <Footer />
+        </div>
       </Context>
     </HashRouter>
   );

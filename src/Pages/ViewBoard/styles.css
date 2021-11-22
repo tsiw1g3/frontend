@@ -28,6 +28,13 @@
   color: #61dafb;
 }
 
+.cargo {
+  font-weight: bold;
+  font-size: large;
+  float: left;
+  text-transform:capitalize;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

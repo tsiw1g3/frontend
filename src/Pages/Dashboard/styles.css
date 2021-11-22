@@ -91,3 +91,26 @@
 
 .left-btn { float: left; }
 .right-btn { float: right; }
+
+#add-user {
+  /* margin:0px 10px; */
+  padding:0px;
+  width:20px;
+  height:20px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor:pointer;
+  background:url("https://seekicon.com/free-icon-download/user-add_1.svg") 0 0 no-repeat;
+}
+
+#edit-board {
+  margin: 0px 25px;
+  width:20px;
+  height:20px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor:pointer;
+  background:url("https://seekicon.com/free-icon-download/edit_10.svg") 0 0 no-repeat;
+}
