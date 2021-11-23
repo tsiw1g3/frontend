@@ -80,15 +80,18 @@ function Dashboard() {
         </div>
       ) : (
         <div className="container">
-          <div className="left-btn">
-            <Button
-              type="button"
-              variant="contained"
-              color="primary"
-              onClick={addBanca}
-            >
-              Adicionar banca
-            </Button>
+          <div>
+            <h2 className="left-btn">Minhas Bancas</h2>
+            <div className="right-btn">
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                onClick={addBanca}
+              >
+                Adicionar banca
+              </Button>
+            </div>
           </div>
           <div className="user-list">
             {data && data.length > 0 ? (
@@ -98,8 +101,8 @@ function Dashboard() {
                     {banca.titulo_trabalho}
                   </div>
                   <div className="user-right">
-                    <button name="edit-board" type="submit" id="edit-board" onClick={() => editBanca(banca)}></button>
-                    <button name="add-user" type="submit" id="add-user" onClick={() => addUser(banca.id)}></button>
+                    <button title="Editar banca" name="edit-board" type="submit" id="edit-board" onClick={() => editBanca(banca)}></button>
+                    <button title="Adicionar membro" name="add-user" type="submit" id="add-user" onClick={() => addUser(banca.id)}></button>
                   </div>
                 </div>
               ))

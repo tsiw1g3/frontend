@@ -17,8 +17,8 @@ function Footer() {
       }}>
       <div>
         <strong>INSTITUTO DE COMPUTAÇÃO</strong>
-        <p>Avenida Adhemar de Barros, s/n - Campus de Ondina</p>
-        <p>CEP: 40.170-110 Salvador-Bahia Telefone: 3283-6164</p>
+        <div>Avenida Adhemar de Barros, s/n - Campus de Ondina</div>
+        <div>CEP: 40.170-110 Salvador-Bahia Telefone: 3283-6164</div>
       </div>
       <img
         src="https://dcc.ufba.br/sites/computacao.ufba.br/files/logos_ufba_rodape.png"

@@ -67,9 +67,16 @@ const Header = () => {
       }}
     >
       <div className="logo-container">
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <h1 className="logo">sisdef</h1>
-        </Link>
+        <div>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <img
+              src="/frontend/img/instituto_de_computacao.png"
+              alt="Logos IC"
+              className="img-logo"
+            />
+            <h1 className="logo" >sisdef</h1>
+          </Link>
+        </div>
       </div>
 
       {isUserLogged ? (
@@ -88,7 +95,7 @@ const Header = () => {
             to="/dashboard"
             style={{ marginTop: -20, marginLeft: 20 }}
           >
-            Dashboard
+            Minhas Bancas
           </Button>
           <Button
             className="login-button"

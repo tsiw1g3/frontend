@@ -129,6 +129,9 @@ function ExaminingBoard() {
     if (!values.local) {
       errors.local = "Required";
     }
+    if (!values.tipo_banca) {
+      errors.tipo_banca = "Required";
+    }
     return errors;
   };
 
@@ -184,6 +187,16 @@ function ExaminingBoard() {
                       multiline
                       component={TextField}
                       label="Palavras Chave (Separadas por vírgula)"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      name="tipo_banca"
+                      multiline
+                      fullWidth
+                      required
+                      component={TextField}
+                      label="Tipo da defesa"
                     />
                   </Grid>
                   <Grid item xs={12}>

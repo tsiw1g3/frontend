@@ -121,6 +121,10 @@ function Addition() {
         </div>
       ) : (
         <div className="container">
+          <div>
+            <h2 className="left-btn">Componentes da banca</h2>
+            <h4 className="right-head">Limites: 1 orientador, 2 avaliadores, 1 aluno</h4>
+          </div>
           <div className="user-list">
             {inn && inn.length > 0 ? (
               inn.map((user) => (
@@ -145,7 +149,8 @@ function Addition() {
               <div></div>
             )}
           </div>
-          <div className="user-list">
+          <h2>Adicionar membro</h2>
+          <div>
             {data && data.length > 0 ? (
               data
                 .filter(function (e) {

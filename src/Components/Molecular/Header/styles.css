@@ -5,9 +5,17 @@
   background-image: "url(/frontend/img/bg_head_white.png)"; */
 }
 
+.img-logo { 
+  float: left;
+  width: 50px;
+  margin-left: 30px;
+  margin-top: 5px;
+}
+
 .logo {
   color: black;
-  margin-left: 1rem;
+  margin-left: 20px;
+  float: left;
 }
 
 .login-form {

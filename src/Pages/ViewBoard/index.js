@@ -154,6 +154,9 @@ function ViewBoard() {
     if (!values.local) {
       errors.local = "Required";
     }
+    if (!values.tipo_banca) {
+      errors.tipo_banca = "Required";
+    }
     return errors;
   };
 
@@ -244,6 +247,7 @@ function ViewBoard() {
                 hora: banca.data_realizacao,
                 nota: nota,
                 nota_nao_alteravel: nota,
+                tipo_banca: banca.tipo_banca
               }}
               validate={validate}
               render={({
@@ -297,6 +301,16 @@ function ViewBoard() {
                           multiline
                           component={TextField}
                           label="Palavras Chave (Separadas por vírgula)"
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field
+                          name="tipo_banca"
+                          multiline
+                          fullWidth
+                          required
+                          component={TextField}
+                          label="Tipo da defesa"
                         />
                       </Grid>
                       <Grid item xs={12}>
