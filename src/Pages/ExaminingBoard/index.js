@@ -1,12 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import "./styles.css";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-
+import { withStyles} from '@material-ui/core/styles';
 import { Form, Field } from "react-final-form";
 import { TextField, Checkbox, Radio, Select } from "final-form-material-ui";
-import { Paper, Grid, Button, CssBaseline } from "@material-ui/core";
+import { Paper, Grid, Button, CssBaseline, InputLabel, MenuItem } from "@material-ui/core";
 // Picker
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -21,7 +21,6 @@ import {
 
 function ExaminingBoard() {
   //
-
   const history = useHistory();
 
   const goToDashboard = () => {
@@ -132,6 +131,15 @@ function ExaminingBoard() {
     if (!values.tipo_banca) {
       errors.tipo_banca = "Required";
     }
+    if (!values.curso) {
+      errors.curso = "Required";
+    }
+    if (!values.disciplina) {
+      errors.disciplina = "Required";
+    }
+    if (!values.autor) {
+      errors.autor = "Required";
+    }
     return errors;
   };
 
@@ -163,6 +171,7 @@ function ExaminingBoard() {
                       fullWidth
                       required
                       multiline
+                      rows={4}
                       name="resumo"
                       component={TextField}
                       type="text"
@@ -176,7 +185,17 @@ function ExaminingBoard() {
                       multiline
                       required
                       component={TextField}
+                      rows={4}
                       label="Abstract"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      name="autor"
+                      fullWidth
+                      required
+                      component={TextField}
+                      label="Autor"
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -189,7 +208,7 @@ function ExaminingBoard() {
                       label="Palavras Chave (Separadas por vírgula)"
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={8}>
                     <Field
                       name="tipo_banca"
                       multiline
@@ -198,6 +217,28 @@ function ExaminingBoard() {
                       component={TextField}
                       label="Tipo da defesa"
                     />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Field
+                        name="curso"
+                        label="Curso"
+                        formControlProps={{className: 'curso'}}
+                        component={Select}
+                    >
+                        <MenuItem value={"BCC"}>BCC</MenuItem>
+                        <MenuItem value={"BSI"}>BSI</MenuItem>
+                    </Field>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Field
+                        name="disciplina"
+                        label="Disciplina"
+                        formControlProps={{className: 'disciplina'}}
+                        component={Select}
+                    >
+                        <MenuItem value={"MATA67"}>MATA67</MenuItem>
+                        <MenuItem value={"MATC98"}>MATC98</MenuItem>
+                    </Field>
                   </Grid>
                   <Grid item xs={12}>
                     <Field
