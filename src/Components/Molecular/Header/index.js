@@ -74,7 +74,7 @@ const Header = () => {
               alt="Logos IC"
               className="img-logo"
             />
-            <h1 className="logo" >sisdef</h1>
+            <h1 className="logo" >Sistema de Defesas de TCC</h1>
           </Link>
         </div>
       </div>
@@ -134,13 +134,13 @@ const Header = () => {
           <Button
             className="login-button"
             type="submit"
-            style={{ marginTop: -20, marginLeft: 20 }}
+            style={{ marginTop: -10, marginLeft: 20 }}
           >
             Entrar
           </Button>
           <Button
             className="login-button"
-            style={{ marginTop: -20, marginLeft: 0 }}
+            style={{ marginTop: -10, minWidth: 90, marginRight: -20 }}
             onClick={() => {
               redirectTo("/register");
             }}
