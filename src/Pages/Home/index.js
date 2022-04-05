@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./styles.css";
 import ReactLoading from "react-loading";
+import { useHistory } from "react-router-dom";
 import DataTable from "../../Components/Molecular/Table";
+import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import TextField from '@material-ui/core/TextField';
 
 /*
   Componente responsável pela homepage
 */
 
 const Home = () => {
+  const [rawData, setRawData] = useState([]);
   const [data, setData] = useState([]);
   const [done, setDone] = useState(undefined);
-
-  //TODO Remover código legado
-
-  // const { isLoggedIn } = useContext(MyContext);
-
-  // const history = useHistory();
+  
+  const history = useHistory();
+  
 
   // const logout = () => {
   //   let path = ``;
@@ -23,29 +30,27 @@ const Home = () => {
   //   localStorage.removeItem("loginToken");
   // };
 
-  // const addBanca = () => {
-  //   let path = `addbanca`;
-  //   history.push(path);
-  // };
+  const searchBoard = () => {
+    let inputValue = document.getElementById("banca-search").value;
+    let data1 = rawData[0].filter((a) => String(a.titulo_trabalho).toLowerCase().includes(inputValue.toLowerCase()))
+    let data2 = rawData[1].filter((a) => String(a.titulo_trabalho).toLowerCase().includes(inputValue.toLowerCase()))
+    var allEvents = [];
+    allEvents.push(data1);
+    allEvents.push(data2);
+    setData(allEvents)
+  }
 
-  // const editBanca = (banca) => {
-  //   localStorage.setItem("banca", JSON.stringify(banca));
-  //   let path = `verbanca`;
-  //   history.push(path);
-  // };
-
-  // const addUser = (id) => {
-  //   localStorage.setItem("bancaId", id);
-  //   let path = `addition`;
-  //   history.push(path);
-  // };
+  const onSubmit = (event) => {
+    event.preventDefault();
+    searchBoard();
+  };
 
   useEffect(() => {
     setTimeout(() => {
       var bodyFormData = new FormData();
       axios({
         method: "get",
-        url: "https://organizacao-de-defesas.herokuapp.com/banca",
+        url: "http://localhost:8080/banca",
         data: bodyFormData,
         headers: { Accept: "application/json" },
       }).then(function (response) {
@@ -61,22 +66,64 @@ const Home = () => {
               hour: "2-digit",
               minute: "2-digit",
             });
-            console.log(e.formatedData);
-            e.autor = "Frederico Durão";
+            // console.log(e.formatedData);
+            // e.autor = "Frederico Durão";
           });
           const dt = new Date();
           events.sort((a, b) =>
-            a.data_realizacao < b.data_realizacao ? -1 : 1
+          a.data_realizacao < b.data_realizacao ? -1 : 1
           );
+          var olderEvents = events.filter((a) => a.data < dt);
           events = events.filter((a) => a.data > dt);
-          setData(events);
-          console.log(data);
+          var allEvents = [];
+          allEvents.push(events);
+          allEvents.push(olderEvents);
+          setRawData(allEvents);
         }
         setDone(true);
         return response;
       });
     }, 0);
   }, []);
+  
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box p={3}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+  
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+  };
+  
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+  
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   return (
     <>
@@ -91,38 +138,29 @@ const Home = () => {
         </div>
       ) : (
         <div className="container">
-          <h3 className="left-btn" style={{ color: "#000" }}>
+          <form className="search-form" noValidate autoComplete="off"onSubmit={onSubmit}>
+            <div>
+              <TextField id="banca-search" label="Buscar defesas" variant="outlined" />
+              <button title="Pesquisar bancas" name="search-board" type="button" id="search-board" onClick={() => searchBoard()}></button>
+            </div>
+          </form>
+          <AppBar position="static" style={{ background: '#fff', color: '#000' }}>
+            <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+              <Tab label="Próximas defesas" {...a11yProps(0)} />
+              <Tab label="Defesas anteriores" {...a11yProps(1)} />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={value} index={0}>
+            <DataTable rows={data.length > 0 ? data[0] : rawData[0]} />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <DataTable rows={data.length > 0 ? data[1] : rawData[1]} />
+          </TabPanel>
+          {/* <h3 className="left-btn" style={{ color: "#000" }}>
             Próximas defesas
-          </h3>
-          {/* TODO Remover código de tabela legado */}
-          <div className="user-list">
-            {/* {data && data.length > 0 ? (
-              data.map((banca) => {
-                return (
-                  <div key={banca.id} className="user">
-                    <span className="user-id">Defesa de TCC</span>
-                    <span className="user-name">{banca.titulo_trabalho}</span>
-                    <div className="user-right">
-                      <span className="user-role">{banca.local}</span>
-                      <span className="user-role">
-                        {banca.data.toLocaleString("pt-BR", {
-                          year: "numeric",
-                          month: "numeric",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p></p>
-            )} */}
-          </div>
-          <DataTable rows={data} />
-          {console.log(data)}
+          </h3> */}
+          
+          {/* {console.log(data)} */}
         </div>
       )}
     </>
