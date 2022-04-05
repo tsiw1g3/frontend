@@ -61,10 +61,6 @@
   padding-left: 20px;
 }
 
-.user-name {
-  color: rgb(65, 97, 108);
-}
-
 .user-right {
   color: rgb(65, 97, 108);
   margin-left: auto; 
@@ -93,7 +89,6 @@
 .right-btn { float: right; }
 
 #add-user {
-  /* margin:0px 10px; */
   padding:0px;
   width:20px;
   height:20px;
@@ -101,11 +96,11 @@
   border: none;
   background: none;
   cursor:pointer;
-  background:url("https://seekicon.com/free-icon-download/user-add_1.svg") 0 0 no-repeat;
+  background:url("/public/img/user-add_1.svg") 0 0 no-repeat;
 }
 
 #edit-board {
-  margin: 0px 25px;
+  margin: 0px 25px 0px 0px;
   width:20px;
   height:20px;
   padding: 0;
@@ -113,4 +108,19 @@
   background: none;
   cursor:pointer;
   background:url("https://seekicon.com/free-icon-download/edit_10.svg") 0 0 no-repeat;
+}
+
+#send-email {
+  margin: 0px 0px 0px 25px;
+  width:20px;
+  height:20px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor:pointer;
+  background:url("https://seekicon.com/free-icon-download/email_5.svg") 0 0 no-repeat;
+}
+
+.MuiDataGrid-row:nth-of-type(even){
+  background-color: #f2f2f2;
 }
