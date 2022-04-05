@@ -7,7 +7,7 @@ import axios from "axios";
 
 import { Form, Field } from "react-final-form";
 import { TextField, Checkbox, Radio, Select } from "final-form-material-ui";
-import { Paper, Grid, Button, CssBaseline } from "@material-ui/core";
+import { Paper, Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
 // Picker
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -109,7 +109,7 @@ function ViewBoard() {
     values.data_realizacao = hour.toISOString();
     axios({
       method: "put",
-      url: `https://organizacao-de-defesas.herokuapp.com/banca/${banca.id}`,
+      url: `http://localhost:8080/banca/${banca.id}`,
       data: encode(values),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -124,7 +124,7 @@ function ViewBoard() {
       var details = { nota: parseFloat(values.nota) };
       axios({
         method: "put",
-        url: `https://organizacao-de-defesas.herokuapp.com/usuario-banca/${idUb}`,
+        url: `http://localhost:8080/usuario-banca/${idUb}`,
         data: encode(details),
         headers: {
           "Content-Type": "multipart/form-data",
@@ -157,12 +157,21 @@ function ViewBoard() {
     if (!values.tipo_banca) {
       errors.tipo_banca = "Required";
     }
+    if (!values.curso) {
+      errors.curso = "Required";
+    }
+    if (!values.disciplina) {
+      errors.disciplina = "Required";
+    }
+    if (!values.autor) {
+      errors.autor = "Required";
+    }
     return errors;
   };
 
   const generateReport = async () => {
     fetch(
-      `https://organizacao-de-defesas.herokuapp.com/documento/${banca.id}`,
+      `http://localhost:8080/documento/${banca.id}`,
       {
         method: "GET",
         headers: {
@@ -187,7 +196,7 @@ function ViewBoard() {
     setTimeout(() => {
       axios({
         method: "get",
-        url: `https://organizacao-de-defesas.herokuapp.com/usuario-banca/id/${banca.id}/${userId}`,
+        url: `http://localhost:8080/usuario-banca/id/${banca.id}/${userId}`,
         headers: {
           "Content-Type": "application/json",
           Authorization: loginToken,
@@ -200,7 +209,7 @@ function ViewBoard() {
         if (response.data.data.role == "aluno") {
           axios({
             method: "get",
-            url: `https://organizacao-de-defesas.herokuapp.com/nota/${banca.id}`,
+            url: `http://localhost:8080/nota/${banca.id}`,
             headers: {
               "Content-Type": "application/json",
               Authorization: loginToken,
@@ -247,7 +256,10 @@ function ViewBoard() {
                 hora: banca.data_realizacao,
                 nota: nota,
                 nota_nao_alteravel: nota,
-                tipo_banca: banca.tipo_banca
+                tipo_banca: banca.tipo_banca,
+                curso: banca.curso,
+                autor: banca.autor,
+                disciplina: banca.disciplina
               }}
               validate={validate}
               render={({
@@ -295,6 +307,15 @@ function ViewBoard() {
                       </Grid>
                       <Grid item xs={12}>
                         <Field
+                          name="autor"
+                          fullWidth
+                          required
+                          component={TextField}
+                          label="Autor"
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field
                           name="palavras_chave"
                           fullWidth
                           required
@@ -303,7 +324,7 @@ function ViewBoard() {
                           label="Palavras Chave (Separadas por vírgula)"
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid item xs={8}>
                         <Field
                           name="tipo_banca"
                           multiline
@@ -312,6 +333,28 @@ function ViewBoard() {
                           component={TextField}
                           label="Tipo da defesa"
                         />
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Field
+                            name="curso"
+                            label="Curso"
+                            formControlProps={{className: 'curso'}}
+                            component={Select}
+                        >
+                            <MenuItem value={"BCC"}>BCC</MenuItem>
+                            <MenuItem value={"BSI"}>BSI</MenuItem>
+                        </Field>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Field
+                            name="disciplina"
+                            label="Disciplina"
+                            formControlProps={{className: 'disciplina'}}
+                            component={Select}
+                        >
+                            <MenuItem value={"MATA67"}>MATA67</MenuItem>
+                            <MenuItem value={"MATC98"}>MATC98</MenuItem>
+                        </Field>
                       </Grid>
                       <Grid item xs={12}>
                         <Field

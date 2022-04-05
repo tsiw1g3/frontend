@@ -34,6 +34,9 @@
   float: left;
   text-transform:capitalize;
 }
+.curso, .disciplina{
+  width:100%;
+}
 
 @keyframes App-logo-spin {
   from {
