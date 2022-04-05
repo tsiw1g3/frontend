@@ -50,7 +50,7 @@ const Home = () => {
       var bodyFormData = new FormData();
       axios({
         method: "get",
-        url: "http://localhost:8080/banca",
+        url: "https://organizacao-de-defesas.herokuapp.com/banca",
         data: bodyFormData,
         headers: { Accept: "application/json" },
       }).then(function (response) {

@@ -109,7 +109,7 @@ function ViewBoard() {
     values.data_realizacao = hour.toISOString();
     axios({
       method: "put",
-      url: `http://localhost:8080/banca/${banca.id}`,
+      url: `https://organizacao-de-defesas.herokuapp.com/banca/${banca.id}`,
       data: encode(values),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -124,7 +124,7 @@ function ViewBoard() {
       var details = { nota: parseFloat(values.nota) };
       axios({
         method: "put",
-        url: `http://localhost:8080/usuario-banca/${idUb}`,
+        url: `https://organizacao-de-defesas.herokuapp.com/usuario-banca/${idUb}`,
         data: encode(details),
         headers: {
           "Content-Type": "multipart/form-data",
@@ -171,7 +171,7 @@ function ViewBoard() {
 
   const generateReport = async () => {
     fetch(
-      `http://localhost:8080/documento/${banca.id}`,
+      `https://organizacao-de-defesas.herokuapp.com/documento/${banca.id}`,
       {
         method: "GET",
         headers: {
@@ -196,7 +196,7 @@ function ViewBoard() {
     setTimeout(() => {
       axios({
         method: "get",
-        url: `http://localhost:8080/usuario-banca/id/${banca.id}/${userId}`,
+        url: `https://organizacao-de-defesas.herokuapp.com/usuario-banca/id/${banca.id}/${userId}`,
         headers: {
           "Content-Type": "application/json",
           Authorization: loginToken,
@@ -209,7 +209,7 @@ function ViewBoard() {
         if (response.data.data.role == "aluno") {
           axios({
             method: "get",
-            url: `http://localhost:8080/nota/${banca.id}`,
+            url: `https://organizacao-de-defesas.herokuapp.com/nota/${banca.id}`,
             headers: {
               "Content-Type": "application/json",
               Authorization: loginToken,
