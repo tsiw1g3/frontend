@@ -9,7 +9,7 @@ export const MyContext = createContext();
 
 // Define the base URL
 const Axios = axios.create({
-  baseURL: "https://organizacao-de-defesas.herokuapp.com",
+  baseURL: "https://sistema-de-defesa.herokuapp.com"//"https://organizacao-de-defesas.herokuapp.com",
 });
 
 class MyContextProvider extends Component {
@@ -29,7 +29,7 @@ class MyContextProvider extends Component {
 
   // On Click the Log out button
   logoutUser = () => {
-    localStorage.removeItem("loginToken");
+    localStorage.clear();
     this.setState({
       ...this.state,
       isAuth: false,
@@ -37,6 +37,7 @@ class MyContextProvider extends Component {
   };
 
   registerUser = async (user) => {
+    console.log(user);
     // Sending the user registration request
     const register = await Axios.post("usuario", {
       nome: user.nome,
@@ -46,6 +47,8 @@ class MyContextProvider extends Component {
       school: user.universidade,
       academic_title: "Bacharelado",
       status: "user",
+      role:1,
+      hash:user.hash
     });
 
     return register.data;
@@ -55,10 +58,9 @@ class MyContextProvider extends Component {
     var bodyFormData = new FormData();
     bodyFormData.append("username", user.username);
     bodyFormData.append("password", user.password);
-
     const res = await axios({
       method: "post",
-      url: "https://organizacao-de-defesas.herokuapp.com/login",
+      url: "https://sistema-de-defesa.herokuapp.com/login",
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
     })
