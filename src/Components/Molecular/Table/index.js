@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useHistory } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { DataGrid, ptBR } from "@mui/x-data-grid";
 
@@ -14,22 +15,17 @@ const theme = createTheme(
   ptBR,
 );
 
-const columns = [
-  { field: "tipo_banca", headerName: "Defesa", width: 130 },
-  { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 650 },
-  { field: "autor", headerName: "Autor", width: 200 },
-  { field: "curso", headerName: "Curso", width: 200 },
-  { field: "formatedData", headerName: "Data de realização", width: 200 },
-  { field: "local", headerName: "Local ou link", width: 300 },
-];
-
 export default function DataTable(params) {
   return (
     <div style={{ height: 400, width: "100%" }}>
       <ThemeProvider theme={theme}>
       <DataGrid
+        onCellDoubleClick={(pms, event) => {
+            event.defaultMuiPrevented = true;
+            params.onCellDoubleClick(pms.id);
+        }}
         rows={params.rows}
-        columns={columns}
+        columns={params.columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
       />

@@ -3,6 +3,7 @@ import { MyContext } from "../../../Context";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
+import ReactLoading from "react-loading";
 import "./styles.css";
 
 /*
@@ -12,6 +13,7 @@ import "./styles.css";
 const Header = () => {
   const { loginUser, logoutUser, isLoggedIn } = useContext(MyContext);
   const [isUserLogged, setIsUserLogged] = useState(isLoggedIn());
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
 
@@ -37,15 +39,19 @@ const Header = () => {
   // On Submit Login From
   const submitForm = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const data = await loginUser(user);
     if (data.data) {
-      localStorage.setItem("userId", data.data.id);
+    setLoading(false);
+    localStorage.setItem("userId", data.data.id);
       localStorage.setItem("loginToken", data.data.token);
+      localStorage.setItem("role", data.data.role);
       setIsUserLogged(true);
       redirectTo("dashboard");
       // await isLoggedIn();
     } else {
-      console.log("kk, man");
+      setLoading(false);
+      alert("Usuário ou senha incorretos");
     }
   };
 
@@ -97,6 +103,19 @@ const Header = () => {
           >
             Minhas Bancas
           </Button>
+          {localStorage.getItem("role") == 3 ? (
+            <Button
+            className="login-button"
+            component={Link}
+            to="/users"
+            style={{ marginTop: -20, marginLeft: 20 }}
+            >
+              Ver Usuários
+            </Button>
+          ): (
+          <h1></h1>
+          )}
+          
           <Button
             className="login-button"
             onClick={() => {
@@ -112,6 +131,17 @@ const Header = () => {
         </div>
       ) : (
         <form className="login-form" onSubmit={submitForm}>
+          {loading ? (
+            <div className="center">
+            <ReactLoading
+              type={"spin"}
+              color={"#41616c"}
+              height={80}
+              width={80}
+            />
+            </div>
+          ) : (null)
+          }
           <TextField
             className="login-input"
             name="username"
@@ -138,7 +168,7 @@ const Header = () => {
           >
             Entrar
           </Button>
-          <Button
+          {/* <Button
             className="login-button"
             style={{ marginTop: -10, minWidth: 90, marginRight: -20 }}
             onClick={() => {
@@ -146,7 +176,7 @@ const Header = () => {
             }}
           >
             Registrar
-          </Button>
+          </Button> */}
         </form>
       )}
     </div>

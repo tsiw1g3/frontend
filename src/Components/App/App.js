@@ -18,7 +18,7 @@ function App() {
         <div
           className="app-container"
           style={{
-            minHeight: 500,
+            minHeight: "78vh",
           }}
         >
           <div
@@ -28,9 +28,9 @@ function App() {
           >
             <Routes />
           </div>
-          <Footer />
         </div>
       </Context>
+      <Footer />
     </HashRouter>
   );
 }

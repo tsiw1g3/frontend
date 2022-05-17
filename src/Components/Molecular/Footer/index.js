@@ -17,7 +17,7 @@ function Footer() {
       }}>
       <div>
         <strong>INSTITUTO DE COMPUTAÇÃO</strong>
-        <div>Avenida Adhemar de Barros, s/n - Campus de Ondina</div>
+        <div>Avenida Milton Santos, s/n - Campus de Ondina, PAF 2</div>
         <div>CEP: 40.170-110 Salvador-Bahia Telefone: 3283-6164</div>
       </div>
       <img
