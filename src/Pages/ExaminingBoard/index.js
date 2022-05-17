@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import "./styles.css";
 import Container from "@material-ui/core/Container";
+import ReactLoading from "react-loading";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { withStyles} from '@material-ui/core/styles';
@@ -21,6 +22,8 @@ import {
 
 function ExaminingBoard() {
   //
+  const [loading, setLoading] = useState(false);
+  const [tipo_banca, setTipo_banca] = useState(true);
   const history = useHistory();
 
   const goToDashboard = () => {
@@ -81,70 +84,115 @@ function ExaminingBoard() {
     return formData;
   }
 
+  const handleChange = e => {
+    const { value } = e.target;
+    if(value == "remoto"){
+      setTipo_banca(false);
+    }
+    else if(value == "local"){
+      setTipo_banca(true);
+    }
+  };
+
   const onSubmit = async (values) => {
     var hour = new Date(values.hora);
     var date = new Date(values.data_realizacao);
+    if(values['curso'] == 'BCC'){
+      values.disciplina = 'MATA67';
+    }
+    else if(values['curso'] == 'BSI'){
+      values.disciplina = 'MATC98';
+    }
     const loginToken = localStorage.getItem("loginToken");
-
+    const userId = localStorage.getItem("userId");
+    values.user_id = userId;
     hour.setHours(hour.getHours() - 3);
     hour.setDate(date.getDate());
     hour.setMonth(date.getMonth());
     hour.setFullYear(date.getFullYear());
     hour = hour.toISOString();
     values.data_realizacao = hour;
+    setLoading(true);
     await axios({
       method: "post",
-      url: `https://organizacao-de-defesas.herokuapp.com/banca`,
+      url: `https://sistema-de-defesa.herokuapp.com/banca`,
       data: getFormData(values),
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: loginToken,
         Accept: "application/json",
       },
-    }).then(function (response) {
+    })
+    .then(function (response) {
+      setLoading(false);
+      goToDashboard();
+    })
+    .catch(error => {
+      setLoading(false);
+      alert("Ocorreu um erro ao tentar cadastrar a banca");
       goToDashboard();
     });
   };
   const validate = (values) => {
     const errors = {};
     if (!values.titulo_trabalho) {
-      errors.titulo_trabalho = "Required";
+      errors.titulo_trabalho = "Obrigatório";
     }
     if (!values.resumo) {
-      errors.resumo = "Required";
+      errors.resumo = "Obrigatório";
     }
     if (!values.abstract) {
-      errors.abstract = "Required";
+      errors.abstract = "Obrigatório";
     }
     if (!values.palavras_chave) {
-      errors.palavras_chave = "Required";
+      errors.palavras_chave = "Obrigatório";
     }
     if (!values.data_realizacao) {
-      errors.data_realizacao = "Required";
+      errors.data_realizacao = "Obrigatório";
     }
     if (!values.hora) {
-      errors.hora = "Required";
+      errors.hora = "Obrigatório";
     }
     if (!values.local) {
-      errors.local = "Required";
-    }
-    if (!values.tipo_banca) {
-      errors.tipo_banca = "Required";
+      errors.local = "Obrigatório";
     }
     if (!values.curso) {
-      errors.curso = "Required";
+      errors.curso = "Obrigatório";
     }
-    if (!values.disciplina) {
-      errors.disciplina = "Required";
+    if (!values.tipo_banca) {
+      errors.tipo_banca = "Obrigatório";
     }
     if (!values.autor) {
-      errors.autor = "Required";
+      errors.autor = "Obrigatório";
+    }
+    if (!values.turma) {
+      errors.turma = "Obrigatório";
+    }
+    if (!values.ano) {
+      errors.ano = "Obrigatório";
+    }
+    if (!values.semestre_letivo) {
+      errors.semestre_letivo = "Obrigatório";
+    }
+    if (!values.matricula) {
+      errors.matricula = "Obrigatório";
     }
     return errors;
   };
 
   return (
     <Container className="App">
+      {loading ? (
+        <div className="center">
+        <ReactLoading
+          type={"spin"}
+          color={"#41616c"}
+          height={50}
+          width={50}
+        />
+      </div>
+      ) : (null)
+      }
       <div style={{ padding: 16, margin: "auto", maxWidth: 2000 }}>
         <CssBaseline />
         <Form
@@ -158,7 +206,7 @@ function ExaminingBoard() {
                   <Grid item xs={12}>
                     <Field
                       fullWidth
-                      required
+                      Obrigatório
                       multiline
                       name="titulo_trabalho"
                       component={TextField}
@@ -169,9 +217,8 @@ function ExaminingBoard() {
                   <Grid item xs={12}>
                     <Field
                       fullWidth
-                      required
+                      Obrigatório
                       multiline
-                      rows={4}
                       name="resumo"
                       component={TextField}
                       type="text"
@@ -183,42 +230,49 @@ function ExaminingBoard() {
                       name="abstract"
                       fullWidth
                       multiline
-                      required
+                      Obrigatório
                       component={TextField}
-                      rows={4}
                       label="Abstract"
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <Field
                       name="autor"
                       fullWidth
-                      required
+                      Obrigatório
                       component={TextField}
                       label="Autor"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Field
+                      name="matricula"
+                      fullWidth
+                      Obrigatório
+                      component={TextField}
+                      label="Matrícula"
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <Field
                       name="palavras_chave"
                       fullWidth
-                      required
+                      Obrigatório
                       multiline
                       component={TextField}
                       label="Palavras Chave (Separadas por vírgula)"
                     />
                   </Grid>
-                  <Grid item xs={8}>
-                    <Field
-                      name="tipo_banca"
-                      multiline
-                      fullWidth
-                      required
-                      component={TextField}
-                      label="Tipo da defesa"
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={6}>
+                        <Field
+                          name="turma"
+                          fullWidth
+                          Obrigatório
+                          component={TextField}
+                          label="Turma"
+                        />
+                      </Grid>
+                  <Grid item xs={4}>
                     <Field
                         name="curso"
                         label="Curso"
@@ -230,24 +284,40 @@ function ExaminingBoard() {
                     </Field>
                   </Grid>
                   <Grid item xs={2}>
-                    <Field
-                        name="disciplina"
-                        label="Disciplina"
-                        formControlProps={{className: 'disciplina'}}
-                        component={Select}
-                    >
-                        <MenuItem value={"MATA67"}>MATA67</MenuItem>
-                        <MenuItem value={"MATC98"}>MATC98</MenuItem>
-                    </Field>
+                    Remoto
+                    <Field name="tipo_banca" component={Radio} type="radio" value="remoto" onClick={handleChange}></Field>
+                    Local
+                    <Field name="tipo_banca" component={Radio} type="radio" value="local" onClick={handleChange}></Field>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={3}>
+                    <Field
+                      name="ano"
+                      multiline
+                      fullWidth
+                      Obrigatório
+                      component={TextField}
+                      label="Ano"
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Field
+                      name="semestre_letivo"
+                      fullWidth
+                      Obrigatório
+                      component={TextField}
+                      label="Semestre Letivo"
+                      type="number"
+                      InputProps={{ inputProps: { min: 1, max: 9, type: 'number' } }}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
                     <Field
                       name="local"
                       multiline
                       fullWidth
-                      required
+                      Obrigatório
                       component={TextField}
-                      label="Local ou link"
+                      label={tipo_banca ? "Local" : "Link"}
                     />
                   </Grid>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -255,7 +325,7 @@ function ExaminingBoard() {
                       <Field
                         name="data_realizacao"
                         component={DatePickerWrapper}
-                        required
+                        Obrigatório
                         fullWidth
                         margin="normal"
                         label="Data"
@@ -264,7 +334,7 @@ function ExaminingBoard() {
                     <Grid item xs={6}>
                       <Field
                         name="hora"
-                        required
+                        Obrigatório
                         component={TimePickerWrapper}
                         fullWidth
                         margin="normal"
@@ -280,6 +350,15 @@ function ExaminingBoard() {
                       disabled={submitting}
                     >
                       Adicionar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="button"
+                      disabled={submitting}
+                      onClick={goToDashboard}
+                    >
+                      Voltar
                     </Button>
                   </Grid>
                 </Grid>

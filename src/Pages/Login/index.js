@@ -19,11 +19,13 @@ function Login() {
     successMsg: "",
   };
 
+  const roles = ["aluno", "docente", "admin"];
+
   const history = useHistory();
 
   const routeChange = () => {
     let path = `dashboard`;
-    history.push(path);
+    // history.push(path);
   };
 
   const [state, setState] = useState(initialState);
@@ -49,6 +51,7 @@ function Login() {
       });
       localStorage.setItem("userId", data.data.id);
       localStorage.setItem("loginToken", data.data.token);
+      localStorage.setItem("role", roles[Number(data.data.role) - 1]);
       routeChange();
       // await isLoggedIn();
     } else {
@@ -87,7 +90,7 @@ function Login() {
             <input
               name="username"
               type="text"
-              required
+              Obrigatório
               placeholder="Usuário"
               value={state.userInfo.email}
               onChange={onChangeValue}
@@ -99,7 +102,7 @@ function Login() {
             <input
               name="password"
               type="password"
-              required
+              Obrigatório
               placeholder="Digite sua senha"
               value={state.userInfo.password}
               onChange={onChangeValue}

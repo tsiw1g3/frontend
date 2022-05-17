@@ -31,6 +31,7 @@ function ViewBoard() {
   const [idUb, setIdUb] = useState([]);
   const [role, setRole] = useState([]);
   const [done, setDone] = useState(undefined);
+  const [tipo_banca, setTipo_banca] = useState(true);
 
   const history = useHistory();
 
@@ -101,6 +102,12 @@ function ViewBoard() {
     var hour = new Date(values.hora);
     var date = new Date(values.data_realizacao);
     const loginToken = localStorage.getItem("loginToken");
+    if(values['curso'] == 'BCC'){
+      values.disciplina = 'MATA67';
+    }
+    else if(values['curso'] == 'BSI'){
+      values.disciplina = 'MATC98';
+    }
 
     hour.setHours(hour.getHours() - 3);
     hour.setDate(date.getDate());
@@ -109,7 +116,7 @@ function ViewBoard() {
     values.data_realizacao = hour.toISOString();
     axios({
       method: "put",
-      url: `https://organizacao-de-defesas.herokuapp.com/banca/${banca.id}`,
+      url: `https://sistema-de-defesa.herokuapp.com/banca/${banca.id}`,
       data: encode(values),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -120,58 +127,77 @@ function ViewBoard() {
       goToDashboard();
     });
 
-    if (role != "aluno") {
-      var details = { nota: parseFloat(values.nota) };
-      axios({
-        method: "put",
-        url: `https://organizacao-de-defesas.herokuapp.com/usuario-banca/${idUb}`,
-        data: encode(details),
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: loginToken,
-          Accept: "application/json",
-        },
-      }).then(function (response) {
-        return response;
-      });
-    }
+    // if (role != "aluno") {
+    //   var details = { nota: parseFloat(values.nota) };
+    //   axios({
+    //     method: "put",
+    //     url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/${idUb}`,
+    //     data: encode(details),
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //       Authorization: loginToken,
+    //       Accept: "application/json",
+    //     },
+    //   }).then(function (response) {
+    //     return response;
+    //   });
+    // }
   };
 
   const validate = (values) => {
     const errors = {};
     if (!values.titulo_trabalho) {
-      errors.titulo_trabalho = "Required";
+      errors.titulo_trabalho = "Obrigatório";
     }
     if (!values.resumo) {
-      errors.resumo = "Required";
+      errors.resumo = "Obrigatório";
     }
     if (!values.abstract) {
-      errors.abstract = "Required";
+      errors.abstract = "Obrigatório";
     }
     if (!values.palavras_chave) {
-      errors.palavras_chave = "Required";
+      errors.palavras_chave = "Obrigatório";
     }
     if (!values.local) {
-      errors.local = "Required";
-    }
-    if (!values.tipo_banca) {
-      errors.tipo_banca = "Required";
+      errors.local = "Obrigatório";
     }
     if (!values.curso) {
-      errors.curso = "Required";
+      errors.curso = "Obrigatório";
     }
-    if (!values.disciplina) {
-      errors.disciplina = "Required";
+    if (!values.tipo_banca) {
+      errors.tipo_banca = "Obrigatório";
     }
     if (!values.autor) {
-      errors.autor = "Required";
+      errors.autor = "Obrigatório";
+    }
+    if (!values.turma) {
+      errors.turma = "Obrigatório";
+    }
+    if (!values.ano) {
+      errors.ano = "Obrigatório";
+    }
+    if (!values.semestre_letivo) {
+      errors.semestre_letivo = "Obrigatório";
+    }
+    if (!values.matricula) {
+      errors.matricula = "Obrigatório";
     }
     return errors;
   };
 
+  const handleChange = e => {
+    const { value } = e.target;
+    if(value == "remoto"){
+      setTipo_banca(false);
+    }
+    else if(value == "local"){
+      setTipo_banca(true);
+    }
+  };
+
   const generateReport = async () => {
     fetch(
-      `https://organizacao-de-defesas.herokuapp.com/documento/${banca.id}`,
+      `https://sistema-de-defesa.herokuapp.com/documento/${banca.id}`,
       {
         method: "GET",
         headers: {
@@ -194,38 +220,19 @@ function ViewBoard() {
 
   useEffect(() => {
     setTimeout(() => {
-      axios({
-        method: "get",
-        url: `https://organizacao-de-defesas.herokuapp.com/usuario-banca/id/${banca.id}/${userId}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: loginToken,
-          Accept: "application/json",
-        },
-      }).then(function (response) {
-        setRole(response.data.data.role);
-        setIdUb(response.data.data.id);
-
-        if (response.data.data.role == "aluno") {
-          axios({
-            method: "get",
-            url: `https://organizacao-de-defesas.herokuapp.com/nota/${banca.id}`,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: loginToken,
-              Accept: "application/json",
-            },
-          }).then(function (response) {
-            setNota(response.data.data || "");
-            setDone(true);
-          });
-        } else {
-          // setNota(response.data.data.toString());
-          setNota(response.data.data.nota || "");
+        axios({
+          method: "get",
+          url: `https://sistema-de-defesa.herokuapp.com/nota/${banca.id}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: loginToken,
+            Accept: "application/json",
+          },
+        }).then(function (response) {
+          setNota(response.data.data || "");
           setDone(true);
-        }
-        return response;
-      });
+          return response;
+        });
     }, 0);
   }, []);
 
@@ -256,10 +263,14 @@ function ViewBoard() {
                 hora: banca.data_realizacao,
                 nota: nota,
                 nota_nao_alteravel: nota,
-                tipo_banca: banca.tipo_banca,
                 curso: banca.curso,
                 autor: banca.autor,
-                disciplina: banca.disciplina
+                turma: banca.turma,
+                disciplina: banca.disciplina,
+                tipo_banca: banca.tipo_banca,
+                matricula: banca.matricula,
+                ano: banca.ano,
+                semestre_letivo: banca.semestre_letivo,
               }}
               validate={validate}
               render={({
@@ -271,12 +282,11 @@ function ViewBoard() {
               }) => (
                 <form onSubmit={handleSubmit} noValidate>
                   <Paper style={{ padding: 16 }}>
-                    <div className="cargo">Cargo: {role}</div>
                     <Grid container alignItems="flex-start" spacing={2}>
                       <Grid item xs={12}>
                         <Field
                           fullWidth
-                          required
+                          Obrigatório
                           multiline
                           name="titulo_trabalho"
                           component={TextField}
@@ -287,7 +297,7 @@ function ViewBoard() {
                       <Grid item xs={12}>
                         <Field
                           fullWidth
-                          required
+                          Obrigatório
                           multiline
                           name="resumo"
                           component={TextField}
@@ -300,41 +310,49 @@ function ViewBoard() {
                           name="abstract"
                           fullWidth
                           multiline
-                          required
+                          Obrigatório
                           component={TextField}
                           label="Abstract"
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid item xs={6}>
                         <Field
                           name="autor"
                           fullWidth
-                          required
+                          Obrigatório
                           component={TextField}
                           label="Autor"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Field
+                          name="matricula"
+                          fullWidth
+                          Obrigatório
+                          component={TextField}
+                          label="Matrícula"
                         />
                       </Grid>
                       <Grid item xs={12}>
                         <Field
                           name="palavras_chave"
                           fullWidth
-                          required
+                          Obrigatório
                           multiline
                           component={TextField}
                           label="Palavras Chave (Separadas por vírgula)"
                         />
                       </Grid>
-                      <Grid item xs={8}>
+                      <Grid item xs={6}>
                         <Field
-                          name="tipo_banca"
-                          multiline
+                          name="turma"
                           fullWidth
-                          required
+                          Obrigatório
                           component={TextField}
-                          label="Tipo da defesa"
+                          label="Turma"
                         />
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={4}>
                         <Field
                             name="curso"
                             label="Curso"
@@ -346,23 +364,39 @@ function ViewBoard() {
                         </Field>
                       </Grid>
                       <Grid item xs={2}>
-                        <Field
-                            name="disciplina"
-                            label="Disciplina"
-                            formControlProps={{className: 'disciplina'}}
-                            component={Select}
-                        >
-                            <MenuItem value={"MATA67"}>MATA67</MenuItem>
-                            <MenuItem value={"MATC98"}>MATC98</MenuItem>
-                        </Field>
+                        Remoto
+                        <Field name="tipo_banca" component={Radio} type="radio" value="remoto" onClick={handleChange} checked={!tipo_banca}></Field>
+                        Local
+                        <Field name="tipo_banca" component={Radio} type="radio" value="local" onClick={handleChange} checked={tipo_banca}></Field>
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid item xs={3}>
+                        <Field
+                          name="ano"
+                          multiline
+                          fullWidth
+                          Obrigatório
+                          component={TextField}
+                          label="Ano"
+                        />
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Field
+                          name="semestre_letivo"
+                          fullWidth
+                          Obrigatório
+                          component={TextField}
+                          label="Semestre Letivo"
+                          type="number"
+                          InputProps={{ inputProps: { min: 1, max: 9, type: 'number' } }}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
                         <Field
                           name="local"
                           multiline
                           fullWidth
                           component={TextField}
-                          required
+                          Obrigatório
                           multiline
                           label="Local ou link"
                         />
@@ -372,7 +406,7 @@ function ViewBoard() {
                           <Field
                             name="data_realizacao"
                             component={DatePickerWrapper}
-                            required
+                            Obrigatório
                             fullWidth
                             margin="normal"
                             label="Data"
@@ -381,23 +415,13 @@ function ViewBoard() {
                         <Grid item xs={6}>
                           <Field
                             name="hora"
-                            required
+                            Obrigatório
                             component={TimePickerWrapper}
                             fullWidth
                             margin="normal"
                             label="Hora"
                           />
                         </Grid>
-                        {role != "aluno" ? (
-                          <Grid item xs={12}>
-                            <Field
-                              name="nota"
-                              fullWidth
-                              component={TextField}
-                              label="Nota"
-                            />
-                          </Grid>
-                        ) : (
                           <Grid item xs={12}>
                             <Field
                               name="nota_nao_alteravel"
@@ -407,7 +431,6 @@ function ViewBoard() {
                               label="Nota Final"
                             />
                           </Grid>
-                        )}
                       </MuiPickersUtilsProvider>
                       <Grid item style={{ marginTop: 16 }}>
                         <Button
@@ -430,8 +453,17 @@ function ViewBoard() {
                             Gerar relatório
                           </Button>
                         ) : (
-                          <p></p>
+                          <span></span>
                         )}
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          type="button"
+                          disabled={submitting}
+                          onClick={goToDashboard}
+                        >
+                          Voltar
+                        </Button>
                       </Grid>
                     </Grid>
                   </Paper>

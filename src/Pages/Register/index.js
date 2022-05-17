@@ -1,13 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { MyContext } from "../../Context";
 import { useHistory } from "react-router-dom";
-
+import axios from "axios";
 import "./styles.css";
 import Container from "@material-ui/core/Container";
+import ReactLoading from "react-loading";
 
 import { Form, Field } from "react-final-form";
 import { TextField } from "final-form-material-ui";
 import { Paper, Grid, Button, CssBaseline } from "@material-ui/core";
+import {useLocation} from "react-router-dom";
 // Picker
 
 /*
@@ -15,6 +17,8 @@ import { Paper, Grid, Button, CssBaseline } from "@material-ui/core";
 */
 
 function Register() {
+  const [done, setDone] = useState(false);
+  const [hash, setHash] = useState('');
   const { toggleNav, registerUser } = useContext(MyContext);
   const initialState = {
     userInfo: {
@@ -37,9 +41,40 @@ function Register() {
     history.push(path);
   };
 
+  useEffect(() => {
+    setTimeout(async () => {
+      let url = window.location.href;
+      let regex = /[?&]([^=#]+)=([^&#]*)/g,
+      hash = '',
+      match
+      match = regex.exec(url);
+      if(match == null){
+        goToHome();
+      }
+      hash = match[2];
+      const users = await axios({
+        method: "get",
+        url: `https://sistema-de-defesa.herokuapp.com/invite/${hash}`,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+        },
+      }).then(function (response) {
+        if(response.data.data == true){
+          setHash(hash);
+          setDone(true);
+        }
+        else{
+          goToHome();
+        }
+      });
+    }, 0);
+  }, []);
+
   // On Submit the Registration Form
   const submitForm = async (event) => {
     // event.preventDefault();
+    event.hash = hash;
     const data = await registerUser(event);
     goToHome();
   };
@@ -68,25 +103,36 @@ function Register() {
   const validate = (values) => {
     const errors = {};
     if (!values.nome) {
-      errors.nome = "Required";
+      errors.nome = "Obrigatório";
     }
     if (!values.email) {
-      errors.email = "Required";
+      errors.email = "Obrigatório";
     }
     if (!values.username) {
-      errors.username = "Required";
+      errors.username = "Obrigatório";
     }
     if (!values.password) {
-      errors.password = "Required";
+      errors.password = "Obrigatório";
     }
     if (!values.universidade) {
-      errors.universidade = "Required";
+      errors.universidade = "Obrigatório";
     }
     return errors;
   };
 
   return (
-    <Container className="App">
+    <>
+      {!done ? (
+        <div className="center">
+          <ReactLoading
+            type={"spin"}
+            color={"#41616c"}
+            height={100}
+            width={100}
+          />
+        </div>
+      ) : (
+      <Container className="App">
       <div style={{ padding: 16, margin: "auto", maxWidth: 2000 }}>
         <CssBaseline />
         <Form
@@ -103,18 +149,18 @@ function Register() {
                   <Grid item xs={12}>
                     <Field
                       fullWidth
-                      required
+                      Obrigatório
                       name="nome"
                       value={state.userInfo.nome}
                       component={TextField}
                       type="text"
-                      label="Nome"
+                      label="Nome Completo"
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <Field
                       fullWidth
-                      required
+                      Obrigatório
                       multiline
                       name="email"
                       value={state.userInfo.email}
@@ -126,7 +172,7 @@ function Register() {
                   <Grid item xs={12}>
                     <Field
                       fullWidth
-                      required
+                      Obrigatório
                       multiline
                       name="username"
                       value={state.userInfo.username}
@@ -138,7 +184,7 @@ function Register() {
                   <Grid item xs={12}>
                     <Field
                       fullWidth
-                      required
+                      Obrigatório
                       name="password"
                       value={state.userInfo.password}
                       component={TextField}
@@ -149,7 +195,7 @@ function Register() {
                   <Grid item xs={12}>
                     <Field
                       fullWidth
-                      required
+                      Obrigatório
                       multiline
                       name="universidade"
                       value={state.userInfo.universidade}
@@ -174,7 +220,9 @@ function Register() {
           )}
         />
       </div>
-    </Container>
+      </Container>
+      )}
+    </>
   );
 }
 

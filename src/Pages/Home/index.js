@@ -22,7 +22,34 @@ const Home = () => {
   const [done, setDone] = useState(undefined);
   
   const history = useHistory();
+
+  function goToViewBanca(banca){
+    let path = `verbanca?id=` + banca;
+    history.push(path);
+  };
   
+  const renderDetailsButton = (params) => {
+    return (
+      <div>
+          <button title="Ver banca" name="see-board" type="submit" id="see-board" onClick={() => goToViewBanca(params.row.id)}></button>
+      </div>
+    )
+  }
+  
+  const columns = [
+    { field: "formatedData", headerName: "Data de realização", width: 200 },
+    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 680 },
+    { field: "autor", headerName: "Discente", width: 200 },
+    { field: "curso", headerName: "Curso", width: 200 },
+    { field: "local", headerName: "Local ou link", width: 300 },
+    {
+      field: 'actions',
+      headerName: 'Ações',
+      width: 170,
+      renderCell: renderDetailsButton,
+      disableClickEventBubbling: true,
+    }
+  ];
 
   // const logout = () => {
   //   let path = ``;
@@ -50,7 +77,7 @@ const Home = () => {
       var bodyFormData = new FormData();
       axios({
         method: "get",
-        url: "https://organizacao-de-defesas.herokuapp.com/banca",
+        url: "https://sistema-de-defesa.herokuapp.com/banca",
         data: bodyFormData,
         headers: { Accept: "application/json" },
       }).then(function (response) {
@@ -151,10 +178,10 @@ const Home = () => {
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
-            <DataTable rows={data.length > 0 ? data[0] : rawData[0]} />
+            <DataTable onCellDoubleClick={goToViewBanca} columns={columns} rows={data.length > 0 ? data[0] : rawData[0]} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <DataTable rows={data.length > 0 ? data[1] : rawData[1]} />
+            <DataTable rows={data.length > 0 ? data[1] : rawData[1]} columns={columns}/>
           </TabPanel>
           {/* <h3 className="left-btn" style={{ color: "#000" }}>
             Próximas defesas
