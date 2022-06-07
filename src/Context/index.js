@@ -9,7 +9,7 @@ export const MyContext = createContext();
 
 // Define the base URL
 const Axios = axios.create({
-  baseURL: "https://sistema-de-defesa.herokuapp.com"//"https://organizacao-de-defesas.herokuapp.com",
+  baseURL: "https://sistema-de-defesa.herokuapp.1com"//"https://organizacao-de-defesas.herokuapp.com",
 });
 
 class MyContextProvider extends Component {
@@ -60,7 +60,7 @@ class MyContextProvider extends Component {
     bodyFormData.append("password", user.password);
     const res = await axios({
       method: "post",
-      url: "https://sistema-de-defesa.herokuapp.com/login",
+      url: "http://localhost:8080/login",
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
     })

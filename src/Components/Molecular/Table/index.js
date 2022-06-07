@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useHistory } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { DataGrid, ptBR } from "@mui/x-data-grid";
+import { makeStyles } from '@material-ui/core/styles';
 
 /*
   Componente responsável pela renderização da tabela de defesas
@@ -15,7 +15,21 @@ const theme = createTheme(
   ptBR,
 );
 
+const styles = makeStyles({
+  root:{
+    borderRadius:"10px",
+    "& .MuiDataGrid-columnsContainer":{
+        background:"#6c7ae0",
+        borderRadius:"10px 10px 0 0px"
+    },
+    "& .MuiDataGrid-columnHeaderTitle":{
+        color:"white"
+    },
+  }
+})
+
 export default function DataTable(params) {
+  const classes = styles();
   return (
     <div style={{ height: 400, width: "100%" }}>
       <ThemeProvider theme={theme}>
@@ -28,6 +42,7 @@ export default function DataTable(params) {
         columns={params.columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
+        className={classes.root}
       />
       </ThemeProvider>
     </div>

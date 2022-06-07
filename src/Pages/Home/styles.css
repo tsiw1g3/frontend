@@ -130,12 +130,27 @@
   width: 25px;
   min-width: 25px;
   height: 25px;
-  padding: 0;
+  padding: 2px;
   border: none;
   cursor:pointer;
   background:url("/public/img/eye-open_2.svg") 0 0 no-repeat;
 }
 
+#trash {
+  margin: 0px 15px 0px 0px;
+  width:20px;
+  height:20px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor:pointer;
+  background:url("/public/img/trash_24.svg") 0 0 no-repeat;
+}
+
 .MuiDataGrid-selectedRowCount{
   display:none !important;
 }
+
+/* .MuiDataGrid-columnsContainer{
+  background:black;
+} */

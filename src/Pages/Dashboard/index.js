@@ -44,7 +44,6 @@ function Dashboard() {
   const history = useHistory();
   localStorage.removeItem("bancaId");
 
-
   const logout = () => {
     let path = ``;
     history.push(path);
@@ -107,6 +106,14 @@ function Dashboard() {
   const loginToken = localStorage.getItem("loginToken");
   const userId = localStorage.getItem("userId");
 
+  const themeButton = createTheme({
+    palette: {
+      primary: {
+        main: '#329F5B',
+      },
+    },
+  });
+
   const useStyles = makeStyles((theme) => ({
     modal: {
       display: 'flex',
@@ -123,6 +130,21 @@ function Dashboard() {
       boxShadow:"0px 0px 0px",
     },
   }));
+
+  const styles = makeStyles({
+    root:
+      {
+        borderRadius:"10px",
+        "& .MuiDataGrid-columnsContainer":{
+            background:"#6c7ae0",
+            borderRadius:"10px 10px 0 0px"
+        },
+        "& .MuiDataGrid-columnHeaderTitle":{
+            color:"white"
+        },
+      }
+  })
+
   const classes = useStyles();
 
   const getBancaUsuarios = async (bancaId) => {
@@ -131,7 +153,7 @@ function Dashboard() {
       const users = await axios({
         method: "get",
         url:
-          "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
+          "http://localhost:8080/usuario-banca/usuarios/" +
           bancaId,
         data: bodyFormData,
         headers: {
@@ -153,7 +175,7 @@ function Dashboard() {
       await axios({
         method: "get",
         url:
-        "https://sistema-de-defesa.herokuapp.com/usuario/" +
+        "http://localhost:8080/usuario/" +
           userId +
           "/banca",
         data: bodyFormData,
@@ -168,7 +190,7 @@ function Dashboard() {
       await axios({
         method: "get",
         url:
-        "https://sistema-de-defesa.herokuapp.com/banca/" +
+        "http://localhost:8080/banca/" +
           userId +
           "/bancas",
         data: bodyFormData,
@@ -218,7 +240,7 @@ function Dashboard() {
     const loginToken = localStorage.getItem("loginToken");
     await axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/email`,
+      url: `http://localhost:8080/usuario-banca/usuarios/email`,
       data: getFormData(values),
       headers: {
         "Content-Type": "multipart/form-data",
@@ -243,7 +265,7 @@ function Dashboard() {
     const id = values.avaliador
     await axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/nota/${banca}/${id}`,
+      url: `http://localhost:8080/usuario-banca/nota/${banca}/${id}`,
       data: getFormData(values),
       headers: {
         "Content-Type": "multipart/form-data",
@@ -331,7 +353,7 @@ function Dashboard() {
   const renderDetailsButton2 = (params) => {
     return (
       <div>
-          <button title="Dar Nota" name="give-score" type="submit" id="give-score" onClick={() => openModalNota(params.row.id, params.row.titulo_trabalho)}></button>
+          <button title="Dar Nota" name="give-score" type="submit" id="give-score-solo" onClick={() => openModalNota(params.row.id, params.row.titulo_trabalho)}></button>
       </div>
     )
   }
@@ -354,15 +376,17 @@ function Dashboard() {
                 InputProps={{ inputProps: { min: 0, max: 10, type: 'number' } }}
                 label="Nota"
                 />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={submitting}
-                  style={{marginLeft:"15px"}}
-                >
-                  Enviar
-              </Button>
+                <ThemeProvider theme={themeButton}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      disabled={submitting}
+                      style={{marginLeft:"15px", borderRadius: 10}}
+                    >
+                        Enviar
+                    </Button>
+                </ThemeProvider>
             </form>
           )}
         />
@@ -371,24 +395,24 @@ function Dashboard() {
   }
 
   const columns = [
-    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 1000 },
+    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 1250 },
     { field: "curso", headerName: "Curso", width: 150 },
     {
       field: 'actions',
       headerName: 'Ações',
-      width: 170,
+      width: 300,
       renderCell: renderDetailsButton,
       disableClickEventBubbling: true,
     }
   ];
 
   const columns2 = [
-    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 1000 },
+    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 1250 },
     { field: "curso", headerName: "Curso", width: 150 },
     {
       field: 'actions',
       headerName: 'Ações',
-      width: 170,
+      width: 300,
       renderCell: renderDetailsButton2,
       disableClickEventBubbling: true,
     }
@@ -406,6 +430,8 @@ function Dashboard() {
     },
   ];
 
+  const classesGrid = styles();
+
   return (
     <>
       {!done ? (
@@ -421,20 +447,21 @@ function Dashboard() {
         <div className="container">
           <div className="tcc-list">
               <AppBar position="static" style={{ background: '#fff', color: '#000', display: "-webkit-box" }}>
-                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" style={{ width:"30%"}}>
+                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" style={{ width:"100%"}}>
                   <Tab label="Minhas defesas" {...a11yProps(0)} />
                   <Tab label="Defesas em que participo" {...a11yProps(1)} />
+                  <ThemeProvider theme={themeButton}>
+                      <Button
+                        type="button"
+                        variant="contained"
+                        color="primary"
+                        onClick={addBanca}
+                        style={{borderRadius: 10}}
+                      >
+                        Adicionar banca
+                      </Button>
+                  </ThemeProvider>
                 </Tabs>
-                <div className="right-btn">
-                    <Button
-                      type="button"
-                      variant="contained"
-                      color="primary"
-                      onClick={addBanca}
-                    >
-                      Adicionar banca
-                    </Button>
-                  </div>
               </AppBar>
               <TabPanel value={value} index={0}>
                   {data2 && data2.length > 0 ? (
@@ -445,6 +472,7 @@ function Dashboard() {
                       columns={columns}
                       pageSize={5}
                       rowsPerPageOptions={[5]}
+                      className={classesGrid.root}
                     />
                     </ThemeProvider>
                   </div>
@@ -459,6 +487,7 @@ function Dashboard() {
                       columns={columns2}
                       pageSize={5}
                       rowsPerPageOptions={[5]}
+                      className={classesGrid.root}
                     />
                     </ThemeProvider>
                   </div>
@@ -536,14 +565,17 @@ function Dashboard() {
                                   />
                                 </Grid>
                                 <Grid item style={{ marginTop: 16 }}>
-                                  <Button
-                                    variant="contained"
-                                    color="primary"
-                                    type="submit"
-                                    disabled={submitting}
-                                  >
-                                    Enviar
-                                  </Button>
+                                  <ThemeProvider theme={themeButton}>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        type="submit"
+                                        disabled={submitting}
+                                        style={{borderRadius:10}}
+                                      >
+                                        Enviar
+                                      </Button>
+                                  </ThemeProvider>
                                 </Grid>
                               </Grid>
                             </Paper>
@@ -602,14 +634,17 @@ function Dashboard() {
                                   />
                                 </Grid>
                                 <Grid item style={{ marginTop: 16 }}>
-                                  <Button
-                                    variant="contained"
-                                    color="primary"
-                                    type="submit"
-                                    disabled={submitting}
-                                  >
-                                    Enviar
-                                  </Button>
+                                  <ThemeProvider theme={themeButton}>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        type="submit"
+                                        disabled={submitting}
+                                        style={{borderRadius:10}}
+                                      >
+                                        Enviar
+                                      </Button>
+                                  </ThemeProvider>
                                 </Grid>
                               </Grid>
                             </Paper>
@@ -669,6 +704,7 @@ function Dashboard() {
                                       pageSize={5}
                                       rowsPerPageOptions={[5]}
                                       rowHeight={62}
+                                      className={classesGrid.root}
                                     />
                                 </div>
                                 ):(null)}

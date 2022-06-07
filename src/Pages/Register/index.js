@@ -54,7 +54,7 @@ function Register() {
       hash = match[2];
       const users = await axios({
         method: "get",
-        url: `https://sistema-de-defesa.herokuapp.com/invite/${hash}`,
+        url: `http://localhost:8080/invite/${hash}`,
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",

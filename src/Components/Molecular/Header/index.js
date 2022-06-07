@@ -5,10 +5,18 @@ import { useHistory } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
 import ReactLoading from "react-loading";
 import "./styles.css";
+import { createTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 /*
   Componente responsável pela renderização do cabeçalho da aplicação
 */
+const useStyles = makeStyles({
+  root: {
+    height: 20,
+  },
+});
 
 const Header = () => {
   const { loginUser, logoutUser, isLoggedIn } = useContext(MyContext);
@@ -21,6 +29,33 @@ const Header = () => {
     username: "",
     password: "",
   };
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#6c7ae0',
+        dark: '#002884',
+        contrastText: '#fff',
+      },
+      secondary: {
+        light: '#ff7961',
+        main: '#f44336',
+        dark: '#ba000d',
+        contrastText: '#000',
+      },
+    },
+  });
+
+  const themeTextField = createTheme({
+    overrides: {
+      MuiOutlinedInput: {
+        input: {
+          height:20
+        },
+      },
+    },
+  });
 
   const redirectTo = (path) => {
     history.push(path);
@@ -64,13 +99,15 @@ const Header = () => {
     setAnchorEl(null);
   };
 
+  const classes = useStyles();
+
   return (
     <div
       className="header"
       expand="lg"
-      style={{
-        backgroundImage: `url(/frontend/img/header.png)`,
-      }}
+      // style={{
+      //   backgroundImage: `url(/frontend/img/header.png)`,
+      // }}
     >
       <div className="logo-container">
         <div>
@@ -87,47 +124,50 @@ const Header = () => {
 
       {isUserLogged ? (
         <div className="login-form">
-          <Button
-            className="login-button"
-            component={Link}
-            to="/"
-            style={{ marginTop: -20, marginLeft: 20 }}
-          >
-            Home
-          </Button>
-          <Button
-            className="login-button"
-            component={Link}
-            to="/dashboard"
-            style={{ marginTop: -20, marginLeft: 20 }}
-          >
-            Minhas Bancas
-          </Button>
-          {localStorage.getItem("role") == 3 ? (
-            <Button
-            className="login-button"
-            component={Link}
-            to="/users"
-            style={{ marginTop: -20, marginLeft: 20 }}
-            >
-              Ver Usuários
-            </Button>
-          ): (
-          <h1></h1>
-          )}
-          
-          <Button
-            className="login-button"
-            onClick={() => {
-              logoutUser();
-              setIsUserLogged(false);
-              setUser(initialUser);
-              redirectTo("/");
-            }}
-            style={{ marginTop: -20, marginLeft: 20 }}
-          >
-            Logout
-          </Button>
+          <ThemeProvider theme={theme}>
+              <Button
+                className="login-button"
+                component={Link}
+                to="/"
+                style={{ marginTop: -20, marginLeft: 20 }}
+              >
+                Home
+              </Button>
+              <Button
+                className="login-button"
+                component={Link}
+                to="/dashboard"
+                style={{ marginTop: -20, marginLeft: 20 }}
+              >
+                Minhas Bancas
+              </Button>
+              {localStorage.getItem("role") == 3 ? (
+                <Button
+                className="login-button"
+                component={Link}
+                to="/users"
+                style={{ marginTop: -20, marginLeft: 20 }}
+                >
+                  Ver Usuários
+                </Button>
+              ): (
+              <h1></h1>
+              )}
+              <Button
+                className="login-button"
+                onClick={() => {
+                  logoutUser();
+                  setIsUserLogged(false);
+                  setUser(initialUser);
+                  redirectTo("/");
+                }}
+                style={{ marginLeft: 20, minWidth:80, height:40, borderRadius:10 }}
+                color="primary"
+                variant="contained"
+              >
+                Logout
+              </Button>
+          </ThemeProvider>
         </div>
       ) : (
         <form className="login-form" onSubmit={submitForm}>
@@ -142,32 +182,38 @@ const Header = () => {
             </div>
           ) : (null)
           }
-          <TextField
-            className="login-input"
-            name="username"
-            label="Usuário"
-            variant="outlined"
-            size="small"
-            style={{ marginLeft: 20 }}
-            onChange={onChangeValue}
-          />
-          <TextField
-            className="login-input"
-            name="password"
-            label="Senha"
-            variant="outlined"
-            size="small"
-            type="password"
-            style={{ marginLeft: 20 }}
-            onChange={onChangeValue}
-          />
-          <Button
-            className="login-button"
-            type="submit"
-            style={{ marginTop: -10, marginLeft: 20 }}
-          >
-            Entrar
-          </Button>
+          <ThemeProvider theme={themeTextField}>
+            <TextField
+              className={classes.root}
+              name="username"
+              label="Usuário"
+              variant="outlined"
+              size="small"
+              style={{ marginLeft: 20 }}
+              onChange={onChangeValue}
+              />
+            <TextField
+              className={classes.root}
+              name="password"
+              label="Senha"
+              variant="outlined"
+              size="small"
+              type="password"
+              style={{ marginLeft: 20 }}
+              onChange={onChangeValue}
+              />
+          </ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <Button
+              className="login-button"
+              type="submit"
+              style={{ marginLeft: 20, minWidth:80, height:40, borderRadius:10 }}
+              color="primary"
+              variant="contained"
+            >
+              Entrar
+            </Button>
+          </ThemeProvider>
           {/* <Button
             className="login-button"
             style={{ marginTop: -10, minWidth: 90, marginRight: -20 }}

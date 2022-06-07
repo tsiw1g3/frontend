@@ -12,9 +12,7 @@ function Footer() {
       bg="light"
       expand="lg"
       fixed="bottom"
-      style={{
-        backgroundImage: `url(/frontend/img/header.png)`,
-      }}>
+    >
       <div>
         <strong>INSTITUTO DE COMPUTAÇÃO</strong>
         <div>Avenida Milton Santos, s/n - Campus de Ondina, PAF 2</div>

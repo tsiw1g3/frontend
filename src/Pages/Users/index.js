@@ -4,8 +4,9 @@ import { useHistory } from "react-router-dom";
 import "./styles.css";
 import axios from "axios";
 import ReactLoading from "react-loading";
-import { Button, Select, InputLabel, MenuItem } from "@material-ui/core";
+import { Button, Select, InputLabel, MenuItem, ThemeProvider } from "@material-ui/core";
 import SelectSearch, { fuzzySearch } from "react-select-search";
+import { createTheme } from '@material-ui/core/styles';
 
 /*
   Componente responsável pela página de adição de usuários à bancas
@@ -36,13 +37,41 @@ function Users() {
   const loginToken = localStorage.getItem("loginToken");
   const userId = localStorage.getItem("userId");
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#329F5B',
+        dark: '#184e2d',
+        contrastText: '#fff',
+      },
+      secondary: {
+        light: '#ff7961',
+        main: '#6c7ae0',
+        dark: '#002884',
+        contrastText: '#fff',
+      },
+    },
+  });
+
+  const themeConvite = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#1D2987',
+        dark: '#0e1443',
+        contrastText: '#fff',
+      }
+    }
+  });
+
   const editRole = async () => {
     var bodyFormData = new FormData();
     bodyFormData.append("role", cargo);
     setDone(false);
     await axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/usuario/${usuario}/role`,
+      url: `http://localhost:8080/usuario/${usuario}/role`,
       data: bodyFormData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -62,7 +91,7 @@ function Users() {
     // setDone(false);
     const invite = axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/invite`,
+      url: `http://localhost:8080/invite`,
       data: bodyFormData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -82,7 +111,7 @@ function Users() {
       var bodyFormData = new FormData();
       const users = axios({
         method: "get",
-        url: "https://sistema-de-defesa.herokuapp.com/usuario",
+        url: "http://localhost:8080/usuario",
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -140,17 +169,22 @@ function Users() {
         </div>
       ) : (
         <div className="container">
-          <div className="right-btn">
-            <Button
-              type="button"
-              variant="contained"
-              color="primary"
-              onClick={generateLink}
-            >
-              Gerar link de convite
-            </Button>
+          <div>
+            <div className="right-btn">
+              <ThemeProvider theme={themeConvite}>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    onClick={generateLink}
+                    style={{borderRadius: 10}}
+                  >
+                    Gerar link de convite
+                  </Button>
+              </ThemeProvider>
+            </div>
+            <h2>Usuários</h2>
           </div>
-          <h2>Usuários</h2>
           <div>
             <div className="user">
                 <div className="user-name">
@@ -172,27 +206,33 @@ function Users() {
                         search
                         value={cargo}
                         onChange={roleChange}
-                        placeholder="Cargo"
+                        placeholder="Função"
                       />
-                    <Button
-                      onClick={editRole}
-                      className="user-role"
-                      type="button"
-                      variant="contained"
-                      color="primary"
-                    >
-                      Alterar cargo
-                    </Button>
+                    <ThemeProvider theme={theme}>
+                      <Button
+                        onClick={editRole}
+                        className="user-role"
+                        type="button"
+                        variant="contained"
+                        color="primary"
+                        style={{marginLeft:16, borderRadius:10}}
+                      >
+                        Alterar função
+                      </Button>
+                    </ThemeProvider>
                 </div>
              </div>
-             <Button
+             <ThemeProvider theme={theme}>
+                <Button
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   type="button"
                   onClick={goToDashboard}
-              >
-                Voltar
-              </Button>
+                  style={{borderRadius:10}}
+                >
+                    Voltar
+                </Button>
+              </ThemeProvider>
           </div>
         </div>
       )}

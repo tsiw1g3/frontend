@@ -27,11 +27,48 @@ const Home = () => {
     let path = `verbanca?id=` + banca;
     history.push(path);
   };
+
+  const editBanca = (banca) => {
+    localStorage.setItem("banca", JSON.stringify(banca));
+    let path = `editarbanca`;
+    history.push(path);
+  };
   
+  const role = localStorage.getItem("role");
+  const loginToken = localStorage.getItem("loginToken");
+  
+  const reload = () => {
+    window.location.reload();
+  };
+
+  const removeBanca = (bancaId) => {
+    axios({
+      method: "delete",
+      url: `http://localhost:8080/banca/${bancaId}/delete`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: loginToken,
+        Accept: "application/json",
+      },
+    }).then(function (response) {
+      alert("Banca removida com sucesso");
+      reload();
+    }).catch(function (error) {
+      alert(error.response.data.message);
+    });
+  };
+
   const renderDetailsButton = (params) => {
     return (
       <div>
           <button title="Ver banca" name="see-board" type="submit" id="see-board" onClick={() => goToViewBanca(params.row.id)}></button>
+          {role == 3 ? (
+            <>
+              <button title="Editar banca" name="edit-board" type="submit" id="edit-board" onClick={() => editBanca(params.row)}></button>
+              <button title="Remover banca" name="trash" type="submit" id="trash" onClick={() => removeBanca(params.row.id)}></button>
+            </>
+          ) : (null)
+          }
       </div>
     )
   }
@@ -77,7 +114,7 @@ const Home = () => {
       var bodyFormData = new FormData();
       axios({
         method: "get",
-        url: "https://sistema-de-defesa.herokuapp.com/banca",
+        url: "http://localhost:8080/banca",
         data: bodyFormData,
         headers: { Accept: "application/json" },
       }).then(function (response) {

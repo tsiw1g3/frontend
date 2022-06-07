@@ -7,7 +7,7 @@ import axios from "axios";
 import { withStyles} from '@material-ui/core/styles';
 import { Form, Field } from "react-final-form";
 import { TextField, Checkbox, Radio, Select } from "final-form-material-ui";
-import { Paper, Grid, Button, CssBaseline, InputLabel, MenuItem } from "@material-ui/core";
+import { Paper, Grid, Button, CssBaseline, InputLabel, MenuItem, ThemeProvider } from "@material-ui/core";
 // Picker
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -15,6 +15,8 @@ import {
   TimePicker,
   DatePicker,
 } from "@material-ui/pickers";
+import { makeStyles } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 
 /*
   Componente responsável pela página de criação de bancas
@@ -78,6 +80,23 @@ function ExaminingBoard() {
     );
   }
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#329F5B',
+        dark: '#184e2d',
+        contrastText: '#fff',
+      },
+      secondary: {
+        light: '#ff7961',
+        main: '#6c7ae0',
+        dark: '#002884',
+        contrastText: '#fff',
+      },
+    },
+  });
+
   function getFormData(object) {
     const formData = new FormData();
     Object.keys(object).forEach((key) => formData.append(key, object[key]));
@@ -115,7 +134,7 @@ function ExaminingBoard() {
     setLoading(true);
     await axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/banca`,
+      url: `http://localhost:8080/banca`,
       data: getFormData(values),
       headers: {
         "Content-Type": "multipart/form-data",
@@ -180,8 +199,17 @@ function ExaminingBoard() {
     return errors;
   };
 
+  const styles = makeStyles({
+    root:{
+      boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
+      padding: "16px"
+    }
+  });
+
+  const classesGrid = styles();
+
   return (
-    <Container className="App">
+    <Container className="App banca-form-container">
       {loading ? (
         <div className="center">
         <ReactLoading
@@ -193,16 +221,17 @@ function ExaminingBoard() {
       </div>
       ) : (null)
       }
-      <div style={{ padding: 16, margin: "auto", maxWidth: 2000 }}>
+      <div style={{ padding: 16, display:"flex", flexDirection: "column", maxWidth: 3000 }}>
         <CssBaseline />
+        <h2 class="banca-form-header">Adicionar nova banca</h2>
         <Form
           onSubmit={onSubmit}
           initialValues={{}}
           validate={validate}
           render={({ handleSubmit, reset, submitting, pristine, values }) => (
             <form onSubmit={handleSubmit} noValidate>
-              <Paper style={{ padding: 16 }}>
-                <Grid container alignItems="flex-start" spacing={2}>
+              
+                <Grid container alignItems="flex-start" spacing={2} className={classesGrid.root}>
                   <Grid item xs={12}>
                     <Field
                       fullWidth
@@ -283,10 +312,10 @@ function ExaminingBoard() {
                         <MenuItem value={"BSI"}>BSI</MenuItem>
                     </Field>
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid style={{padding:0,marginTop:"auto", fontSize: "13px"}} item xs={2}>
                     Remoto
                     <Field name="tipo_banca" component={Radio} type="radio" value="remoto" onClick={handleChange}></Field>
-                    Local
+                    Presencial
                     <Field name="tipo_banca" component={Radio} type="radio" value="local" onClick={handleChange}></Field>
                   </Grid>
                   <Grid item xs={3}>
@@ -343,26 +372,30 @@ function ExaminingBoard() {
                     </Grid>
                   </MuiPickersUtilsProvider>
                   <Grid item style={{ marginTop: 16 }}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      type="submit"
-                      disabled={submitting}
-                    >
-                      Adicionar
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      type="button"
-                      disabled={submitting}
-                      onClick={goToDashboard}
-                    >
-                      Voltar
-                    </Button>
+                    <ThemeProvider theme={theme}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          type="submit"
+                          disabled={submitting}
+                          style={{borderRadius: 10}}
+                        >
+                          Adicionar
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          type="button"
+                          disabled={submitting}
+                          onClick={goToDashboard}
+                          style={{marginLeft:10, borderRadius: 10}}
+                        >
+                          Voltar
+                        </Button>
+                    </ThemeProvider>
                   </Grid>
                 </Grid>
-              </Paper>
+              
             </form>
           )}
         />

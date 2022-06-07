@@ -130,6 +130,17 @@
   background:url("/public/img/star_34.svg") 0 0 no-repeat;
 }
 
+#give-score-solo {
+  margin: 0px 15px 0px 0px;
+  width:20px;
+  height:20px;
+  padding: 4px;
+  border: none;
+  background: none;
+  cursor:pointer;
+  background:url("/public/img/star_34.svg") 0 0 no-repeat;
+}
+
 .MuiDataGrid-row:nth-of-type(even){
   background-color: #f2f2f2;
 }

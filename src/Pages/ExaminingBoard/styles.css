@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.banca-form-container{
+  min-height: 82.5vh;
+  display: flex !important;
+  margin: 16px 0;
+}
+
+.banca-form-header{
+  margin-right: auto;
+  margin-bottom: 26px;
+}

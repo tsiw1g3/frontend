@@ -18,7 +18,7 @@ function App() {
         <div
           className="app-container"
           style={{
-            minHeight: "78vh",
+            minHeight: "82.5vh",
           }}
         >
           <div

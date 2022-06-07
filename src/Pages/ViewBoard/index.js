@@ -7,7 +7,7 @@ import axios from "axios";
 
 import { Form, Field } from "react-final-form";
 import { TextField, Checkbox, Radio, Select } from "final-form-material-ui";
-import { Paper, Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
+import { Paper, Grid, Button, CssBaseline, MenuItem, ThemeProvider } from "@material-ui/core";
 // Picker
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -15,6 +15,8 @@ import {
   TimePicker,
   DatePicker,
 } from "@material-ui/pickers";
+import { makeStyles } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 
 /*
   Componente responsável pela página de visualização de bancas
@@ -116,7 +118,7 @@ function ViewBoard() {
     values.data_realizacao = hour.toISOString();
     axios({
       method: "put",
-      url: `https://sistema-de-defesa.herokuapp.com/banca/${banca.id}`,
+      url: `http://localhost:8080/banca/${banca.id}`,
       data: encode(values),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -131,7 +133,7 @@ function ViewBoard() {
     //   var details = { nota: parseFloat(values.nota) };
     //   axios({
     //     method: "put",
-    //     url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/${idUb}`,
+    //     url: `http://localhost:8080/usuario-banca/${idUb}`,
     //     data: encode(details),
     //     headers: {
     //       "Content-Type": "multipart/form-data",
@@ -197,7 +199,7 @@ function ViewBoard() {
 
   const generateReport = async () => {
     fetch(
-      `https://sistema-de-defesa.herokuapp.com/documento/${banca.id}`,
+      `http://localhost:8080/documento/${banca.id}`,
       {
         method: "GET",
         headers: {
@@ -222,7 +224,7 @@ function ViewBoard() {
     setTimeout(() => {
         axios({
           method: "get",
-          url: `https://sistema-de-defesa.herokuapp.com/nota/${banca.id}`,
+          url: `http://localhost:8080/nota/${banca.id}`,
           headers: {
             "Content-Type": "application/json",
             Authorization: loginToken,
@@ -236,6 +238,43 @@ function ViewBoard() {
     }, 0);
   }, []);
 
+  const styles = makeStyles({
+    root:{
+      boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
+      padding: "16px"
+    }
+  });
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#1D2987',
+        dark: '#0e1443',
+        contrastText: '#fff',
+      },
+      secondary: {
+        light: '#ff7961',
+        main: '#6c7ae0',
+        dark: '#002884',
+        contrastText: '#fff',
+      },
+    },
+  });
+
+  const themeEditar = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#329F5B',
+        dark: '#184e2d',
+        contrastText: '#fff',
+      }
+    }
+  });
+
+  const classesGrid = styles();
+
   return (
     <>
       {!done ? (
@@ -248,9 +287,10 @@ function ViewBoard() {
           />
         </div>
       ) : (
-        <Container className="App">
-          <div style={{ padding: 16, margin: "auto", maxWidth: 2000 }}>
+        <Container className="App banca-form-container">
+          <div style={{ padding: 16, display:"flex", flexDirection: "column", maxWidth: 2000 }}>
             <CssBaseline />
+            <h2 class="banca-form-header">Editar banca</h2>
             <Form
               onSubmit={onSubmit}
               initialValues={{
@@ -281,8 +321,7 @@ function ViewBoard() {
                 values,
               }) => (
                 <form onSubmit={handleSubmit} noValidate>
-                  <Paper style={{ padding: 16 }}>
-                    <Grid container alignItems="flex-start" spacing={2}>
+                    <Grid container alignItems="flex-start" spacing={2} className={classesGrid.root}>
                       <Grid item xs={12}>
                         <Field
                           fullWidth
@@ -363,10 +402,10 @@ function ViewBoard() {
                             <MenuItem value={"BSI"}>BSI</MenuItem>
                         </Field>
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid style={{padding:0,marginTop:"auto", fontSize: "13px"}} item xs={2}>
                         Remoto
                         <Field name="tipo_banca" component={Radio} type="radio" value="remoto" onClick={handleChange} checked={!tipo_banca}></Field>
-                        Local
+                        Presencial
                         <Field name="tipo_banca" component={Radio} type="radio" value="local" onClick={handleChange} checked={tipo_banca}></Field>
                       </Grid>
                       <Grid item xs={3}>
@@ -433,40 +472,42 @@ function ViewBoard() {
                           </Grid>
                       </MuiPickersUtilsProvider>
                       <Grid item style={{ marginTop: 16 }}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          type="submit"
-                          disabled={submitting}
-                        >
-                          Editar
-                        </Button>
-                        {role == "orientador" ? (
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                              setDone(false);
-                              generateReport();
-                            }}
-                          >
-                            Gerar relatório
-                          </Button>
-                        ) : (
-                          <span></span>
-                        )}
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          type="button"
-                          disabled={submitting}
-                          onClick={goToDashboard}
-                        >
-                          Voltar
-                        </Button>
+                            <ThemeProvider theme={themeEditar}>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={submitting}
+                                style={{borderRadius:10}}
+                              >
+                                Editar
+                              </Button>
+                            </ThemeProvider>
+                            <ThemeProvider theme={theme}>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => {
+                                setDone(false);
+                                generateReport();
+                              }}
+                              style={{marginLeft:10, borderRadius: 10}}
+                            >
+                              Gerar relatório
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              type="button"
+                              disabled={submitting}
+                              onClick={goToDashboard}
+                              style={{marginLeft:10, borderRadius: 10}}
+                            >
+                              Voltar
+                            </Button>
+                        </ThemeProvider>
                       </Grid>
                     </Grid>
-                  </Paper>
                 </form>
               )}
             />

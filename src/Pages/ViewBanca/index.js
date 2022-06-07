@@ -5,9 +5,11 @@ import ReactLoading from "react-loading";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
+import CardBanca from "../../Components/Card";
 import { Form, Field } from "react-final-form";
 import { TextField, Checkbox, Radio, Select } from "final-form-material-ui";
 import { Paper, Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 
 /*
   Componente responsável pela página de visualização de bancas
@@ -40,7 +42,7 @@ function ViewBanca() {
       banca = match[2];
       const users = await axios({
         method: "get",
-        url: `https://sistema-de-defesa.herokuapp.com/banca/${banca}`,
+        url: `http://localhost:8080/banca/${banca}`,
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
@@ -81,7 +83,7 @@ function ViewBanca() {
       const users = axios({
         method: "get",
         url:
-          "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
+          "http://localhost:8080/usuario-banca/usuarios/" +
           banca,
         data: bodyFormData,
         headers: {
@@ -99,6 +101,17 @@ function ViewBanca() {
     }, 0);
   }, []);
 
+  const styles = makeStyles({
+    root:{
+      boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
+      padding: "16px",
+      borderRadius:"8px"
+    }
+  });
+
+  const classesGrid = styles();
+  console.log(banca);
+
   return (
     <>
       {!done && !done2 ? (
@@ -112,96 +125,60 @@ function ViewBanca() {
           </div>
         ) : (
         <Container className="App">
-          <div style={{ padding: 16, margin: "auto", maxWidth: 2000 }}>
+          <div style={{ padding: 16, display:"flex", flexDirection: "column", margin: "auto", maxWidth: 2000 }}>
             <CssBaseline />
-            <Paper style={{ padding: 16 }}>
+            <Grid container alignItems="flex-start" spacing={2} className={classesGrid.root}>
               <div className="banca-content">
                 <h1>Título: {banca.titulo_trabalho}</h1>
               </div>
-              <Grid container justifyContent="flex-start">
+              <Grid container justifyContent="flex-start" spacing={2}>
                 <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Resumo: </strong> {banca.resumo}</span>
-                  </div>
-                  <br></br>
+                  <CardBanca text={banca.resumo} title="Resumo"></CardBanca>
                 </Grid>
                 <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Abstract: </strong> {banca.abstract}</span>
-                  </div>
-                  <br></br>
+                  <CardBanca text={banca.abstract} title="Abstract"></CardBanca>
+                </Grid>
+                <Grid item xs={4}>
+                  <CardBanca text={banca.autor} title="Autor"></CardBanca>
+                </Grid>
+                <Grid item xs={4}>
+                  <CardBanca text={banca.matricula} title="Matrícula"></CardBanca>
+                </Grid>
+                <Grid item xs={4}>
+                  <CardBanca text={banca.palavras_chave} title="Palavras Chaves (Separadas por vírgula)"></CardBanca>
+                </Grid>
+                <Grid item xs={4}>
+                  <CardBanca text={banca.turma} title="Turma"></CardBanca>
+                </Grid>
+                <Grid item xs={4}>
+                  <CardBanca text={banca.curso} title="Curso"></CardBanca>
+                </Grid>
+                <Grid item xs={4}>
+                  <CardBanca text={banca.ano} title="Ano"></CardBanca>
+                </Grid>
+                <Grid item xs={4}>
+                  <CardBanca text={banca.semestre_letivo} title="Semestre Letivo"></CardBanca>
+                </Grid>
+                <Grid item xs={4}>
+                  <CardBanca text={banca.local} title="Local"></CardBanca>
+                </Grid>
+                <Grid item xs={4}>
+                  <CardBanca text={date} title="Data e hora"></CardBanca>
                 </Grid>
                 <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Autor: </strong>{banca.autor}</span>
-                  </div>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Matrícula: </strong>{banca.matricula}</span>
-                  </div>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Palavras Chaves (Separadas por vírgula): </strong>{banca.palavras_chave}</span>
-                  </div>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Turma: </strong>{banca.turma}</span>
-                  </div>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Curso: </strong>{banca.curso}</span>
-                  </div>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Ano: </strong>{banca.ano}</span>
-                  </div>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Semestre Letivo: </strong>{banca.semestre_letivo}</span>
-                  </div>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Local: </strong>{banca.local}</span>
-                  </div>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="banca-content">
-                    <span><strong>Data e hora: </strong>{date}</span>
-                  </div>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  {inn.length > 0 ? (
-                    <div className="banca-content"><strong>Banca avaliadora:</strong></div>
-                  ):(null)
-                  }
-                  {inn && inn.length > 0 ? (
+                  <CardBanca text={inn} title="Banca avaliadora"></CardBanca>
+                  {/* {inn && inn.length > 0 ? (
                     inn.map((user) => (
                       <div className="banca-content">
                         <span>{user.nome}</span>
                       </div>
                     ))
                   ) : (
-                    <div className="banca-content"><strong>Banca avaliadora pendente</strong></div>
-                  )}
+                    <div className="banca-content"><strong>Pendente</strong></div>
+                  )} */}
                 </Grid>
               </Grid>
-            </Paper>
+            </Grid>
           </div>
         </Container>
         )}

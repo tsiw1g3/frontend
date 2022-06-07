@@ -4,9 +4,10 @@ import { useHistory } from "react-router-dom";
 import "./styles.css";
 import axios from "axios";
 import ReactLoading from "react-loading";
-import { Button, Select, MenuItem, InputLabel, FormControl } from "@material-ui/core";
+import { Button, Select, MenuItem, InputLabel, FormControl, ThemeProvider } from "@material-ui/core";
 import { DataGrid } from "@mui/x-data-grid";
 import SelectSearch, { fuzzySearch } from "react-select-search";
+import { createTheme } from '@material-ui/core/styles';
 /*
   Componente responsável pela página de adição de usuários à bancas
 */
@@ -52,10 +53,38 @@ function Addition() {
     }
   ]
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#329F5B',
+        dark: '#184e2d',
+        contrastText: '#fff',
+      },
+      secondary: {
+        light: '#ff7961',
+        main: '#6c7ae0',
+        dark: '#002884',
+        contrastText: '#fff',
+      },
+    },
+  });
+
+  const themeRemover = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#df2a39',
+        dark: '#931621',
+        contrastText: '#fff',
+      },
+    },
+  });
+
   const removeUser = (id) => {
     axios({
       method: "delete",
-      url: `https://sistema-de-defesa.herokuapp.com/banca/${bancaId}/user/${id}`,
+      url: `http://localhost:8080/banca/${bancaId}/user/${id}`,
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: loginToken,
@@ -74,7 +103,7 @@ function Addition() {
     bodyFormData.append("role", cargo);
     axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/${bancaId}`,
+      url: `http://localhost:8080/usuario-banca/${bancaId}`,
       data: bodyFormData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -94,7 +123,7 @@ function Addition() {
   //     const users = axios({
   //       method: "get",
   //       url:
-  //         "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
+  //         "http://localhost:8080/usuario-banca/usuarios/" +
   //         bancaId,
   //       data: bodyFormData,
   //       headers: {
@@ -120,7 +149,7 @@ function Addition() {
       var bodyFormData = new FormData();
       const users = axios({
         method: "get",
-        url: "https://sistema-de-defesa.herokuapp.com/usuario",
+        url: "http://localhost:8080/usuario",
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -140,7 +169,7 @@ function Addition() {
       var bodyFormData = new FormData();
       const banca = axios({
         method: "get",
-        url: "https://sistema-de-defesa.herokuapp.com/banca/" + bancaId,
+        url: "http://localhost:8080/banca/" + bancaId,
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -154,7 +183,7 @@ function Addition() {
         const users = axios({
           method: "get",
           url:
-            "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
+            "http://localhost:8080/usuario-banca/usuarios/" +
             bancaId,
           data: bodyFormData,
           headers: {
@@ -183,15 +212,18 @@ function Addition() {
     return (
       <div>
         {params.id != 0 ? (
-        <Button
-          onClick={() => removeUser(params.id)}
-          className="user-role"
-          type="button"
-          variant="contained"
-          color="primary"
-        >
-          Remover da banca
-        </Button>
+        <ThemeProvider theme={themeRemover}>
+          <Button
+            onClick={() => removeUser(params.id)}
+            className="user-role"
+            type="button"
+            variant="contained"
+            color="primary"
+            style={{borderRadius:10}}
+          >
+            Remover da banca
+          </Button>
+        </ThemeProvider>
         ) : (null)}
     </div>
     )
@@ -199,7 +231,7 @@ function Addition() {
 
   const columnsNota = [
     { field: "role", headerName: "Função", width: 150 },
-    { field: "nome", headerName: "Nome", width: 950 },
+    { field: "nome", headerName: "Nome", width: 1350 },
     {
       field: 'actions',
       headerName: 'Ações',
@@ -290,17 +322,20 @@ function Addition() {
                         search
                         value={cargo}
                         onChange={roleChange}
-                        placeholder="Cargo"
+                        placeholder="Função"
                       />
-                    <Button
-                      onClick={addUser}
-                      className="user-role"
-                      type="button"
-                      variant="contained"
-                      color="primary"
-                    >
-                      Adicionar
-                    </Button>
+                    <ThemeProvider theme={theme}>
+                      <Button
+                        onClick={addUser}
+                        className="user-role"
+                        type="button"
+                        variant="contained"
+                        color="primary"
+                        style={{marginLeft:16, borderRadius:10}}
+                      >
+                        Adicionar
+                      </Button>
+                    </ThemeProvider>
                 </div>
              </div>
           </div>
@@ -321,14 +356,17 @@ function Addition() {
                   />
               </div>
           </div>
-          <Button
+          <ThemeProvider theme={theme}>
+            <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               type="button"
               onClick={goToDashboard}
-          >
-            Voltar
-          </Button>
+              style={{marginTop:10, borderRadius:10}}
+            >
+              Voltar
+            </Button>
+          </ThemeProvider>
         </div>
       )}
     </>
