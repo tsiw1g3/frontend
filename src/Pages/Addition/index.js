@@ -84,7 +84,7 @@ function Addition() {
   const removeUser = (id) => {
     axios({
       method: "delete",
-      url: `http://localhost:8080/banca/${bancaId}/user/${id}`,
+      url: `https://sistema-de-defesa.herokuapp.com/banca/${bancaId}/user/${id}`,
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: loginToken,
@@ -103,7 +103,7 @@ function Addition() {
     bodyFormData.append("role", cargo);
     axios({
       method: "post",
-      url: `http://localhost:8080/usuario-banca/${bancaId}`,
+      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/${bancaId}`,
       data: bodyFormData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -123,7 +123,7 @@ function Addition() {
   //     const users = axios({
   //       method: "get",
   //       url:
-  //         "http://localhost:8080/usuario-banca/usuarios/" +
+  //         "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
   //         bancaId,
   //       data: bodyFormData,
   //       headers: {
@@ -149,7 +149,7 @@ function Addition() {
       var bodyFormData = new FormData();
       const users = axios({
         method: "get",
-        url: "http://localhost:8080/usuario",
+        url: "https://sistema-de-defesa.herokuapp.com/usuario",
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -169,7 +169,7 @@ function Addition() {
       var bodyFormData = new FormData();
       const banca = axios({
         method: "get",
-        url: "http://localhost:8080/banca/" + bancaId,
+        url: "https://sistema-de-defesa.herokuapp.com/banca/" + bancaId,
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -183,7 +183,7 @@ function Addition() {
         const users = axios({
           method: "get",
           url:
-            "http://localhost:8080/usuario-banca/usuarios/" +
+            "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
             bancaId,
           data: bodyFormData,
           headers: {
