@@ -263,7 +263,7 @@ function Addition() {
 
   let missing = '';
   if(inn.length < 4 && inn.length != 1){
-    missing += 'Faltam: '
+    missing += 'Falta(m): '
     let orientador = 1;
     let avaliador = 2;
     for(let x=0;x<inn.length;x++){

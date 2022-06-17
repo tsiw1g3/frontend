@@ -31,3 +31,10 @@
 .login-button {
   margin-top: -16px;
 }
+
+.forgot-pass{
+  position: absolute;
+  margin-top: 40px;
+  margin-left: 20px;
+  cursor:pointer;
+}

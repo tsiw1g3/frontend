@@ -5,7 +5,8 @@ import axios from "axios";
 import "./styles.css";
 import Container from "@material-ui/core/Container";
 import ReactLoading from "react-loading";
-
+import { makeStyles } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Form, Field } from "react-final-form";
 import { TextField } from "final-form-material-ui";
 import { Paper, Grid, Button, CssBaseline } from "@material-ui/core";
@@ -40,6 +41,23 @@ function Register() {
     let path = ``;
     history.push(path);
   };
+
+  const themeButton = createTheme({
+    palette: {
+      primary: {
+        main: '#329F5B',
+      },
+    },
+  });
+
+  const styles = makeStyles({
+    root:{
+      boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
+      padding: "16px"
+    }
+  });
+
+  const classesGrid = styles();
 
   useEffect(() => {
     setTimeout(async () => {
@@ -144,8 +162,7 @@ function Register() {
             submitting,
           }) => (
             <form onSubmit={handleSubmit} noValidate>
-              <Paper style={{ padding: 16 }}>
-                <Grid container alignItems="flex-start" spacing={2}>
+                <Grid container alignItems="flex-start" spacing={2} className={classesGrid.root}>
                   <Grid item xs={12}>
                     <Field
                       fullWidth
@@ -205,17 +222,18 @@ function Register() {
                     />
                   </Grid>
                   <Grid item style={{ marginTop: 16 }}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      type="submit"
-                      disabled={submitting}
-                    >
-                      Registrar
-                    </Button>
+                    <ThemeProvider theme={themeButton}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={submitting}
+                      >
+                        Registrar
+                      </Button>
+                    </ThemeProvider>
                   </Grid>
                 </Grid>
-              </Paper>
             </form>
           )}
         />

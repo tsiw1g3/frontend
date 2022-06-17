@@ -525,7 +525,9 @@ function Dashboard() {
                       <p id="transition-modal-description">Os emails devem ser separados por vírgula</p>
                       <Form
                         onSubmit={onSubmitEmail}
-                        initialValues={{}}
+                        initialValues={{
+                          mensagem: "Olá, gostaria de convidá-lo(a) para compor a banca de TCC abaixo."
+                        }}
                         validate={validate}
                         render={({ handleSubmit, reset, submitting, pristine, values }) => (
                           <form onSubmit={handleSubmit} noValidate>

@@ -90,6 +90,11 @@ const Header = () => {
     }
   };
 
+  const reset_pass_btn = () => {
+    let path = `resetpass`;
+    history.push(path);
+  };
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -102,6 +107,7 @@ const Header = () => {
   const classes = useStyles();
 
   return (
+    <>
     <div
       className="header"
       expand="lg"
@@ -214,6 +220,7 @@ const Header = () => {
               Entrar
             </Button>
           </ThemeProvider>
+          <a className="forgot-pass" onClick={reset_pass_btn}>Esqueceu a senha?</a>
           {/* <Button
             className="login-button"
             style={{ marginTop: -10, minWidth: 90, marginRight: -20 }}
@@ -226,6 +233,7 @@ const Header = () => {
         </form>
       )}
     </div>
+    </>
   );
 };
 

@@ -37,7 +37,7 @@ class MyContextProvider extends Component {
   };
 
   registerUser = async (user) => {
-    console.log(user);
+    // console.log(user);
     // Sending the user registration request
     const register = await Axios.post("usuario", {
       nome: user.nome,

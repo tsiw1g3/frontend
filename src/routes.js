@@ -10,6 +10,7 @@ import Addition from "./Pages/Addition";
 import ViewBoard from "./Pages/ViewBoard";
 import Users from "./Pages/Users";
 import ViewBanca from "./Pages/ViewBanca";
+import ResetPassword from "./Pages/ResetPassword";
 
 const Routes = () => {
   return (
@@ -23,6 +24,7 @@ const Routes = () => {
       <Route component={Addition} path="/addition" exact />
       <Route component={ViewBoard} path="/editarbanca" exact />
       <Route component={Users} path="/users" exact />
+      <Route component={ResetPassword} path="/resetpass" exact />
     </>
   );
 };
