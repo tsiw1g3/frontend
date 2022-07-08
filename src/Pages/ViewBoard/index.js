@@ -17,6 +17,7 @@ import {
 } from "@material-ui/pickers";
 import { makeStyles } from '@material-ui/core/styles';
 import { createTheme } from '@material-ui/core/styles';
+import { getWrapperFromVariant } from "@material-ui/pickers/wrappers/Wrapper";
 
 /*
   Componente responsável pela página de visualização de bancas
@@ -198,28 +199,65 @@ function ViewBoard() {
   };
 
   const generateReport = async () => {
-    fetch(
-      `https://sistema-de-defesa.herokuapp.com/documento/${banca.id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: loginToken,
-          'Access-Control-Allow-Origin' : '*',
-        },
-      }
-    ) // FETCH BLOB FROM IT
-      .then((response) => response.blob())
-      .then((blob) => {
-        // RETRIEVE THE BLOB AND CREATE LOCAL URL
-        setDone(true);
-        var _url = window.URL.createObjectURL(blob);
-        window.open(_url, "_blank").focus(); // window.open + focus
-      })
-      .catch((err) => {
-        setDone(true);
-        console.log(err);
-      });
+    axios({
+      method: "get",
+      url: `https://sistema-de-defesa.herokuapp.com/documento/documentoInfo/58`,
+      headers: {
+        // "Content-Type": "application/json",
+        Authorization: loginToken,
+        // 'Access-Control-Allow-Origin' : '*',
+        // Accept: "application/json",
+      },
+    }).then(function (response) {
+      var data = response.data;
+
+      var bodyFormData = new FormData();
+      bodyFormData.append("curso", data.curso);
+      bodyFormData.append("disciplina", data.disciplina);
+      bodyFormData.append("turma", data.turma);
+      bodyFormData.append("titulo_trabalho", data.titulo_trabalho);
+      bodyFormData.append("data", data.data);
+      bodyFormData.append("horario", data.horario);
+      bodyFormData.append("nota_orientador", data.nota_orientador);
+      bodyFormData.append("orientador", data.orientador);
+      bodyFormData.append("semestre", data.semestre);
+      bodyFormData.append("avaliadores", JSON.stringify(data.avaliadores));
+      bodyFormData.append("aluno", data.aluno);
+      // console.log(data);
+      // console.log(response.data);
+      // console.log(Date.now());
+    axios(
+        {
+          url:`https://sistema-de-defesa.herokuapp.com/documento/${banca.id}`,
+          method:"POST",
+          data: bodyFormData,
+          responseType: 'blob',
+          headers: {
+            Authorization: loginToken,
+            // 'Access-Control-Allow-Origin' : '*',
+            // 'Content-type':"application/json"
+          },
+        }
+      ) // FETCH BLOB FROM IT
+        .then((response) => {
+          // console.log(Date.now());
+          // RETRIEVE THE response AND CREATE LOCAL URL
+          setDone(true);
+          var _url = window.URL.createObjectURL(response.data);
+          window.open(_url, "_blank").focus(); // window.open + focus
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+    
   };
+
+  function getFormData(object) {
+    const formData = new FormData();
+    Object.keys(object).forEach((key) => formData.append(key, object[key]));
+    return formData;
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -291,7 +329,7 @@ function ViewBoard() {
         <Container className="App banca-form-container">
           <div style={{ padding: 16, display:"flex", flexDirection: "column", maxWidth: 2000 }}>
             <CssBaseline />
-            <h2 class="banca-form-header">Editar banca</h2>
+            <h2 className="banca-form-header">Editar banca</h2>
             <Form
               onSubmit={onSubmit}
               initialValues={{

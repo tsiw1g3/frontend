@@ -61,7 +61,7 @@ function Register() {
     // setDone(false);
     const resetPassword = axios({
       method: "post",
-      url: `http://localhost:8080/reset-password`,
+      url: `https://sistema-de-defesa.herokuapp.com/reset-password`,
       data: bodyFormData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -84,7 +84,7 @@ function Register() {
     // setDone(false);
     const resetPassword = axios({
       method: "post",
-      url: `http://localhost:8080/reset-password/reset`,
+      url: `https://sistema-de-defesa.herokuapp.com/reset-password/reset`,
       data: bodyFormData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -115,7 +115,7 @@ function Register() {
         hash = match[2];
         const passHash = await axios({
           method: "get",
-          url: `http://localhost:8080/reset-password/${hash}`,
+          url: `https://sistema-de-defesa.herokuapp.com/reset-password/${hash}`,
           headers: {
             "Content-Type": "multipart/form-data",
             Accept: "application/json",
