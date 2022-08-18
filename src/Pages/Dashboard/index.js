@@ -29,8 +29,8 @@ import { flexibleCompare } from "@fullcalendar/react";
 function Dashboard() {
   const { toggleNav, registerUser } = useContext(MyContext);
 
-  const [data2, setData2] = useState([]);
-  const [data, setData] = useState([]);
+  const [dataMinhasDefesas, setDataMinhasDefesas] = useState([]);
+  const [dataDefesasParticipo, setDataDefesasParticipo] = useState([]);
   const [done, setDone] = useState(undefined);
   const [done2, setDone2] = useState(false);
   const [open, setOpen] = useState(false);
@@ -153,7 +153,7 @@ function Dashboard() {
       const users = await axios({
         method: "get",
         url:
-          "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
+          "http://localhost:8080/usuario-banca/usuarios/" +
           bancaId,
         data: bodyFormData,
         headers: {
@@ -175,9 +175,7 @@ function Dashboard() {
       await axios({
         method: "get",
         url:
-        "https://sistema-de-defesa.herokuapp.com/usuario/" +
-          userId +
-          "/banca",
+        "http://localhost:8080/usuario/" +userId + "/banca",
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -185,14 +183,38 @@ function Dashboard() {
           Accept: "application/json",
         },
       }).then(function (response) {
-        setData(response.data.data);
+        var events = response.data.data;
+        if (events) {
+          events.forEach((e) => {
+            e.data = new Date(e.data_realizacao);
+            e.data.setSeconds(0);
+            e.formatedData = e.data.toLocaleString("pt-BR", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            // console.log(e.formatedData);
+            // e.autor = "Frederico Durão";
+          });
+          const dt = new Date();
+          // events.sort((a, b) =>
+          // a.data_realizacao < b.data_realizacao ? -1 : 1
+          // );
+          // var olderEvents = events.filter((a) => a.data < dt);
+          // events = events.filter((a) => a.data > dt);
+          // var allEvents = [];
+          // allEvents.push(events);
+          // allEvents.push(olderEvents);
+          console.log(events);
+        }
+        setDataDefesasParticipo(events);
       });
       await axios({
         method: "get",
         url:
-        "https://sistema-de-defesa.herokuapp.com/banca/" +
-          userId +
-          "/bancas",
+        "http://localhost:8080/banca/" +userId + "/bancas",
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -200,7 +222,33 @@ function Dashboard() {
           Accept: "application/json",
         },
       }).then(function (response) {
-        setData2(response.data.data);
+        var events = response.data.data;
+        if (events) {
+          events.forEach((e) => {
+            e.data = new Date(e.data_realizacao);
+            e.data.setSeconds(0);
+            e.formatedData = e.data.toLocaleString("pt-BR", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            // console.log(e.formatedData);
+            // e.autor = "Frederico Durão";
+          });
+          const dt = new Date();
+          // events.sort((a, b) =>
+          // a.data_realizacao < b.data_realizacao ? -1 : 1
+          // );
+          // var olderEvents = events.filter((a) => a.data < dt);
+          // events = events.filter((a) => a.data > dt);
+          // var allEvents = [];
+          // allEvents.push(events);
+          // allEvents.push(olderEvents);
+          console.log(events);
+        }
+        setDataMinhasDefesas(events);
         setDone(true);
       });
     }, 0);
@@ -240,7 +288,7 @@ function Dashboard() {
     const loginToken = localStorage.getItem("loginToken");
     await axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/email`,
+      url: `http://localhost:8080/usuario-banca/usuarios/email`,
       data: getFormData(values),
       headers: {
         "Content-Type": "multipart/form-data",
@@ -265,7 +313,7 @@ function Dashboard() {
     const id = values.avaliador
     await axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/nota/${banca}/${id}`,
+      url: `http://localhost:8080/usuario-banca/nota/${banca}/${id}`,
       data: getFormData(values),
       headers: {
         "Content-Type": "multipart/form-data",
@@ -395,25 +443,33 @@ function Dashboard() {
   }
 
   const columns = [
-    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 1250 },
-    { field: "curso", headerName: "Curso", width: 150 },
+    { field: "formatedData", headerName: "Data", width: 140 },
+    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
+    { field: "autor", headerName: "Discente", width: 200 },
+    { field: "orientador", headerName: "Orientador", width: 200 },
+    { field: "curso", headerName: "Curso", width: 200 },
+    { field: "local", headerName: "Local ou link", width: 300 },
     {
       field: 'actions',
       headerName: 'Ações',
-      width: 300,
+      width: 370,
       renderCell: renderDetailsButton,
       disableClickEventBubbling: true,
     }
   ];
 
   const columns2 = [
-    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 1250 },
-    { field: "curso", headerName: "Curso", width: 150 },
+    { field: "formatedData", headerName: "Data", width: 140 },
+    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
+    { field: "autor", headerName: "Discente", width: 200 },
+    { field: "orientador", headerName: "Orientador", width: 200 },
+    { field: "curso", headerName: "Curso", width: 200 },
+    { field: "local", headerName: "Local ou link", width: 300 },
     {
       field: 'actions',
       headerName: 'Ações',
-      width: 300,
-      renderCell: renderDetailsButton2,
+      width: 370,
+      renderCell: renderDetailsButton,
       disableClickEventBubbling: true,
     }
   ];
@@ -458,40 +514,42 @@ function Dashboard() {
                         onClick={addBanca}
                         style={{borderRadius: 10}}
                       >
-                        Adicionar banca
+                        Cadastrar Defesa de TCC
                       </Button>
                   </ThemeProvider>
                 </Tabs>
               </AppBar>
               <TabPanel value={value} index={0}>
-                  {data2 && data2.length > 0 ? (
-                    <div style={{ height: 400, width: "100%" }}>
+                    <div style={{ height: dataMinhasDefesas.length > 0 ? 400 : 200, width: "100%" }}>
                     <ThemeProvider theme={theme}>
                     <DataGrid
-                      rows={data2}
+                      rows={dataMinhasDefesas}
                       columns={columns}
                       pageSize={5}
                       rowsPerPageOptions={[5]}
                       className={classesGrid.root}
+                      localeText={{
+                        noRowsLabel: "Não há bancas registradas"
+                      }}
                     />
                     </ThemeProvider>
                   </div>
-                    ) : (null)}
               </TabPanel>
               <TabPanel value={value} index={1}>
-                  {data && data.length > 0 ? (
-                    <div style={{ height: 400, width: "100%" }}>
+                    <div style={{ height: dataDefesasParticipo.length > 0 ? 400 : 200, width: "100%" }}>
                     <ThemeProvider theme={theme}>
                     <DataGrid
-                      rows={data}
+                      rows={dataDefesasParticipo}
                       columns={columns2}
                       pageSize={5}
                       rowsPerPageOptions={[5]}
                       className={classesGrid.root}
+                      localeText={{
+                        noRowsLabel: "Não há bancas registradas"
+                      }}
                     />
                     </ThemeProvider>
                   </div>
-                    ) : (null)}
               </TabPanel>
               <Modal
                 aria-labelledby="transition-modal-title"
@@ -698,18 +756,19 @@ function Dashboard() {
                                   />
                                 </div>
                                 ):(null)}
-                                {inn && inn.length > 0 ? (
-                                  <div style={{ height: 400, width: "100%" }}>
-                                    <DataGrid
-                                      rows={inn}
-                                      columns={columnsNota}
-                                      pageSize={5}
-                                      rowsPerPageOptions={[5]}
-                                      rowHeight={62}
-                                      className={classesGrid.root}
-                                    />
+                                <div style={{ height: inn.length > 0 ? 400 : 200, width: "100%" }}>
+                                  <DataGrid
+                                    rows={inn}
+                                    columns={columnsNota}
+                                    pageSize={5}
+                                    rowsPerPageOptions={[5]}
+                                    rowHeight={62}
+                                    className={classesGrid.root}
+                                    localeText={{
+                                      noRowsLabel: "Não há membros registrados na banca"
+                                    }}
+                                  />
                                 </div>
-                                ):(null)}
                               </Grid>
                             </Grid>
                           </Paper>

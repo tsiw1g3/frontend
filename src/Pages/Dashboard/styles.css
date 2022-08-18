@@ -33,9 +33,9 @@
 
 /*////////////////////////*/
 
-.container {
+/* .container {
   padding: 20px 100px 20px 100px;
-}
+} */
 
 .input {
   padding: 5px 15px;
@@ -105,7 +105,7 @@
   border: none;
   background: none;
   cursor:pointer;
-  background:url("https://seekicon.com/free-icon-download/edit_10.svg") 0 0 no-repeat;
+  background:url("/public/img/edit_10.svg") 0 0 no-repeat;
 }
 
 #send-email {
@@ -116,7 +116,7 @@
   border: none;
   background: none;
   cursor:pointer;
-  background:url("https://seekicon.com/free-icon-download/email_5.svg") 0 0 no-repeat;
+  background:url("/public/img/email_5.svg") 0 0 no-repeat;
 }
 
 #give-score {

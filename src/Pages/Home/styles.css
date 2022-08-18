@@ -33,9 +33,9 @@
 
 /*////////////////////////*/
 
-.container {
+/* .container {
   padding: 20px 100px 20px 100px;
-}
+} */
 
 .input {
   padding: 5px 15px;
@@ -120,7 +120,7 @@
   padding: 0;
   border: none;
   cursor:pointer;
-  background:url("https://seekicon.com/free-icon-download/search_19.svg") 0 0 no-repeat;
+  background:url("/public/img/search_19.svg") 0 0 no-repeat;
 }
 
 #see-board {

@@ -44,6 +44,23 @@ const Header = () => {
         dark: '#ba000d',
         contrastText: '#000',
       },
+      third:{
+        light: '#ff7961',
+        main: '#73D498',
+        dark: '#ba000d',
+        contrastText: '#000',
+      }
+    },
+  });
+
+  const theme2 = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#73D498',
+        dark: '#2B8C50',
+        contrastText: '#fff',
+      },
     },
   });
 
@@ -173,6 +190,21 @@ const Header = () => {
               >
                 Logout
               </Button>
+              <ThemeProvider theme={theme2}>
+                <a href="https://www.google.com.br" target="_blank" style={{ textDecoration:"none"}}>
+                  <Button
+                    className="avaliacao-button"
+                    // onClick={() => {
+                    //   window.location.replace("https://www.google.com.br");
+                    // }}
+                    style={{ marginLeft: 20, minWidth:80, height:40, borderRadius:10 }}
+                    color="primary"
+                    variant="contained"
+                  >
+                    Avaliação
+                  </Button>
+                </a>
+              </ThemeProvider>
           </ThemeProvider>
         </div>
       ) : (

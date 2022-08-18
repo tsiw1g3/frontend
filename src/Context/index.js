@@ -60,7 +60,7 @@ class MyContextProvider extends Component {
     bodyFormData.append("password", user.password);
     const res = await axios({
       method: "post",
-      url: "https://sistema-de-defesa.herokuapp.com/login",
+      url: "http://localhost:8080/login",
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
     })

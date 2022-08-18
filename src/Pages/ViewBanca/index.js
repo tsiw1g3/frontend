@@ -6,10 +6,9 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 import CardBanca from "../../Components/Card";
-import { Form, Field } from "react-final-form";
-import { TextField, Checkbox, Radio, Select } from "final-form-material-ui";
-import { Paper, Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
+import { Paper, Grid, Button, CssBaseline, MenuItem, ThemeProvider } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 
 /*
   Componente responsável pela página de visualização de bancas
@@ -29,6 +28,23 @@ function ViewBanca() {
     history.push(path);
   };
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#329F5B',
+        dark: '#184e2d',
+        contrastText: '#fff',
+      },
+      secondary: {
+        light: '#ff7961',
+        main: '#6c7ae0',
+        dark: '#002884',
+        contrastText: '#fff',
+      },
+    },
+  });
+
   useEffect(() => {
     setTimeout(async () => {
       let url = window.location.href;
@@ -42,7 +58,7 @@ function ViewBanca() {
       banca = match[2];
       const users = await axios({
         method: "get",
-        url: `https://sistema-de-defesa.herokuapp.com/banca/${banca}`,
+        url: `http://localhost:8080/banca/${banca}`,
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
@@ -83,7 +99,7 @@ function ViewBanca() {
       const users = axios({
         method: "get",
         url:
-          "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
+          "http://localhost:8080/usuario-banca/usuarios/" +
           banca,
         data: bodyFormData,
         headers: {
@@ -177,8 +193,22 @@ function ViewBanca() {
                     <div className="banca-content"><strong>Pendente</strong></div>
                   )} */}
                 </Grid>
+                <ThemeProvider theme={theme}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    type="button"
+                    onClick={goToHome}
+                    style={{marginLeft:8, borderRadius: 10}}
+                  >
+                    Voltar
+                  </Button>
+                </ThemeProvider>
               </Grid>
             </Grid>
+          </div>
+          <div>
+            
           </div>
         </Container>
         )}

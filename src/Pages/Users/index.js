@@ -71,7 +71,7 @@ function Users() {
     setDone(false);
     await axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/usuario/${usuario}/role`,
+      url: `http://localhost:8080/usuario/${usuario}/role`,
       data: bodyFormData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -91,7 +91,7 @@ function Users() {
     // setDone(false);
     const invite = axios({
       method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/invite`,
+      url: `http://localhost:8080/invite`,
       data: bodyFormData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -111,7 +111,7 @@ function Users() {
       var bodyFormData = new FormData();
       const users = axios({
         method: "get",
-        url: "https://sistema-de-defesa.herokuapp.com/usuario",
+        url: "http://localhost:8080/usuario",
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",

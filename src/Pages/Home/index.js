@@ -44,7 +44,7 @@ const Home = () => {
   const removeBanca = (bancaId) => {
     axios({
       method: "delete",
-      url: `https://sistema-de-defesa.herokuapp.com/banca/${bancaId}/delete`,
+      url: `http://localhost:8080/banca/${bancaId}/delete`,
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: loginToken,
@@ -74,15 +74,16 @@ const Home = () => {
   }
   
   const columns = [
-    { field: "formatedData", headerName: "Data de realização", width: 200 },
-    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 680 },
+    { field: "formatedData", headerName: "Data", width: 140 },
+    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
     { field: "autor", headerName: "Discente", width: 200 },
+    { field: "orientador", headerName: "Orientador", width: 200 },
     { field: "curso", headerName: "Curso", width: 200 },
     { field: "local", headerName: "Local ou link", width: 300 },
     {
       field: 'actions',
       headerName: 'Ações',
-      width: 170,
+      width: 370,
       renderCell: renderDetailsButton,
       disableClickEventBubbling: true,
     }
@@ -114,7 +115,7 @@ const Home = () => {
       var bodyFormData = new FormData();
       axios({
         method: "get",
-        url: "https://sistema-de-defesa.herokuapp.com/banca",
+        url: "http://localhost:8080/banca",
         data: bodyFormData,
         headers: { Accept: "application/json" },
       }).then(function (response) {

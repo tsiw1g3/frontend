@@ -31,7 +31,7 @@ const styles = makeStyles({
 export default function DataTable(params) {
   const classes = styles();
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: params.rows.length > 0 ? 400 : 200, width: "100%" }}>
       <ThemeProvider theme={theme}>
       <DataGrid
         onCellDoubleClick={(pms, event) => {
@@ -43,6 +43,9 @@ export default function DataTable(params) {
         pageSize={5}
         rowsPerPageOptions={[5]}
         className={classes.root}
+        localeText={{
+          noRowsLabel: "Não há bancas registradas"
+        }}
       />
       </ThemeProvider>
     </div>
