@@ -44,7 +44,7 @@ const Home = () => {
   const removeBanca = (bancaId) => {
     axios({
       method: "delete",
-      url: `http://localhost:8080/banca/${bancaId}/delete`,
+      url: `https://sistema-de-defesa.herokuapp.com/banca/${bancaId}/delete`,
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: loginToken,
@@ -115,7 +115,7 @@ const Home = () => {
       var bodyFormData = new FormData();
       axios({
         method: "get",
-        url: "http://localhost:8080/banca",
+        url: "https://sistema-de-defesa.herokuapp.com/banca",
         data: bodyFormData,
         headers: { Accept: "application/json" },
       }).then(function (response) {

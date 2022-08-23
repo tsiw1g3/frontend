@@ -134,7 +134,7 @@ function ExaminingBoard() {
     setLoading(true);
     await axios({
       method: "post",
-      url: `http://localhost:8080/banca`,
+      url: `https://sistema-de-defesa.herokuapp.com/banca`,
       data: getFormData(values),
       headers: {
         "Content-Type": "multipart/form-data",

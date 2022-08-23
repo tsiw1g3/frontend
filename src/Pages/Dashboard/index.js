@@ -153,7 +153,7 @@ function Dashboard() {
       const users = await axios({
         method: "get",
         url:
-          "http://localhost:8080/usuario-banca/usuarios/" +
+          "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
           bancaId,
         data: bodyFormData,
         headers: {
@@ -175,7 +175,7 @@ function Dashboard() {
       await axios({
         method: "get",
         url:
-        "http://localhost:8080/usuario/" +userId + "/banca",
+        "https://sistema-de-defesa.herokuapp.com/usuario/" +userId + "/banca",
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -214,7 +214,7 @@ function Dashboard() {
       await axios({
         method: "get",
         url:
-        "http://localhost:8080/banca/" +userId + "/bancas",
+        "https://sistema-de-defesa.herokuapp.com/banca/" +userId + "/bancas",
         data: bodyFormData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -288,7 +288,7 @@ function Dashboard() {
     const loginToken = localStorage.getItem("loginToken");
     await axios({
       method: "post",
-      url: `http://localhost:8080/usuario-banca/usuarios/email`,
+      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/email`,
       data: getFormData(values),
       headers: {
         "Content-Type": "multipart/form-data",
@@ -313,7 +313,7 @@ function Dashboard() {
     const id = values.avaliador
     await axios({
       method: "post",
-      url: `http://localhost:8080/usuario-banca/nota/${banca}/${id}`,
+      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/nota/${banca}/${id}`,
       data: getFormData(values),
       headers: {
         "Content-Type": "multipart/form-data",

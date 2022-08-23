@@ -58,7 +58,7 @@ function ViewBanca() {
       banca = match[2];
       const users = await axios({
         method: "get",
-        url: `http://localhost:8080/banca/${banca}`,
+        url: `https://sistema-de-defesa.herokuapp.com/banca/${banca}`,
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
@@ -99,7 +99,7 @@ function ViewBanca() {
       const users = axios({
         method: "get",
         url:
-          "http://localhost:8080/usuario-banca/usuarios/" +
+          "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
           banca,
         data: bodyFormData,
         headers: {
