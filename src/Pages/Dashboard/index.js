@@ -207,7 +207,7 @@ function Dashboard() {
           // var allEvents = [];
           // allEvents.push(events);
           // allEvents.push(olderEvents);
-          console.log(events);
+          // console.log(events);
         }
         setDataDefesasParticipo(events);
       });
@@ -246,7 +246,7 @@ function Dashboard() {
           // var allEvents = [];
           // allEvents.push(events);
           // allEvents.push(olderEvents);
-          console.log(events);
+          // console.log(events);
         }
         setDataMinhasDefesas(events);
         setDone(true);
