@@ -95,7 +95,8 @@ const Header = () => {
     const data = await loginUser(user);
     if (data.data) {
     setLoading(false);
-    localStorage.setItem("userId", data.data.id);
+      localStorage.setItem("userId", data.data.id);
+      localStorage.setItem("nome", data.data.nome.split(' ')[0]);
       localStorage.setItem("loginToken", data.data.token);
       localStorage.setItem("role", data.data.role);
       setIsUserLogged(true);
@@ -148,6 +149,9 @@ const Header = () => {
       {isUserLogged ? (
         <div className="login-form">
           <ThemeProvider theme={theme}>
+              <div style={{ marginTop: 11, marginLeft: 20 }}>
+                Olá, {localStorage.getItem("nome")}
+              </div>
               <Button
                 className="login-button"
                 component={Link}
@@ -191,12 +195,12 @@ const Header = () => {
                 Logout
               </Button>
               <ThemeProvider theme={theme2}>
-                <a href="https://www.google.com.br" target="_blank" style={{ textDecoration:"none"}}>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfTSPtMb09CIpLb0SjrtZM1Pfe8_5wrGrpZ2Ccr59ZdxPbFoA/viewform" target="_blank" style={{ textDecoration:"none"}}>
                   <Button
                     className="avaliacao-button"
-                    // onClick={() => {
-                    //   window.location.replace("https://www.google.com.br");
-                    // }}
+                    onClick={() => {
+                      window.open("https://docs.google.com/forms/d/e/1FAIpQLSfTSPtMb09CIpLb0SjrtZM1Pfe8_5wrGrpZ2Ccr59ZdxPbFoA/viewform", '_blank');
+                    }}
                     style={{ marginLeft: 20, minWidth:80, height:40, borderRadius:10 }}
                     color="primary"
                     variant="contained"

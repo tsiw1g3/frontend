@@ -443,35 +443,35 @@ function Dashboard() {
   }
 
   const columns = [
+    {
+      field: 'actions',
+      headerName: 'Ações',
+      width: 200,
+      renderCell: renderDetailsButton,
+      disableClickEventBubbling: true,
+    },
     { field: "formatedData", headerName: "Data", width: 140 },
     { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
     { field: "autor", headerName: "Discente", width: 200 },
     { field: "orientador", headerName: "Orientador", width: 200 },
     { field: "curso", headerName: "Curso", width: 200 },
     { field: "local", headerName: "Local ou link", width: 300 },
-    {
-      field: 'actions',
-      headerName: 'Ações',
-      width: 370,
-      renderCell: renderDetailsButton,
-      disableClickEventBubbling: true,
-    }
   ];
 
   const columns2 = [
+    {
+      field: 'actions',
+      headerName: 'Ações',
+      width: 50,
+      renderCell: renderDetailsButton2,
+      disableClickEventBubbling: true,
+    },
     { field: "formatedData", headerName: "Data", width: 140 },
     { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
     { field: "autor", headerName: "Discente", width: 200 },
     { field: "orientador", headerName: "Orientador", width: 200 },
     { field: "curso", headerName: "Curso", width: 200 },
     { field: "local", headerName: "Local ou link", width: 300 },
-    {
-      field: 'actions',
-      headerName: 'Ações',
-      width: 370,
-      renderCell: renderDetailsButton2,
-      disableClickEventBubbling: true,
-    }
   ];
 
   const columnsNota = [
@@ -580,11 +580,10 @@ function Dashboard() {
                           <h2 id="transition-modal-title">Convidar pessoas para defesa</h2>
                           <span style={{cursor:"pointer"}} onClick={closeModal}>x</span>
                       </div>
-                      <p id="transition-modal-description">Os emails devem ser separados por vírgula</p>
                       <Form
                         onSubmit={onSubmitEmail}
                         initialValues={{
-                          mensagem: "Olá, gostaria de convidá-lo(a) para assistir a defesa de TCC abaixo."
+                          mensagem: "Olá, gostaria de convidá-lo(a) para a defesa de TCC abaixo."
                         }}
                         validate={validate}
                         render={({ handleSubmit, reset, submitting, pristine, values }) => (
@@ -599,7 +598,7 @@ function Dashboard() {
                                     name="emails"
                                     component={TextField}
                                     type="text"
-                                    label="Destinatários"
+                                    label="E-mail dos convidados para banca (separe os e-mails por vírgula)"
                                   />
                                 </Grid>
                                 <Grid item xs={12}>

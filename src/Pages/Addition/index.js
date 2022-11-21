@@ -8,6 +8,7 @@ import { Button, Select, MenuItem, InputLabel, FormControl, ThemeProvider } from
 import { DataGrid } from "@mui/x-data-grid";
 import SelectSearch, { fuzzySearch } from "react-select-search";
 import { createTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 /*
   Componente responsável pela página de adição de usuários à bancas
 */
@@ -76,6 +77,17 @@ function Addition() {
         light: '#757ce8',
         main: '#df2a39',
         dark: '#931621',
+        contrastText: '#fff',
+      },
+    },
+  });
+
+  const theme2 = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#6c7ae0',
+        dark: '#2B8C50',
         contrastText: '#fff',
       },
     },
@@ -243,6 +255,7 @@ function Addition() {
   const goToDashboard = () => {
     let path = `dashboard`;
     history.push(path);
+    alert("Membros da banca atualizados com sucesso!")
   };
 
   const userChange = (value) => {
@@ -284,6 +297,24 @@ function Addition() {
       missing+= "2 avaliadores";
     }
   }
+
+  const styles = makeStyles({
+    root:{
+      borderRadius:"10px",
+      "& .MuiDataGrid-columnsContainer":{
+          background:"#6c7ae0",
+          borderRadius:"10px 10px 0 0px"
+      },
+      "& .MuiDataGrid-columnHeaderTitle":{
+          color:"white",
+          fontWeight: 700,
+      },
+      "& .MuiDataGrid-columnHeaderTitleContainer":{
+        justifyContent:"center"
+      }
+    }
+  })
+  const classes = styles();
   
 
   return (
@@ -346,24 +377,27 @@ function Addition() {
           </div>
           <div className="members-list">
               <div style={{ height: 400, width: "100%" }}>
+                <ThemeProvider theme={theme2}>
                   <DataGrid
                     rows={inn}
                     columns={columnsNota}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
                     rowHeight={62}
+                    className={classes.root}
                   />
+                </ThemeProvider>  
               </div>
           </div>
           <ThemeProvider theme={theme}>
             <Button
               variant="contained"
-              color="secondary"
+              color="primary"
               type="button"
               onClick={goToDashboard}
               style={{marginTop:10, borderRadius:10}}
             >
-              Voltar
+              Finalizar
             </Button>
           </ThemeProvider>
         </div>

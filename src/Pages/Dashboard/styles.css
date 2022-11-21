@@ -109,10 +109,10 @@
 }
 
 #send-email {
-  margin: 0px 15px 0px 0px;
-  width:20px;
-  height:20px;
-  padding: 0;
+  margin: 5px 15px 0px 0px;
+  width: 25px;
+  height: 25px;
+  padding: 4px;
   border: none;
   background: none;
   cursor:pointer;
@@ -121,9 +121,9 @@
 
 #give-score {
   margin: 0px 15px 0px 0px;
-  width:20px;
-  height:20px;
-  padding: 0;
+  width: 25px;
+  height: 25px;
+  padding: 2px;
   border: none;
   background: none;
   cursor:pointer;

@@ -23,7 +23,11 @@ const styles = makeStyles({
         borderRadius:"10px 10px 0 0px"
     },
     "& .MuiDataGrid-columnHeaderTitle":{
-        color:"white"
+        color:"white",
+        fontWeight: 700,
+    },
+    "& .MuiDataGrid-columnHeaderTitleContainer":{
+      justifyContent:"center"
     },
   }
 })

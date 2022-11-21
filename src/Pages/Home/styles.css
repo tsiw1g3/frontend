@@ -21,6 +21,7 @@
 
 .search-form{
   margin:20px 0px;
+  background-color: #dbd9d9;
 }
 
 @media (max-width: 700px) {
