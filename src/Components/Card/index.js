@@ -18,7 +18,6 @@ const theme = createTheme(
 
 
 export default function CardBanca(params) {
-    // console.log(params);
   return (
     <div className="card">
         <h4 className="card-title">{params.title}</h4>

@@ -201,7 +201,7 @@ function ViewBoard() {
   const generateReport = async () => {
     axios({
       method: "get",
-      url: `https://sistema-de-defesa.herokuapp.com/documento/documentoInfo/58`,
+      url: `https://sistema-de-defesa.herokuapp.com/documento/documentoInfo/${banca.id}`,
       headers: {
         // "Content-Type": "application/json",
         Authorization: loginToken,
@@ -223,9 +223,6 @@ function ViewBoard() {
       bodyFormData.append("semestre", data.semestre);
       bodyFormData.append("avaliadores", JSON.stringify(data.avaliadores));
       bodyFormData.append("aluno", data.aluno);
-      // console.log(data);
-      // console.log(response.data);
-      // console.log(Date.now());
     axios(
         {
           url:`https://sistema-de-defesa.herokuapp.com/documento/${banca.id}`,
@@ -240,14 +237,13 @@ function ViewBoard() {
         }
       ) // FETCH BLOB FROM IT
         .then((response) => {
-          // console.log(Date.now());
           // RETRIEVE THE response AND CREATE LOCAL URL
           setDone(true);
           var _url = window.URL.createObjectURL(response.data);
           window.open(_url, "_blank").focus(); // window.open + focus
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     });
     

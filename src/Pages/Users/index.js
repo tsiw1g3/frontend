@@ -99,8 +99,8 @@ function Users() {
         Accept: "application/json",
       },
     }).then(function (response) {
-        navigator.clipboard.writeText('http://localhost:3000/#/register?inv=' + response.data.data)
-        alert("O link de convite: http://localhost:3000/#/register?inv=" + response.data.data + " foi copiado");
+        navigator.clipboard.writeText('https://tsiw1g3.github.io/frontend/#/register?inv=' + response.data.data)
+        alert("O link de convite: https://tsiw1g3.github.io/frontend/#/register?inv=" + response.data.data + " foi copiado");
       // reload();
     });
   }

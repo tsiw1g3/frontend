@@ -108,7 +108,6 @@ function ViewBanca() {
           Accept: "application/json",
         },
       }).then(function (response) {
-        console.log(response.data.data);
         setInn(response.data.data);
         setDone2(true);
       }).catch(function (error){
@@ -126,7 +125,6 @@ function ViewBanca() {
   });
 
   const classesGrid = styles();
-  console.log(banca);
 
   return (
     <>

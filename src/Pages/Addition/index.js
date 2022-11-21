@@ -194,7 +194,6 @@ function Addition() {
         }).then(function (response2) {
           let aluno = {"role":"Aluno", "nome":response.data.data.autor, 'id':0}
           response2.data.data.push(aluno);
-          console.log(response2.data.data);
           setInn(response2.data.data);
           setDone2(true);
           let ids = [];

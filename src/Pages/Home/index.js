@@ -225,7 +225,6 @@ const Home = () => {
             Próximas defesas
           </h3> */}
           
-          {/* {console.log(data)} */}
         </div>
       )}
     </>

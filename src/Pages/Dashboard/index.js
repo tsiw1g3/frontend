@@ -469,7 +469,7 @@ function Dashboard() {
       field: 'actions',
       headerName: 'Ações',
       width: 370,
-      renderCell: renderDetailsButton,
+      renderCell: renderDetailsButton2,
       disableClickEventBubbling: true,
     }
   ];
@@ -584,7 +584,7 @@ function Dashboard() {
                       <Form
                         onSubmit={onSubmitEmail}
                         initialValues={{
-                          mensagem: "Olá, gostaria de convidá-lo(a) para compor a banca de TCC abaixo."
+                          mensagem: "Olá, gostaria de convidá-lo(a) para assistir a defesa de TCC abaixo."
                         }}
                         validate={validate}
                         render={({ handleSubmit, reset, submitting, pristine, values }) => (
