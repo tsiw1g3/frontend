@@ -17,7 +17,7 @@ function Addition() {
   const { toggleNav, registerUser } = useContext(MyContext);
 
   const [data, setData] = useState([]);
-  const [usuario, setUsuario] = useState('');
+  const [usuario, setUsuario] = useState({name:'',value:0});
   const [cargo, setCargo] = useState('');
   const [bancaData, setBancaData] = useState([]);
   const [inn, setInn] = useState([]);
@@ -111,7 +111,8 @@ function Addition() {
 
   const addUser = () => {
     var bodyFormData = new FormData();
-    bodyFormData.append("id_usuario", usuario);
+    bodyFormData.append("id_usuario", usuario.value);
+    bodyFormData.append("usuario_name", usuario.name)
     bodyFormData.append("role", cargo);
     axios({
       method: "post",
@@ -258,8 +259,9 @@ function Addition() {
     alert("Membros da banca atualizados com sucesso!")
   };
 
-  const userChange = (value) => {
-    setUsuario(value);
+  const userChange = (value, obj) => {
+    console.log(obj);
+    setUsuario(obj);
   }
 
   const roleChange = (value) => {
@@ -315,7 +317,6 @@ function Addition() {
     }
   })
   const classes = styles();
-  
 
   return (
     <>
