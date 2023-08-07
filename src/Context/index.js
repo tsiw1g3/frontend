@@ -1,16 +1,11 @@
 import React, { createContext, Component } from "react";
-import axios from "axios";
+import api from "Config/http";
 
 /*
   Componente que guarda as informações de login
 */
 
 export const MyContext = createContext();
-
-// Define the base URL
-const Axios = axios.create({
-  baseURL: "https://sistema-de-defesa.herokuapp.com"//"https://organizacao-de-defesas.herokuapp.com",
-});
 
 class MyContextProvider extends Component {
   constructor() {
@@ -39,7 +34,7 @@ class MyContextProvider extends Component {
   registerUser = async (user) => {
     // console.log(user);
     // Sending the user registration request
-    const register = await Axios.post("usuario", {
+    const register = await api.post("usuario", {
       nome: user.nome,
       email: user.email,
       username: user.username,
@@ -47,8 +42,8 @@ class MyContextProvider extends Component {
       school: user.universidade,
       academic_title: "Bacharelado",
       status: "user",
-      role:1,
-      hash:user.hash
+      role: 1,
+      hash: user.hash,
     });
 
     return register.data;
@@ -58,12 +53,11 @@ class MyContextProvider extends Component {
     var bodyFormData = new FormData();
     bodyFormData.append("username", user.username);
     bodyFormData.append("password", user.password);
-    const res = await axios({
-      method: "post",
-      url: "https://sistema-de-defesa.herokuapp.com/login",
-      data: bodyFormData,
-      headers: { "Content-Type": "multipart/form-data" },
-    })
+
+    const res = await api
+      .post("/login", bodyFormData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
       .then(function (response) {
         //handle success
         // handleClick();
