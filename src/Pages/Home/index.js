@@ -135,44 +135,34 @@ const Home = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      var bodyFormData = new FormData();
-      api
-        .get("/banca", {
-          data: bodyFormData,
-          headers: { Accept: "application/json" },
-        })
-        .then(function (response) {
-          var events = response.data.data;
-          if (events) {
-            events.forEach((e) => {
-              e.data = new Date(e.data_realizacao);
-              e.data.setSeconds(0);
-              e.formatedData = e.data.toLocaleString("pt-BR", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              });
-              // console.log(e.formatedData);
-              // e.autor = "Frederico Durão";
-            });
-            const dt = new Date();
-            events.sort((a, b) =>
-              a.data_realizacao < b.data_realizacao ? -1 : 1
-            );
-            var olderEvents = events.filter((a) => a.data < dt);
-            events = events.filter((a) => a.data > dt);
-            var allEvents = [];
-            allEvents.push(events);
-            allEvents.push(olderEvents);
-            setRawData(allEvents);
-          }
-          setDone(true);
-          return response;
+    api.get("/banca").then(function (response) {
+      var events = response.data.data;
+      if (events) {
+        events.forEach((e) => {
+          e.data = new Date(e.data_realizacao);
+          e.data.setSeconds(0);
+          e.formatedData = e.data.toLocaleString("pt-BR", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          // console.log(e.formatedData);
+          // e.autor = "Frederico Durão";
         });
-    }, 0);
+        const dt = new Date();
+        events.sort((a, b) => (a.data_realizacao < b.data_realizacao ? -1 : 1));
+        var olderEvents = events.filter((a) => a.data < dt);
+        events = events.filter((a) => a.data > dt);
+        var allEvents = [];
+        allEvents.push(events);
+        allEvents.push(olderEvents);
+        setRawData(allEvents);
+      }
+      setDone(true);
+      return response;
+    });
   }, []);
 
   function TabPanel(props) {
