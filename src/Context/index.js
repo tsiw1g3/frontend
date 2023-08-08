@@ -59,6 +59,7 @@ class MyContextProvider extends Component {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(function (response) {
+        console.log(response);
         //handle success
         // handleClick();
         return response;
