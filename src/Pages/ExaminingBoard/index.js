@@ -102,12 +102,6 @@ function ExaminingBoard() {
     },
   });
 
-  function getFormData(object) {
-    const formData = new FormData();
-    Object.keys(object).forEach((key) => formData.append(key, object[key]));
-    return formData;
-  }
-
   const handleChange = (e) => {
     const { value } = e.target;
     if (value === "remoto") {
@@ -118,8 +112,8 @@ function ExaminingBoard() {
   };
 
   const onSubmit = async (values) => {
-    var hour = new Date(values.hora);
-    var date = new Date(values.data_realizacao);
+    const hour = new Date(values.hora);
+    const date = new Date(values.data_realizacao);
     if (values["curso"] === "BCC") {
       values.disciplina = "MATA67";
     } else if (values["curso"] === "BSI") {
@@ -131,12 +125,11 @@ function ExaminingBoard() {
     hour.setDate(date.getDate());
     hour.setMonth(date.getMonth());
     hour.setFullYear(date.getFullYear());
-    hour = hour.toISOString();
-    values.data_realizacao = hour;
+    values.data_realizacao = hour.toISOString().slice(0, 19).replace("T", " ");
     setLoading(true);
 
     api
-      .post("/banca", getFormData(values))
+      .post("/banca", values)
       .then(function (response) {
         setLoading(false);
         goToDashboard();
@@ -224,7 +217,7 @@ function ExaminingBoard() {
         }}
       >
         <CssBaseline />
-        <h2 class="banca-form-header">Adicionar nova banca</h2>
+        <h2 className="banca-form-header">Adicionar nova banca</h2>
         <Form
           onSubmit={onSubmit}
           initialValues={{}}

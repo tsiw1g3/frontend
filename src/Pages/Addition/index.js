@@ -4,11 +4,18 @@ import { useHistory } from "react-router-dom";
 import "./styles.css";
 import axios from "axios";
 import ReactLoading from "react-loading";
-import { Button, Select, MenuItem, InputLabel, FormControl, ThemeProvider } from "@material-ui/core";
+import {
+  Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  ThemeProvider,
+} from "@material-ui/core";
 import { DataGrid } from "@mui/x-data-grid";
 import SelectSearch, { fuzzySearch } from "react-select-search";
-import { createTheme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/core/styles';
+import { createTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 /*
   Componente responsável pela página de adição de usuários à bancas
 */
@@ -17,8 +24,8 @@ function Addition() {
   const { toggleNav, registerUser } = useContext(MyContext);
 
   const [data, setData] = useState([]);
-  const [usuario, setUsuario] = useState({name:'',value:0});
-  const [cargo, setCargo] = useState('');
+  const [usuario, setUsuario] = useState({ name: "", value: 0 });
+  const [cargo, setCargo] = useState("");
   const [bancaData, setBancaData] = useState([]);
   const [inn, setInn] = useState([]);
   const [userIds, setUserIds] = useState([]);
@@ -36,37 +43,36 @@ function Addition() {
 
   const loginToken = localStorage.getItem("loginToken");
   const userId = localStorage.getItem("userId");
-  const bancaId = localStorage.getItem("bancaId")
-
+  const bancaId = localStorage.getItem("bancaId");
 
   const optionsCargos = [
     {
-      name:"Orientador",
-      value:"orientador"
+      name: "Orientador",
+      value: "orientador",
     },
     {
-      name:"Co-Orientador",
-      value:"coorientador"
+      name: "Co-Orientador",
+      value: "coorientador",
     },
     {
-      name:"Avaliador",
-      value:"avaliador"
-    }
-  ]
+      name: "Avaliador",
+      value: "avaliador",
+    },
+  ];
 
   const theme = createTheme({
     palette: {
       primary: {
-        light: '#757ce8',
-        main: '#329F5B',
-        dark: '#184e2d',
-        contrastText: '#fff',
+        light: "#757ce8",
+        main: "#329F5B",
+        dark: "#184e2d",
+        contrastText: "#fff",
       },
       secondary: {
-        light: '#ff7961',
-        main: '#6c7ae0',
-        dark: '#002884',
-        contrastText: '#fff',
+        light: "#ff7961",
+        main: "#6c7ae0",
+        dark: "#002884",
+        contrastText: "#fff",
       },
     },
   });
@@ -74,10 +80,10 @@ function Addition() {
   const themeRemover = createTheme({
     palette: {
       primary: {
-        light: '#757ce8',
-        main: '#df2a39',
-        dark: '#931621',
-        contrastText: '#fff',
+        light: "#757ce8",
+        main: "#df2a39",
+        dark: "#931621",
+        contrastText: "#fff",
       },
     },
   });
@@ -85,10 +91,10 @@ function Addition() {
   const theme2 = createTheme({
     palette: {
       primary: {
-        light: '#757ce8',
-        main: '#6c7ae0',
-        dark: '#2B8C50',
-        contrastText: '#fff',
+        light: "#757ce8",
+        main: "#6c7ae0",
+        dark: "#2B8C50",
+        contrastText: "#fff",
       },
     },
   });
@@ -102,17 +108,19 @@ function Addition() {
         Authorization: loginToken,
         Accept: "application/json",
       },
-    }).then(function (response) {
-      reload();
-    }).catch(function (error) {
-      alert(error.response.data.message);
-    });
+    })
+      .then(function (response) {
+        reload();
+      })
+      .catch(function (error) {
+        alert(error.response.data.message);
+      });
   };
 
   const addUser = () => {
     var bodyFormData = new FormData();
     bodyFormData.append("id_usuario", usuario.value);
-    bodyFormData.append("usuario_name", usuario.name)
+    bodyFormData.append("usuario_name", usuario.name);
     bodyFormData.append("role", cargo);
     axios({
       method: "post",
@@ -123,11 +131,13 @@ function Addition() {
         Authorization: loginToken,
         Accept: "application/json",
       },
-    }).then(function (response) {
-      reload();
-    }).catch(function (error) {
-      alert(error.response.data.message);
-    });
+    })
+      .then(function (response) {
+        reload();
+      })
+      .catch(function (error) {
+        alert(error.response.data.message);
+      });
   };
 
   // useEffect(() => {
@@ -205,7 +215,7 @@ function Addition() {
             Accept: "application/json",
           },
         }).then(function (response2) {
-          let aluno = {"role":"Aluno", "nome":response.data.data.autor, 'id':0}
+          let aluno = { role: "Aluno", nome: response.data.data.autor, id: 0 };
           response2.data.data.push(aluno);
           setInn(response2.data.data);
           setDone2(true);
@@ -224,29 +234,29 @@ function Addition() {
     return (
       <div>
         {params.id != 0 ? (
-        <ThemeProvider theme={themeRemover}>
-          <Button
-            onClick={() => removeUser(params.id)}
-            className="user-role"
-            type="button"
-            variant="contained"
-            color="primary"
-            style={{borderRadius:10}}
-          >
-            Remover da banca
-          </Button>
-        </ThemeProvider>
-        ) : (null)}
-    </div>
-    )
-  }
+          <ThemeProvider theme={themeRemover}>
+            <Button
+              onClick={() => removeUser(params.id)}
+              className="user-role"
+              type="button"
+              variant="contained"
+              color="primary"
+              style={{ borderRadius: 10 }}
+            >
+              Remover da banca
+            </Button>
+          </ThemeProvider>
+        ) : null}
+      </div>
+    );
+  };
 
   const columnsNota = [
     { field: "role", headerName: "Função", width: 150 },
     { field: "nome", headerName: "Nome", width: 1350 },
     {
-      field: 'actions',
-      headerName: 'Ações',
+      field: "actions",
+      headerName: "Ações",
       width: 200,
       renderCell: renderDetailsButton,
       disableClickEventBubbling: true,
@@ -256,66 +266,66 @@ function Addition() {
   const goToDashboard = () => {
     let path = `dashboard`;
     history.push(path);
-    alert("Membros da banca atualizados com sucesso!")
+    alert("Membros da banca atualizados com sucesso!");
   };
 
   const userChange = (value, obj) => {
     console.log(obj);
     setUsuario(obj);
-  }
+  };
 
   const roleChange = (value) => {
     setCargo(value);
-  }
+  };
 
-  if(data && data.length > 0 && optionsUsers.length <= 0){
-    const options = data.filter(function (e) {
-      return !userIds.includes(e.id);
-    }).map((user) => ({name:user.nome, value:user.id}));
+  if (data && data.length > 0 && optionsUsers.length <= 0) {
+    const options = data
+      .filter(function (e) {
+        return !userIds.includes(e.id);
+      })
+      .map((user) => ({ name: user.nome, value: user.id }));
     setOptionsUsers(options);
   }
 
-  let missing = '';
-  if(inn.length < 4 && inn.length != 1){
-    missing += 'Falta(m): '
+  let missing = "";
+  if (inn.length < 4 && inn.length != 1) {
+    missing += "Falta(m): ";
     let orientador = 1;
     let avaliador = 2;
-    for(let x=0;x<inn.length;x++){
+    for (let x = 0; x < inn.length; x++) {
       let user = inn[x];
-      if(user.role == "orientador"){
+      if (user.role == "orientador") {
         orientador--;
-      }
-      else if(user.role == "avaliador"){
+      } else if (user.role == "avaliador") {
         avaliador--;
       }
     }
-    if(orientador == 1){
+    if (orientador == 1) {
       missing += "1 orientador, ";
     }
-    if(avaliador == 1){
+    if (avaliador == 1) {
       missing += "1 avaliador";
-    }
-    else if(avaliador == 2){
-      missing+= "2 avaliadores";
+    } else if (avaliador == 2) {
+      missing += "2 avaliadores";
     }
   }
 
   const styles = makeStyles({
-    root:{
-      borderRadius:"10px",
-      "& .MuiDataGrid-columnsContainer":{
-          background:"#6c7ae0",
-          borderRadius:"10px 10px 0 0px"
+    root: {
+      borderRadius: "10px",
+      "& .MuiDataGrid-columnsContainer": {
+        background: "#6c7ae0",
+        borderRadius: "10px 10px 0 0px",
       },
-      "& .MuiDataGrid-columnHeaderTitle":{
-          color:"white",
-          fontWeight: 700,
+      "& .MuiDataGrid-columnHeaderTitle": {
+        color: "white",
+        fontWeight: 700,
       },
-      "& .MuiDataGrid-columnHeaderTitleContainer":{
-        justifyContent:"center"
-      }
-    }
-  })
+      "& .MuiDataGrid-columnHeaderTitleContainer": {
+        justifyContent: "center",
+      },
+    },
+  });
   const classes = styles();
 
   return (
@@ -334,61 +344,68 @@ function Addition() {
           <h2>Adicionar membro</h2>
           <div>
             <div className="user">
-                <div className="user-name">
-                      <SelectSearch
-                        id="user-select"
-                        filterOptions={fuzzySearch}
-                        options={optionsUsers}
-                        search
-                        value={usuario}
-                        onChange={userChange}
-                        placeholder="Usuário"
-                      />
-                </div>
-                <div className="user-right" style={{display:"flex"}}>
-                    <SelectSearch
-                        id="role-select"
-                        filterOptions={fuzzySearch}
-                        options={optionsCargos}
-                        search
-                        value={cargo}
-                        onChange={roleChange}
-                        placeholder="Função"
-                      />
-                    <ThemeProvider theme={theme}>
-                      <Button
-                        onClick={addUser}
-                        className="user-role"
-                        type="button"
-                        variant="contained"
-                        color="primary"
-                        style={{marginLeft:16, borderRadius:10}}
-                      >
-                        Adicionar
-                      </Button>
-                    </ThemeProvider>
-                </div>
-             </div>
+              <div className="user-name">
+                <SelectSearch
+                  id="user-select"
+                  filterOptions={fuzzySearch}
+                  options={optionsUsers}
+                  search
+                  value={usuario}
+                  onChange={userChange}
+                  placeholder="Usuário"
+                />
+              </div>
+              <div className="user-right" style={{ display: "flex" }}>
+                <SelectSearch
+                  id="role-select"
+                  filterOptions={fuzzySearch}
+                  options={optionsCargos}
+                  search
+                  value={cargo}
+                  onChange={roleChange}
+                  placeholder="Função"
+                />
+                <ThemeProvider theme={theme}>
+                  <Button
+                    onClick={addUser}
+                    className="user-role"
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    style={{ marginLeft: 16, borderRadius: 10 }}
+                  >
+                    Adicionar
+                  </Button>
+                </ThemeProvider>
+              </div>
+            </div>
           </div>
           <div>
             <div>
-            <h2 className="left-btn">Componentes da banca <small className="missing">{missing != '' ? missing : null}</small></h2>
+              <h2 className="left-btn">
+                Componentes da banca{" "}
+                <small className="missing">
+                  {missing !== "" ? missing : null}
+                </small>
+              </h2>
             </div>
-            <h4 className="right-head">Limites: 1 orientador, 1 co-orientador, 2 avaliadores</h4>
+            <h4 className="right-head">
+              Limites: 1 orientador, 1 co-orientador, 2 avaliadores
+            </h4>
           </div>
           <div className="members-list">
-              <div style={{ height: 400, width: "100%" }}>
-                <ThemeProvider theme={theme2}>
-                  <DataGrid
-                    rows={inn}
-                    columns={columnsNota}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
-                    rowHeight={62}
-                    className={classes.root}
-                  />
-                </ThemeProvider>  
-              </div>
+            <div style={{ height: 400, width: "100%" }}>
+              <ThemeProvider theme={theme2}>
+                <DataGrid
+                  rows={inn}
+                  columns={columnsNota}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  rowHeight={62}
+                  className={classes.root}
+                />
+              </ThemeProvider>
+            </div>
           </div>
           <ThemeProvider theme={theme}>
             <Button
@@ -396,7 +413,7 @@ function Addition() {
               color="primary"
               type="button"
               onClick={goToDashboard}
-              style={{marginTop:10, borderRadius:10}}
+              style={{ marginTop: 10, borderRadius: 10 }}
             >
               Finalizar
             </Button>
