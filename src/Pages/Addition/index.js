@@ -1,38 +1,26 @@
-import React, { useEffect, useContext, useState } from "react";
-import { MyContext } from "../../Context";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import "./styles.css";
-import axios from "axios";
 import ReactLoading from "react-loading";
-import {
-  Button,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  ThemeProvider,
-} from "@material-ui/core";
+import { Button, ThemeProvider } from "@material-ui/core";
 import { DataGrid } from "@mui/x-data-grid";
 import SelectSearch, { fuzzySearch } from "react-select-search";
 import { createTheme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
+import api from "Config/http";
+import "./styles.css";
 /*
   Componente responsável pela página de adição de usuários à bancas
 */
 
 function Addition() {
-  const { toggleNav, registerUser } = useContext(MyContext);
-
   const [data, setData] = useState([]);
   const [usuario, setUsuario] = useState({ name: "", value: 0 });
   const [cargo, setCargo] = useState("");
-  const [bancaData, setBancaData] = useState([]);
   const [inn, setInn] = useState([]);
   const [userIds, setUserIds] = useState([]);
   const [done, setDone] = useState(undefined);
   const [done2, setDone2] = useState(undefined);
   const [done3, setDone3] = useState(undefined);
-  const [loading, setLoading] = useState(false);
   const [optionsUsers, setOptionsUsers] = useState([]);
 
   const history = useHistory();
@@ -41,8 +29,6 @@ function Addition() {
     window.location.reload();
   };
 
-  const loginToken = localStorage.getItem("loginToken");
-  const userId = localStorage.getItem("userId");
   const bancaId = localStorage.getItem("bancaId");
 
   const optionsCargos = [
@@ -100,15 +86,8 @@ function Addition() {
   });
 
   const removeUser = (id) => {
-    axios({
-      method: "delete",
-      url: `https://sistema-de-defesa.herokuapp.com/banca/${bancaId}/user/${id}`,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: loginToken,
-        Accept: "application/json",
-      },
-    })
+    api
+      .delete(`/banca/${bancaId}/user/${id}`)
       .then(function (response) {
         reload();
       })
@@ -118,20 +97,12 @@ function Addition() {
   };
 
   const addUser = () => {
-    var bodyFormData = new FormData();
-    bodyFormData.append("id_usuario", usuario.value);
-    bodyFormData.append("usuario_name", usuario.name);
-    bodyFormData.append("role", cargo);
-    axios({
-      method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/${bancaId}`,
-      data: bodyFormData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: loginToken,
-        Accept: "application/json",
-      },
-    })
+    api
+      .post(`/usuario-banca/${bancaId}`, {
+        id_usuario: usuario.value,
+        usuario_name: usuario.name,
+        role: cargo,
+      })
       .then(function (response) {
         reload();
       })
@@ -140,100 +111,35 @@ function Addition() {
       });
   };
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     var bodyFormData = new FormData();
-  //     const users = axios({
-  //       method: "get",
-  //       url:
-  //         "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
-  //         bancaId,
-  //       data: bodyFormData,
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //         Authorization: loginToken,
-  //         Accept: "application/json",
-  //       },
-  //     }).then(function (response) {
-  //       setInn(response.data.data);
-  //       setDone2(true);
-  //       let ids = [];
-  //       for (var i = 0; i < response.data.data.length; ++i) {
-  //         ids.push(parseInt(response.data.data[i].id));
-  //       }
-  //       setUserIds(ids);
-  //       return response;
-  //     });
-  //   }, 0);
-  // }, []);
+  useEffect(() => {
+    api.get("/usuario").then(function (response) {
+      setData(response.data.data);
+      setDone(true);
+    });
+  }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      var bodyFormData = new FormData();
-      const users = axios({
-        method: "get",
-        url: "https://sistema-de-defesa.herokuapp.com/usuario",
-        data: bodyFormData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: loginToken,
-          Accept: "application/json",
-        },
-      }).then(function (response) {
-        setData(response.data.data);
-        setDone(true);
-
-        return response;
+    api.get(`/banca/${bancaId}`).then(function (response) {
+      setDone3(true);
+      api.get(`/usuario-banca/usuarios/${bancaId}`).then(function (response2) {
+        let aluno = { role: "Aluno", nome: response.data.data.autor, id: 0 };
+        response2.data.data.push(aluno);
+        setInn(response2.data.data);
+        setDone2(true);
+        let ids = [];
+        for (var i = 0; i < response2.data.data.length; ++i) {
+          ids.push(parseInt(response2.data.data[i].id));
+        }
+        setUserIds(ids);
       });
-    }, 0);
-  }, []);
-  useEffect(() => {
-    setTimeout(() => {
-      var bodyFormData = new FormData();
-      const banca = axios({
-        method: "get",
-        url: "https://sistema-de-defesa.herokuapp.com/banca/" + bancaId,
-        data: bodyFormData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: loginToken,
-          Accept: "application/json",
-        },
-      }).then(function (response) {
-        setBancaData(response.data.data);
-        setDone3(true);
-        var bodyFormData = new FormData();
-        const users = axios({
-          method: "get",
-          url:
-            "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
-            bancaId,
-          data: bodyFormData,
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: loginToken,
-            Accept: "application/json",
-          },
-        }).then(function (response2) {
-          let aluno = { role: "Aluno", nome: response.data.data.autor, id: 0 };
-          response2.data.data.push(aluno);
-          setInn(response2.data.data);
-          setDone2(true);
-          let ids = [];
-          for (var i = 0; i < response2.data.data.length; ++i) {
-            ids.push(parseInt(response2.data.data[i].id));
-          }
-          setUserIds(ids);
-        });
-        return response;
-      });
-    }, 0);
-  }, []);
+      return response;
+    });
+  }, [bancaId]);
 
   const renderDetailsButton = (params) => {
     return (
       <div>
-        {params.id != 0 ? (
+        {params.id !== 0 ? (
           <ThemeProvider theme={themeRemover}>
             <Button
               onClick={() => removeUser(params.id)}
@@ -288,24 +194,24 @@ function Addition() {
   }
 
   let missing = "";
-  if (inn.length < 4 && inn.length != 1) {
+  if (inn.length < 4 && inn.length !== 1) {
     missing += "Falta(m): ";
     let orientador = 1;
     let avaliador = 2;
     for (let x = 0; x < inn.length; x++) {
       let user = inn[x];
-      if (user.role == "orientador") {
+      if (user.role === "orientador") {
         orientador--;
-      } else if (user.role == "avaliador") {
+      } else if (user.role === "avaliador") {
         avaliador--;
       }
     }
-    if (orientador == 1) {
+    if (orientador === 1) {
       missing += "1 orientador, ";
     }
-    if (avaliador == 1) {
+    if (avaliador === 1) {
       missing += "1 avaliador";
-    } else if (avaliador == 2) {
+    } else if (avaliador === 2) {
       missing += "2 avaliadores";
     }
   }
@@ -330,7 +236,7 @@ function Addition() {
 
   return (
     <>
-      {!done || !done2 || !done3 || loading ? (
+      {!done || !done2 || !done3 ? (
         <div className="center">
           <ReactLoading
             type={"spin"}
