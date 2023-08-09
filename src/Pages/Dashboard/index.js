@@ -135,7 +135,7 @@ function Dashboard() {
 
   const getBancaUsuarios = async (bancaId) => {
     setLoading(true);
-    api.get(`/usuarios/${bancaId}`).then(function (response) {
+    api.get(`/usuario-banca/usuarios/${bancaId}`).then(function (response) {
       setLoading(false);
       setInn(response.data.data);
       return response;
