@@ -126,7 +126,7 @@ function Users() {
       value: 2,
     },
     {
-      name: "Admnistrador",
+      name: "Administrador",
       value: 3,
     },
   ];
