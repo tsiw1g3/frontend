@@ -95,12 +95,13 @@ const Header = () => {
     const data = await loginUser(user);
     if (data.data) {
       const {
-        data: { id, token, role },
+        data: { id, token, role, name },
       } = data;
 
       localStorage.setItem("loginToken", token);
       localStorage.setItem("userId", id);
       localStorage.setItem("role", role);
+      localStorage.setItem("nome", name);
 
       setIsUserLogged(true);
       setLoading(false);
