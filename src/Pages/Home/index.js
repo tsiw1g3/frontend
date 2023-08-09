@@ -62,7 +62,7 @@ const Home = () => {
           id="see-board"
           onClick={() => goToViewBanca(params.row.id)}
         ></button>
-        {role === 3 ? (
+        {role === "3" ? (
           <>
             <button
               title="Editar banca"

@@ -162,7 +162,7 @@ const Header = () => {
               >
                 Minhas Bancas
               </Button>
-              {localStorage.getItem("role") === 3 && (
+              {localStorage.getItem("role") === "3" && (
                 <Button
                   className="login-button"
                   component={Link}
