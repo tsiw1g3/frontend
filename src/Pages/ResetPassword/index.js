@@ -54,7 +54,7 @@ function Register() {
         },
       })
       .then(function (response) {
-        alert("O Email de redifinição de senha foi enviado");
+        alert("O Email de redefinição de senha foi enviado");
         goToHome();
         // reload();
       })
