@@ -1,14 +1,14 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./styles.css";
 import Container from "@material-ui/core/Container";
 import ReactLoading from "react-loading";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 
 import CardBanca from "../../Components/Card";
-import { Paper, Grid, Button, CssBaseline, MenuItem, ThemeProvider } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
-import { createTheme } from '@material-ui/core/styles';
+import { Grid, Button, CssBaseline, ThemeProvider } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { createTheme } from "@material-ui/core/styles";
+import api from "Config/http";
 
 /*
   Componente responsável pela página de visualização de bancas
@@ -20,108 +20,87 @@ function ViewBanca() {
   const [inn, setInn] = useState([]);
   const [done, setDone] = useState(false);
   const [done2, setDone2] = useState(false);
-  const [date, setDate] = useState('')
+  const [date, setDate] = useState("");
 
-  const loginToken = localStorage.getItem("loginToken");
-  const goToHome = () => {
-    let path = ``;
-    history.push(path);
-  };
+  const goToHome = useCallback(() => {
+    history.push("");
+  }, [history]);
 
   const theme = createTheme({
     palette: {
       primary: {
-        light: '#757ce8',
-        main: '#329F5B',
-        dark: '#184e2d',
-        contrastText: '#fff',
+        light: "#757ce8",
+        main: "#329F5B",
+        dark: "#184e2d",
+        contrastText: "#fff",
       },
       secondary: {
-        light: '#ff7961',
-        main: '#6c7ae0',
-        dark: '#002884',
-        contrastText: '#fff',
+        light: "#ff7961",
+        main: "#6c7ae0",
+        dark: "#002884",
+        contrastText: "#fff",
       },
     },
   });
 
   useEffect(() => {
-    setTimeout(async () => {
-      let url = window.location.href;
-      let regex = /[?&]([^=#]+)=([^&#]*)/g,
-      banca = '',
-      match
-      match = regex.exec(url);
-      if(match == null){
-        goToHome();
-      }
-      banca = match[2];
-      const users = await axios({
-        method: "get",
-        url: `https://sistema-de-defesa.herokuapp.com/banca/${banca}`,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-        },
-      }).then(function (response) {
-        if(response.data.data != null){
-          let data = new Date(response.data.data.data_realizacao);
-          data.setSeconds(0);
-          setDate(data.toLocaleString("pt-BR", {
+    let url = window.location.href;
+    let regex = /[?&]([^=#]+)=([^&#]*)/g,
+      banca = "",
+      match;
+    match = regex.exec(url);
+    if (match == null) {
+      goToHome();
+    }
+    banca = match[2];
+    api.get(`/banca/${banca}`).then(function (response) {
+      if (response.data.data != null) {
+        let data = new Date(response.data.data.data_realizacao);
+        data.setSeconds(0);
+        setDate(
+          data.toLocaleString("pt-BR", {
             year: "numeric",
             month: "numeric",
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
-          }));
-          setBanca(response.data.data);
-          setDone(true);
-        }
-        else{
-          goToHome();
-        }
-      });
-    }, 0);
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      var bodyFormData = new FormData();
-      let url = window.location.href;
-      let regex = /[?&]([^=#]+)=([^&#]*)/g,
-      banca = '',
-      match
-      match = regex.exec(url);
-      if(match == null){
+          })
+        );
+        setBanca(response.data.data);
+        setDone(true);
+      } else {
         goToHome();
       }
-      banca = match[2];
-      const users = axios({
-        method: "get",
-        url:
-          "https://sistema-de-defesa.herokuapp.com/usuario-banca/usuarios/" +
-          banca,
-        data: bodyFormData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: loginToken,
-          Accept: "application/json",
-        },
-      }).then(function (response) {
+    });
+  }, [goToHome]);
+
+  useEffect(() => {
+    let url = window.location.href;
+    let regex = /[?&]([^=#]+)=([^&#]*)/g,
+      banca = "",
+      match;
+    match = regex.exec(url);
+    if (match == null) {
+      goToHome();
+    }
+    banca = match[2];
+    api
+      .get(`/usuario-banca/usuarios/${banca}`)
+      .then(function (response) {
         setInn(response.data.data);
         setDone2(true);
-      }).catch(function (error){
+      })
+      .catch(function (error) {
         setDone2(true);
       });
-    }, 0);
-  }, []);
+  }, [goToHome]);
 
   const styles = makeStyles({
-    root:{
+    root: {
       boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
       padding: "16px",
-      borderRadius:"8px"
-    }
+      borderRadius: "8px",
+    },
   });
 
   const classesGrid = styles();
@@ -129,19 +108,32 @@ function ViewBanca() {
   return (
     <>
       {!done && !done2 ? (
-          <div className="center">
-            <ReactLoading
-              type={"spin"}
-              color={"#41616c"}
-              height={100}
-              width={100}
-            />
-          </div>
-        ) : (
+        <div className="center">
+          <ReactLoading
+            type={"spin"}
+            color={"#41616c"}
+            height={100}
+            width={100}
+          />
+        </div>
+      ) : (
         <Container className="App">
-          <div style={{ padding: 16, display:"flex", flexDirection: "column", margin: "auto", maxWidth: 2000 }}>
+          <div
+            style={{
+              padding: 16,
+              display: "flex",
+              flexDirection: "column",
+              margin: "auto",
+              maxWidth: 2000,
+            }}
+          >
             <CssBaseline />
-            <Grid container alignItems="flex-start" spacing={2} className={classesGrid.root}>
+            <Grid
+              container
+              alignItems="flex-start"
+              spacing={2}
+              className={classesGrid.root}
+            >
               <div className="banca-content">
                 <h1>Título: {banca.titulo_trabalho}</h1>
               </div>
@@ -156,10 +148,16 @@ function ViewBanca() {
                   <CardBanca text={banca.autor} title="Autor"></CardBanca>
                 </Grid>
                 <Grid item xs={4}>
-                  <CardBanca text={banca.matricula} title="Matrícula"></CardBanca>
+                  <CardBanca
+                    text={banca.matricula}
+                    title="Matrícula"
+                  ></CardBanca>
                 </Grid>
                 <Grid item xs={4}>
-                  <CardBanca text={banca.palavras_chave} title="Palavras Chaves (Separadas por vírgula)"></CardBanca>
+                  <CardBanca
+                    text={banca.palavras_chave}
+                    title="Palavras Chaves (Separadas por vírgula)"
+                  ></CardBanca>
                 </Grid>
                 <Grid item xs={4}>
                   <CardBanca text={banca.turma} title="Turma"></CardBanca>
@@ -171,7 +169,10 @@ function ViewBanca() {
                   <CardBanca text={banca.ano} title="Ano"></CardBanca>
                 </Grid>
                 <Grid item xs={4}>
-                  <CardBanca text={banca.semestre_letivo} title="Semestre Letivo"></CardBanca>
+                  <CardBanca
+                    text={banca.semestre_letivo}
+                    title="Semestre Letivo"
+                  ></CardBanca>
                 </Grid>
                 <Grid item xs={4}>
                   <CardBanca text={banca.local} title="Local"></CardBanca>
@@ -197,7 +198,7 @@ function ViewBanca() {
                     color="secondary"
                     type="button"
                     onClick={goToHome}
-                    style={{marginLeft:8, borderRadius: 10}}
+                    style={{ marginLeft: 8, borderRadius: 10 }}
                   >
                     Voltar
                   </Button>
@@ -205,11 +206,9 @@ function ViewBanca() {
               </Grid>
             </Grid>
           </div>
-          <div>
-            
-          </div>
+          <div></div>
         </Container>
-        )}
+      )}
     </>
   );
 }

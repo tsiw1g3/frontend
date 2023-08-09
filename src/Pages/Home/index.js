@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./styles.css";
 import ReactLoading from "react-loading";
 import { useHistory } from "react-router-dom";
@@ -36,22 +35,14 @@ const Home = () => {
   };
 
   const role = localStorage.getItem("role");
-  const loginToken = localStorage.getItem("loginToken");
 
   const reload = () => {
     window.location.reload();
   };
 
   const removeBanca = (bancaId) => {
-    axios({
-      method: "delete",
-      url: `https://sistema-de-defesa.herokuapp.com/banca/${bancaId}/delete`,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: loginToken,
-        Accept: "application/json",
-      },
-    })
+    api
+      .delete(`/banca/${bancaId}/delete`)
       .then(function (response) {
         alert("Banca removida com sucesso");
         reload();

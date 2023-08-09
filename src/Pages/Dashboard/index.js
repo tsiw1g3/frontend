@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./styles.css";
-import axios from "axios";
 import ReactLoading from "react-loading";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -230,18 +229,9 @@ function Dashboard() {
   const onSubmitNota = async (values) => {
     setLoadingModal(true);
     const banca = localStorage.getItem("banca");
-    const loginToken = localStorage.getItem("loginToken");
     const id = values.avaliador;
-    await axios({
-      method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/usuario-banca/nota/${banca}/${id}`,
-      data: getFormData(values),
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: loginToken,
-        Accept: "application/json",
-      },
-    })
+    api
+      .post(`/usuario-banca/nota/${banca}/${id}`, getFormData(values))
       .then(function (response) {
         setLoadingModal(false);
         alert("Nota enviada com sucesso");
