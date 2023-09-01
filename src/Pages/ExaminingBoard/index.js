@@ -1,13 +1,17 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./styles.css";
 import Container from "@material-ui/core/Container";
 import ReactLoading from "react-loading";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
-import { withStyles} from '@material-ui/core/styles';
 import { Form, Field } from "react-final-form";
-import { TextField, Checkbox, Radio, Select } from "final-form-material-ui";
-import { Paper, Grid, Button, CssBaseline, InputLabel, MenuItem, ThemeProvider } from "@material-ui/core";
+import { TextField, Radio, Select } from "final-form-material-ui";
+import {
+  Grid,
+  Button,
+  CssBaseline,
+  MenuItem,
+  ThemeProvider,
+} from "@material-ui/core";
 // Picker
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -15,8 +19,9 @@ import {
   TimePicker,
   DatePicker,
 } from "@material-ui/pickers";
-import { makeStyles } from '@material-ui/core/styles';
-import { createTheme } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
+import { createTheme } from "@material-ui/core/styles";
+import api from "Config/http";
 
 /*
   Componente responsável pela página de criação de bancas
@@ -83,74 +88,57 @@ function ExaminingBoard() {
   const theme = createTheme({
     palette: {
       primary: {
-        light: '#757ce8',
-        main: '#329F5B',
-        dark: '#184e2d',
-        contrastText: '#fff',
+        light: "#757ce8",
+        main: "#329F5B",
+        dark: "#184e2d",
+        contrastText: "#fff",
       },
       secondary: {
-        light: '#ff7961',
-        main: '#6c7ae0',
-        dark: '#002884',
-        contrastText: '#fff',
+        light: "#ff7961",
+        main: "#6c7ae0",
+        dark: "#002884",
+        contrastText: "#fff",
       },
     },
   });
 
-  function getFormData(object) {
-    const formData = new FormData();
-    Object.keys(object).forEach((key) => formData.append(key, object[key]));
-    return formData;
-  }
-
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { value } = e.target;
-    if(value == "remoto"){
+    if (value === "remoto") {
       setTipo_banca(false);
-    }
-    else if(value == "local"){
+    } else if (value === "local") {
       setTipo_banca(true);
     }
   };
 
   const onSubmit = async (values) => {
-    var hour = new Date(values.hora);
-    var date = new Date(values.data_realizacao);
-    if(values['curso'] == 'BCC'){
-      values.disciplina = 'MATA67';
+    const hour = new Date(values.hora);
+    const date = new Date(values.data_realizacao);
+    if (values["curso"] === "BCC") {
+      values.disciplina = "MATA67";
+    } else if (values["curso"] === "BSI") {
+      values.disciplina = "MATC98";
     }
-    else if(values['curso'] == 'BSI'){
-      values.disciplina = 'MATC98';
-    }
-    const loginToken = localStorage.getItem("loginToken");
     const userId = localStorage.getItem("userId");
     values.user_id = userId;
     hour.setHours(hour.getHours() - 3);
     hour.setDate(date.getDate());
     hour.setMonth(date.getMonth());
     hour.setFullYear(date.getFullYear());
-    hour = hour.toISOString();
-    values.data_realizacao = hour;
+    values.data_realizacao = hour.toISOString().slice(0, 19).replace("T", " ");
     setLoading(true);
-    await axios({
-      method: "post",
-      url: `https://sistema-de-defesa.herokuapp.com/banca`,
-      data: getFormData(values),
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: loginToken,
-        Accept: "application/json",
-      },
-    })
-    .then(function (response) {
-      setLoading(false);
-      goToDashboard();
-    })
-    .catch(error => {
-      setLoading(false);
-      alert("Ocorreu um erro ao tentar cadastrar a banca");
-      goToDashboard();
-    });
+
+    api
+      .post("/banca", values)
+      .then(function (response) {
+        setLoading(false);
+        goToDashboard();
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert("Ocorreu um erro ao tentar cadastrar a banca");
+        goToDashboard();
+      });
   };
   const validate = (values) => {
     const errors = {};
@@ -200,10 +188,10 @@ function ExaminingBoard() {
   };
 
   const styles = makeStyles({
-    root:{
+    root: {
       boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
-      padding: "16px"
-    }
+      padding: "16px",
+    },
   });
 
   const classesGrid = styles();
@@ -212,190 +200,217 @@ function ExaminingBoard() {
     <Container className="App banca-form-container">
       {loading ? (
         <div className="center">
-        <ReactLoading
-          type={"spin"}
-          color={"#41616c"}
-          height={50}
-          width={50}
-        />
-      </div>
-      ) : (null)
-      }
-      <div style={{ padding: 16, display:"flex", flexDirection: "column", maxWidth: 3000 }}>
+          <ReactLoading
+            type={"spin"}
+            color={"#41616c"}
+            height={50}
+            width={50}
+          />
+        </div>
+      ) : null}
+      <div
+        style={{
+          padding: 16,
+          display: "flex",
+          flexDirection: "column",
+          maxWidth: 3000,
+        }}
+      >
         <CssBaseline />
-        <h2 class="banca-form-header">Adicionar nova banca</h2>
+        <h2 className="banca-form-header">Adicionar nova banca</h2>
         <Form
           onSubmit={onSubmit}
           initialValues={{}}
           validate={validate}
           render={({ handleSubmit, reset, submitting, pristine, values }) => (
             <form onSubmit={handleSubmit} noValidate>
-              
-                <Grid container alignItems="flex-start" spacing={2} className={classesGrid.root}>
-                  <Grid item xs={12}>
-                    <Field
-                      fullWidth
-                      Obrigatório
-                      multiline
-                      name="titulo_trabalho"
-                      component={TextField}
-                      type="text"
-                      label="Titulo"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Field
-                      fullWidth
-                      Obrigatório
-                      multiline
-                      name="resumo"
-                      component={TextField}
-                      type="text"
-                      label="Resumo"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Field
-                      name="abstract"
-                      fullWidth
-                      multiline
-                      Obrigatório
-                      component={TextField}
-                      label="Abstract"
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Field
-                      name="autor"
-                      fullWidth
-                      Obrigatório
-                      component={TextField}
-                      label="Autor"
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Field
-                      name="matricula"
-                      fullWidth
-                      Obrigatório
-                      component={TextField}
-                      label="Matrícula"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Field
-                      name="palavras_chave"
-                      fullWidth
-                      Obrigatório
-                      multiline
-                      component={TextField}
-                      label="Palavras Chave (Separadas por vírgula)"
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                        <Field
-                          name="turma"
-                          fullWidth
-                          Obrigatório
-                          component={TextField}
-                          label="Turma"
-                        />
-                      </Grid>
-                  <Grid item xs={4}>
-                    <Field
-                        name="curso"
-                        label="Curso"
-                        formControlProps={{className: 'curso'}}
-                        component={Select}
-                    >
-                        <MenuItem value={"BCC"}>BCC</MenuItem>
-                        <MenuItem value={"BSI"}>BSI</MenuItem>
-                    </Field>
-                  </Grid>
-                  <Grid style={{padding:0,marginTop:"auto", fontSize: "13px"}} item xs={2}>
-                    Remoto
-                    <Field name="tipo_banca" component={Radio} type="radio" value="remoto" onClick={handleChange}></Field>
-                    Presencial
-                    <Field name="tipo_banca" component={Radio} type="radio" value="local" onClick={handleChange}></Field>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Field
-                      name="ano"
-                      multiline
-                      fullWidth
-                      Obrigatório
-                      component={TextField}
-                      label="Ano"
-                    />
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Field
-                      name="semestre_letivo"
-                      fullWidth
-                      Obrigatório
-                      component={TextField}
-                      label="Semestre Letivo"
-                      type="number"
-                      InputProps={{ inputProps: { min: 1, max: 9, type: 'number' } }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Field
-                      name="local"
-                      multiline
-                      fullWidth
-                      Obrigatório
-                      component={TextField}
-                      label={tipo_banca ? "Local" : "Link"}
-                    />
-                  </Grid>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid item xs={6}>
-                      <Field
-                        name="data_realizacao"
-                        component={DatePickerWrapper}
-                        Obrigatório
-                        fullWidth
-                        margin="normal"
-                        label="Data"
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Field
-                        name="hora"
-                        Obrigatório
-                        component={TimePickerWrapper}
-                        fullWidth
-                        margin="normal"
-                        label="Hora"
-                      />
-                    </Grid>
-                  </MuiPickersUtilsProvider>
-                  <Grid item style={{ marginTop: 16 }}>
-                    <ThemeProvider theme={theme}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          type="submit"
-                          disabled={submitting}
-                          style={{borderRadius: 10}}
-                        >
-                          Adicionar
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          type="button"
-                          disabled={submitting}
-                          onClick={goToDashboard}
-                          style={{marginLeft:10, borderRadius: 10}}
-                        >
-                          Voltar
-                        </Button>
-                    </ThemeProvider>
-                  </Grid>
+              <Grid
+                container
+                alignItems="flex-start"
+                spacing={2}
+                className={classesGrid.root}
+              >
+                <Grid item xs={12}>
+                  <Field
+                    fullWidth
+                    Obrigatório
+                    multiline
+                    name="titulo_trabalho"
+                    component={TextField}
+                    type="text"
+                    label="Titulo"
+                  />
                 </Grid>
-              
+                <Grid item xs={12}>
+                  <Field
+                    fullWidth
+                    Obrigatório
+                    multiline
+                    name="resumo"
+                    component={TextField}
+                    type="text"
+                    label="Resumo"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    name="abstract"
+                    fullWidth
+                    multiline
+                    Obrigatório
+                    component={TextField}
+                    label="Abstract"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    name="autor"
+                    fullWidth
+                    Obrigatório
+                    component={TextField}
+                    label="Autor"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    name="matricula"
+                    fullWidth
+                    Obrigatório
+                    component={TextField}
+                    label="Matrícula"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    name="palavras_chave"
+                    fullWidth
+                    Obrigatório
+                    multiline
+                    component={TextField}
+                    label="Palavras Chave (Separadas por vírgula)"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    name="turma"
+                    fullWidth
+                    Obrigatório
+                    component={TextField}
+                    label="Turma"
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <Field
+                    name="curso"
+                    label="Curso"
+                    formControlProps={{ className: "curso" }}
+                    component={Select}
+                  >
+                    <MenuItem value={"BCC"}>BCC</MenuItem>
+                    <MenuItem value={"BSI"}>BSI</MenuItem>
+                  </Field>
+                </Grid>
+                <Grid
+                  style={{ padding: 0, marginTop: "auto", fontSize: "13px" }}
+                  item
+                  xs={2}
+                >
+                  Remoto
+                  <Field
+                    name="tipo_banca"
+                    component={Radio}
+                    type="radio"
+                    value="remoto"
+                    onClick={handleChange}
+                  ></Field>
+                  Presencial
+                  <Field
+                    name="tipo_banca"
+                    component={Radio}
+                    type="radio"
+                    value="local"
+                    onClick={handleChange}
+                  ></Field>
+                </Grid>
+                <Grid item xs={3}>
+                  <Field
+                    name="ano"
+                    multiline
+                    fullWidth
+                    Obrigatório
+                    component={TextField}
+                    label="Ano"
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Field
+                    name="semestre_letivo"
+                    fullWidth
+                    Obrigatório
+                    component={TextField}
+                    label="Semestre Letivo"
+                    type="number"
+                    InputProps={{
+                      inputProps: { min: 1, max: 9, type: "number" },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    name="local"
+                    multiline
+                    fullWidth
+                    Obrigatório
+                    component={TextField}
+                    label={tipo_banca ? "Local" : "Link"}
+                  />
+                </Grid>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <Grid item xs={6}>
+                    <Field
+                      name="data_realizacao"
+                      component={DatePickerWrapper}
+                      Obrigatório
+                      fullWidth
+                      margin="normal"
+                      label="Data"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Field
+                      name="hora"
+                      Obrigatório
+                      component={TimePickerWrapper}
+                      fullWidth
+                      margin="normal"
+                      label="Hora"
+                    />
+                  </Grid>
+                </MuiPickersUtilsProvider>
+                <Grid item style={{ marginTop: 16 }}>
+                  <ThemeProvider theme={theme}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      disabled={submitting}
+                      style={{ borderRadius: 10 }}
+                    >
+                      Adicionar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      type="button"
+                      disabled={submitting}
+                      onClick={goToDashboard}
+                      style={{ marginLeft: 10, borderRadius: 10 }}
+                    >
+                      Voltar
+                    </Button>
+                  </ThemeProvider>
+                </Grid>
+              </Grid>
             </form>
           )}
         />

@@ -5,9 +5,9 @@ import { useHistory } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
 import ReactLoading from "react-loading";
 import "./styles.css";
-import { createTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
-import { makeStyles } from '@material-ui/core/styles';
+import { createTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 /*
   Componente responsável pela renderização do cabeçalho da aplicação
@@ -33,33 +33,33 @@ const Header = () => {
   const theme = createTheme({
     palette: {
       primary: {
-        light: '#757ce8',
-        main: '#6c7ae0',
-        dark: '#002884',
-        contrastText: '#fff',
+        light: "#757ce8",
+        main: "#6c7ae0",
+        dark: "#002884",
+        contrastText: "#fff",
       },
       secondary: {
-        light: '#ff7961',
-        main: '#f44336',
-        dark: '#ba000d',
-        contrastText: '#000',
+        light: "#ff7961",
+        main: "#f44336",
+        dark: "#ba000d",
+        contrastText: "#000",
       },
-      third:{
-        light: '#ff7961',
-        main: '#73D498',
-        dark: '#ba000d',
-        contrastText: '#000',
-      }
+      third: {
+        light: "#ff7961",
+        main: "#73D498",
+        dark: "#ba000d",
+        contrastText: "#000",
+      },
     },
   });
 
   const theme2 = createTheme({
     palette: {
       primary: {
-        light: '#757ce8',
-        main: '#73D498',
-        dark: '#2B8C50',
-        contrastText: '#fff',
+        light: "#757ce8",
+        main: "#73D498",
+        dark: "#2B8C50",
+        contrastText: "#fff",
       },
     },
   });
@@ -68,7 +68,7 @@ const Header = () => {
     overrides: {
       MuiOutlinedInput: {
         input: {
-          height:20
+          height: 20,
         },
       },
     },
@@ -94,14 +94,18 @@ const Header = () => {
     setLoading(true);
     const data = await loginUser(user);
     if (data.data) {
-    setLoading(false);
-      localStorage.setItem("userId", data.data.id);
-      localStorage.setItem("nome", data.data.nome.split(' ')[0]);
-      localStorage.setItem("loginToken", data.data.token);
-      localStorage.setItem("role", data.data.role);
+      const {
+        data: { id, token, role, name },
+      } = data;
+
+      localStorage.setItem("loginToken", token);
+      localStorage.setItem("userId", id);
+      localStorage.setItem("role", role);
+      localStorage.setItem("nome", name);
+
       setIsUserLogged(true);
+      setLoading(false);
       redirectTo("dashboard");
-      // await isLoggedIn();
     } else {
       setLoading(false);
       alert("Usuário ou senha incorretos");
@@ -113,42 +117,33 @@ const Header = () => {
     history.push(path);
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const classes = useStyles();
 
   return (
     <>
-    <div
-      className="header"
-      expand="lg"
-      // style={{
-      //   backgroundImage: `url(/frontend/img/header.png)`,
-      // }}
-    >
-      <div className="logo-container">
-        <div>
-          <Link to="/" style={{ textDecoration: "none" }}>
-            <img
-              src="/frontend/img/instituto_de_computacao.png"
-              alt="Logos IC"
-              className="img-logo"
-            />
-            <h1 className="logo" >Sistema de Defesas de TCC</h1>
-          </Link>
+      <div
+        className="header"
+        expand="lg"
+        // style={{
+        //   backgroundImage: `url(/frontend/img/header.png)`,
+        // }}
+      >
+        <div className="logo-container">
+          <div>
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <img
+                src="/frontend/img/instituto_de_computacao.png"
+                alt="Logos IC"
+                className="img-logo"
+              />
+              <h1 className="logo">Sistema de Defesas de TCC</h1>
+            </Link>
+          </div>
         </div>
-      </div>
 
-      {isUserLogged ? (
-        <div className="login-form">
-          <ThemeProvider theme={theme}>
+        {isUserLogged ? (
+          <div className="login-form">
+            <ThemeProvider theme={theme}>
               <div style={{ marginTop: 11, marginLeft: 20 }}>
                 Olá, {localStorage.getItem("nome")}
               </div>
@@ -168,17 +163,15 @@ const Header = () => {
               >
                 Minhas Bancas
               </Button>
-              {localStorage.getItem("role") == 3 ? (
+              {localStorage.getItem("role") === "3" && (
                 <Button
-                className="login-button"
-                component={Link}
-                to="/users"
-                style={{ marginTop: -20, marginLeft: 20 }}
+                  className="login-button"
+                  component={Link}
+                  to="/users"
+                  style={{ marginTop: -20, marginLeft: 20 }}
                 >
                   Ver Usuários
                 </Button>
-              ): (
-              <h1></h1>
               )}
               <Button
                 className="login-button"
@@ -188,20 +181,38 @@ const Header = () => {
                   setUser(initialUser);
                   redirectTo("/");
                 }}
-                style={{ marginLeft: 20, minWidth:80, height:40, borderRadius:10 }}
+                style={{
+                  marginLeft: 20,
+                  minWidth: 80,
+                  height: 40,
+                  borderRadius: 10,
+                }}
                 color="primary"
                 variant="contained"
               >
                 Logout
               </Button>
               <ThemeProvider theme={theme2}>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfTSPtMb09CIpLb0SjrtZM1Pfe8_5wrGrpZ2Ccr59ZdxPbFoA/viewform" target="_blank" style={{ textDecoration:"none"}}>
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfTSPtMb09CIpLb0SjrtZM1Pfe8_5wrGrpZ2Ccr59ZdxPbFoA/viewform"
+                  target="_blank"
+                  style={{ textDecoration: "none" }}
+                  rel="noreferrer"
+                >
                   <Button
                     className="avaliacao-button"
                     onClick={() => {
-                      window.open("https://docs.google.com/forms/d/e/1FAIpQLSfTSPtMb09CIpLb0SjrtZM1Pfe8_5wrGrpZ2Ccr59ZdxPbFoA/viewform", '_blank');
+                      window.open(
+                        "https://docs.google.com/forms/d/e/1FAIpQLSfTSPtMb09CIpLb0SjrtZM1Pfe8_5wrGrpZ2Ccr59ZdxPbFoA/viewform",
+                        "_blank"
+                      );
                     }}
-                    style={{ marginLeft: 20, minWidth:80, height:40, borderRadius:10 }}
+                    style={{
+                      marginLeft: 20,
+                      minWidth: 80,
+                      height: 40,
+                      borderRadius: 10,
+                    }}
                     color="primary"
                     variant="contained"
                   >
@@ -209,66 +220,63 @@ const Header = () => {
                   </Button>
                 </a>
               </ThemeProvider>
-          </ThemeProvider>
-        </div>
-      ) : (
-        <form className="login-form" onSubmit={submitForm}>
-          {loading ? (
-            <div className="center">
-            <ReactLoading
-              type={"spin"}
-              color={"#41616c"}
-              height={80}
-              width={80}
-            />
-            </div>
-          ) : (null)
-          }
-          <ThemeProvider theme={themeTextField}>
-            <TextField
-              className={classes.root}
-              name="username"
-              label="Usuário"
-              variant="outlined"
-              size="small"
-              style={{ marginLeft: 20 }}
-              onChange={onChangeValue}
+            </ThemeProvider>
+          </div>
+        ) : (
+          <form className="login-form" onSubmit={submitForm}>
+            {loading ? (
+              <div className="center">
+                <ReactLoading
+                  type={"spin"}
+                  color={"#41616c"}
+                  height={80}
+                  width={80}
+                />
+              </div>
+            ) : null}
+            <ThemeProvider theme={themeTextField}>
+              <TextField
+                className={classes.root}
+                name="username"
+                label="Usuário"
+                variant="outlined"
+                size="small"
+                style={{ marginLeft: 20 }}
+                onChange={onChangeValue}
               />
-            <TextField
-              className={classes.root}
-              name="password"
-              label="Senha"
-              variant="outlined"
-              size="small"
-              type="password"
-              style={{ marginLeft: 20 }}
-              onChange={onChangeValue}
+              <TextField
+                className={classes.root}
+                name="password"
+                label="Senha"
+                variant="outlined"
+                size="small"
+                type="password"
+                style={{ marginLeft: 20 }}
+                onChange={onChangeValue}
               />
-          </ThemeProvider>
-          <ThemeProvider theme={theme}>
-            <Button
-              className="login-button"
-              type="submit"
-              style={{ marginLeft: 20, minWidth:80, height:40, borderRadius:10 }}
-              color="primary"
-              variant="contained"
-            >
-              Entrar
-            </Button>
-          </ThemeProvider>
-          <a className="forgot-pass" onClick={reset_pass_btn}>Esqueceu a senha?</a>
-          {/* <Button
-            className="login-button"
-            style={{ marginTop: -10, minWidth: 90, marginRight: -20 }}
-            onClick={() => {
-              redirectTo("/register");
-            }}
-          >
-            Registrar
-          </Button> */}
-        </form>
-      )}
-    </div>
+            </ThemeProvider>
+            <ThemeProvider theme={theme}>
+              <Button
+                className="login-button"
+                type="submit"
+                style={{
+                  marginLeft: 20,
+                  minWidth: 80,
+                  height: 40,
+                  borderRadius: 10,
+                }}
+                color="primary"
+                variant="contained"
+              >
+                Entrar
+              </Button>
+            </ThemeProvider>
+            <span role="link" className="forgot-pass" onClick={reset_pass_btn}>
+              Esqueceu a senha?
+            </span>
+          </form>
+        )}
+      </div>
     </>
   );
 };
