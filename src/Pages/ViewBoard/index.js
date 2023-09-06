@@ -152,6 +152,9 @@ function ViewBoard() {
     if (!values.autor) {
       errors.autor = "Obrigatório";
     }
+    if (values.pronome_autor !== 0 && !values.pronome_autor) {
+      errors.pronome_autor = "Obrigatório";
+    }
     if (!values.turma) {
       errors.turma = "Obrigatório";
     }
@@ -290,6 +293,7 @@ function ViewBoard() {
                 nota_nao_alteravel: nota,
                 curso: banca.curso,
                 autor: banca.autor,
+                pronome_autor: banca.pronome_autor,
                 turma: banca.turma,
                 disciplina: banca.disciplina,
                 tipo_banca: banca.tipo_banca,
@@ -353,7 +357,7 @@ function ViewBoard() {
                         label="Autor"
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                       <Field
                         name="matricula"
                         fullWidth
@@ -361,6 +365,24 @@ function ViewBoard() {
                         component={TextField}
                         label="Matrícula"
                       />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Field
+                        component={Select}
+                        label="Pronome"
+                        name="pronome_autor"
+                        formControlProps={{ className: "curso" }}
+                      >
+                        <MenuItem value="0" alignItems="flex-start">
+                          Ele/dele
+                        </MenuItem>
+                        <MenuItem value="1" alignItems="flex-start">
+                          Ela/dela
+                        </MenuItem>
+                        <MenuItem value="2" alignItems="flex-start">
+                          Elu/delu
+                        </MenuItem>
+                      </Field>
                     </Grid>
                     <Grid item xs={12}>
                       <Field
@@ -381,7 +403,7 @@ function ViewBoard() {
                         label="Turma"
                       />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                       <Field
                         name="curso"
                         label="Curso"
@@ -399,7 +421,7 @@ function ViewBoard() {
                         fontSize: "13px",
                       }}
                       item
-                      xs={2}
+                      xs={3}
                     >
                       Remoto
                       <Field

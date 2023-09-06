@@ -32,10 +32,15 @@
   font-weight: bold;
   font-size: large;
   float: left;
-  text-transform:capitalize;
+  text-transform: capitalize;
 }
-.curso, .disciplina{
-  width:100%;
+.curso,
+.disciplina {
+  width: 100%;
+}
+
+.curso {
+  text-align: left;
 }
 
 @keyframes App-logo-spin {

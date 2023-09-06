@@ -172,6 +172,9 @@ function ExaminingBoard() {
     if (!values.autor) {
       errors.autor = "Obrigatório";
     }
+    if (values.pronome_autor !== 0 && !values.pronome_autor) {
+      errors.pronome_autor = "Obrigatório";
+    }
     if (!values.turma) {
       errors.turma = "Obrigatório";
     }
@@ -271,7 +274,7 @@ function ExaminingBoard() {
                     label="Autor"
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                   <Field
                     name="matricula"
                     fullWidth
@@ -279,6 +282,24 @@ function ExaminingBoard() {
                     component={TextField}
                     label="Matrícula"
                   />
+                </Grid>
+                <Grid item xs={3}>
+                  <Field
+                    component={Select}
+                    label="Pronome"
+                    name="pronome_autor"
+                    formControlProps={{ className: "curso" }}
+                  >
+                    <MenuItem value="0" alignItems="flex-start">
+                      Ele/dele
+                    </MenuItem>
+                    <MenuItem value="1" alignItems="flex-start">
+                      Ela/dela
+                    </MenuItem>
+                    <MenuItem value="2" alignItems="flex-start">
+                      Elu/delu
+                    </MenuItem>
+                  </Field>
                 </Grid>
                 <Grid item xs={12}>
                   <Field
