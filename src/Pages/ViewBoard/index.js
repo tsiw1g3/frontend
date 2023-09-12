@@ -32,11 +32,16 @@ function ViewBoard() {
   const banca = JSON.parse(localStorage.getItem("banca"));
   banca.data_realizacao = new Date(banca.data_realizacao);
 
-  const [nota, setNota] = useState([]);
-  const [done, setDone] = useState(undefined);
   const [tipo_banca, setTipo_banca] = useState(true);
+  const [done, setDone] = useState(undefined);
+  const [cursos, setCursos] = useState([]);
+  const [nota, setNota] = useState([]);
 
   const history = useHistory();
+
+  useEffect(() => {
+    api.get("curso").then(({ data: { data } }) => setCursos(data));
+  }, []);
 
   const goToDashboard = () => {
     let path = `dashboard`;
@@ -104,11 +109,6 @@ function ViewBoard() {
   const onSubmit = async (values) => {
     var hour = new Date(values.hora);
     var date = new Date(values.data_realizacao);
-    if (values["curso"] === "BCC") {
-      values.disciplina = "MATA67";
-    } else if (values["curso"] === "BSI") {
-      values.disciplina = "MATC98";
-    }
 
     hour.setHours(hour.getHours() - 3);
     hour.setDate(date.getDate());
@@ -410,8 +410,11 @@ function ViewBoard() {
                         formControlProps={{ className: "curso" }}
                         component={Select}
                       >
-                        <MenuItem value={"BCC"}>BCC</MenuItem>
-                        <MenuItem value={"BSI"}>BSI</MenuItem>
+                        {cursos.map(({ id, sigla }) => (
+                          <MenuItem key={id} value={id}>
+                            {sigla}
+                          </MenuItem>
+                        ))}
                       </Field>
                     </Grid>
                     <Grid
