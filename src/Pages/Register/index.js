@@ -7,8 +7,8 @@ import ReactLoading from "react-loading";
 import { makeStyles } from "@material-ui/core/styles";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Form, Field } from "react-final-form";
-import { TextField } from "final-form-material-ui";
-import { Grid, Button, CssBaseline } from "@material-ui/core";
+import { TextField, Select } from "final-form-material-ui";
+import { Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
 import api from "Config/http";
 // Picker
 
@@ -28,6 +28,7 @@ function Register() {
       password: "",
       academic_title: "",
       universidade: "",
+      pronoun: "",
     },
     errorMsg: "",
     successMsg: "",
@@ -52,6 +53,12 @@ function Register() {
     root: {
       boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
       padding: "16px",
+      "& .MuiFormControl-root": {
+        display: "flex",
+      },
+      "& .MuiSelect-select.MuiSelect-select": {
+        textAlign: "left",
+      },
     },
   });
 
@@ -89,6 +96,9 @@ function Register() {
     const errors = {};
     if (!values.nome) {
       errors.nome = "Obrigatório";
+    }
+    if (!values.pronoun) {
+      errors.pronoun = "Obrigatório";
     }
     if (!values.email) {
       errors.email = "Obrigatório";
@@ -142,6 +152,24 @@ function Register() {
                         type="text"
                         label="Nome Completo"
                       />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Field
+                        name="pronoun"
+                        value={state.userInfo.pronoun}
+                        component={Select}
+                        label="Pronome"
+                      >
+                        <MenuItem value="0" alignItems="flex-start">
+                          Ele/dele
+                        </MenuItem>
+                        <MenuItem value="1" alignItems="flex-start">
+                          Ela/dela
+                        </MenuItem>
+                        <MenuItem value="2" alignItems="flex-start">
+                          Elu/delu
+                        </MenuItem>
+                      </Field>
                     </Grid>
                     <Grid item xs={12}>
                       <Field

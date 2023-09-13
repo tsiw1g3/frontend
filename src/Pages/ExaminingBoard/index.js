@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles.css";
 import Container from "@material-ui/core/Container";
 import ReactLoading from "react-loading";
@@ -29,9 +29,14 @@ import api from "Config/http";
 
 function ExaminingBoard() {
   //
-  const [loading, setLoading] = useState(false);
   const [tipo_banca, setTipo_banca] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [cursos, setCursos] = useState([]);
   const history = useHistory();
+
+  useEffect(() => {
+    api.get("curso").then(({ data: { data } }) => setCursos(data));
+  }, []);
 
   const goToDashboard = () => {
     let path = `dashboard`;
@@ -114,13 +119,9 @@ function ExaminingBoard() {
   const onSubmit = async (values) => {
     const hour = new Date(values.hora);
     const date = new Date(values.data_realizacao);
-    if (values["curso"] === "BCC") {
-      values.disciplina = "MATA67";
-    } else if (values["curso"] === "BSI") {
-      values.disciplina = "MATC98";
-    }
     const userId = localStorage.getItem("userId");
     values.user_id = userId;
+
     hour.setHours(hour.getHours() - 3);
     hour.setDate(date.getDate());
     hour.setMonth(date.getMonth());
@@ -171,6 +172,9 @@ function ExaminingBoard() {
     }
     if (!values.autor) {
       errors.autor = "Obrigatório";
+    }
+    if (values.pronome_autor !== 0 && !values.pronome_autor) {
+      errors.pronome_autor = "Obrigatório";
     }
     if (!values.turma) {
       errors.turma = "Obrigatório";
@@ -271,7 +275,7 @@ function ExaminingBoard() {
                     label="Autor"
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                   <Field
                     name="matricula"
                     fullWidth
@@ -279,6 +283,24 @@ function ExaminingBoard() {
                     component={TextField}
                     label="Matrícula"
                   />
+                </Grid>
+                <Grid item xs={3}>
+                  <Field
+                    component={Select}
+                    label="Pronome"
+                    name="pronome_autor"
+                    formControlProps={{ className: "curso" }}
+                  >
+                    <MenuItem value="0" alignItems="flex-start">
+                      Ele/dele
+                    </MenuItem>
+                    <MenuItem value="1" alignItems="flex-start">
+                      Ela/dela
+                    </MenuItem>
+                    <MenuItem value="2" alignItems="flex-start">
+                      Elu/delu
+                    </MenuItem>
+                  </Field>
                 </Grid>
                 <Grid item xs={12}>
                   <Field
@@ -306,8 +328,11 @@ function ExaminingBoard() {
                     formControlProps={{ className: "curso" }}
                     component={Select}
                   >
-                    <MenuItem value={"BCC"}>BCC</MenuItem>
-                    <MenuItem value={"BSI"}>BSI</MenuItem>
+                    {cursos.map(({ id, sigla }) => (
+                      <MenuItem key={id} value={id}>
+                        {sigla}
+                      </MenuItem>
+                    ))}
                   </Field>
                 </Grid>
                 <Grid

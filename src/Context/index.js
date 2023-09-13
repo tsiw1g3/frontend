@@ -43,6 +43,7 @@ class MyContextProvider extends Component {
       academic_title: "Bacharelado",
       status: "user",
       role: 1,
+      pronoun: Number(user.pronoun),
       hash: user.hash,
     });
 

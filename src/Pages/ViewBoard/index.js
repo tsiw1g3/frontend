@@ -32,11 +32,16 @@ function ViewBoard() {
   const banca = JSON.parse(localStorage.getItem("banca"));
   banca.data_realizacao = new Date(banca.data_realizacao);
 
-  const [nota, setNota] = useState([]);
-  const [done, setDone] = useState(undefined);
   const [tipo_banca, setTipo_banca] = useState(true);
+  const [done, setDone] = useState(undefined);
+  const [cursos, setCursos] = useState([]);
+  const [nota, setNota] = useState([]);
 
   const history = useHistory();
+
+  useEffect(() => {
+    api.get("curso").then(({ data: { data } }) => setCursos(data));
+  }, []);
 
   const goToDashboard = () => {
     let path = `dashboard`;
@@ -104,11 +109,6 @@ function ViewBoard() {
   const onSubmit = async (values) => {
     var hour = new Date(values.hora);
     var date = new Date(values.data_realizacao);
-    if (values["curso"] === "BCC") {
-      values.disciplina = "MATA67";
-    } else if (values["curso"] === "BSI") {
-      values.disciplina = "MATC98";
-    }
 
     hour.setHours(hour.getHours() - 3);
     hour.setDate(date.getDate());
@@ -151,6 +151,9 @@ function ViewBoard() {
     }
     if (!values.autor) {
       errors.autor = "Obrigatório";
+    }
+    if (values.pronome_autor !== 0 && !values.pronome_autor) {
+      errors.pronome_autor = "Obrigatório";
     }
     if (!values.turma) {
       errors.turma = "Obrigatório";
@@ -206,6 +209,38 @@ function ViewBoard() {
           // console.log(err);
         });
     });
+  };
+
+  const generateOrientationReport = () => {
+    api
+      .get(`/documento/orientacao/${banca.id}`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        // RETRIEVE THE response AND CREATE LOCAL URL
+        setDone(true);
+        var _url = window.URL.createObjectURL(response.data);
+        window.open(_url, "_blank").focus(); // window.open + focus
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+  };
+
+  const generateParticipationReport = () => {
+    api
+      .get(`/documento/participacao/${banca.id}`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        // RETRIEVE THE response AND CREATE LOCAL URL
+        setDone(true);
+        var _url = window.URL.createObjectURL(response.data);
+        window.open(_url, "_blank").focus(); // window.open + focus
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -290,6 +325,7 @@ function ViewBoard() {
                 nota_nao_alteravel: nota,
                 curso: banca.curso,
                 autor: banca.autor,
+                pronome_autor: banca.pronome_autor,
                 turma: banca.turma,
                 disciplina: banca.disciplina,
                 tipo_banca: banca.tipo_banca,
@@ -353,7 +389,7 @@ function ViewBoard() {
                         label="Autor"
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                       <Field
                         name="matricula"
                         fullWidth
@@ -361,6 +397,24 @@ function ViewBoard() {
                         component={TextField}
                         label="Matrícula"
                       />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Field
+                        component={Select}
+                        label="Pronome"
+                        name="pronome_autor"
+                        formControlProps={{ className: "curso" }}
+                      >
+                        <MenuItem value="0" alignItems="flex-start">
+                          Ele/dele
+                        </MenuItem>
+                        <MenuItem value="1" alignItems="flex-start">
+                          Ela/dela
+                        </MenuItem>
+                        <MenuItem value="2" alignItems="flex-start">
+                          Elu/delu
+                        </MenuItem>
+                      </Field>
                     </Grid>
                     <Grid item xs={12}>
                       <Field
@@ -381,15 +435,18 @@ function ViewBoard() {
                         label="Turma"
                       />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                       <Field
                         name="curso"
                         label="Curso"
                         formControlProps={{ className: "curso" }}
                         component={Select}
                       >
-                        <MenuItem value={"BCC"}>BCC</MenuItem>
-                        <MenuItem value={"BSI"}>BSI</MenuItem>
+                        {cursos.map(({ id, sigla }) => (
+                          <MenuItem key={id} value={id}>
+                            {sigla}
+                          </MenuItem>
+                        ))}
                       </Field>
                     </Grid>
                     <Grid
@@ -399,7 +456,7 @@ function ViewBoard() {
                         fontSize: "13px",
                       }}
                       item
-                      xs={2}
+                      xs={3}
                     >
                       Remoto
                       <Field
@@ -507,6 +564,28 @@ function ViewBoard() {
                           style={{ marginLeft: 10, borderRadius: 10 }}
                         >
                           Gerar relatório
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            setDone(false);
+                            generateOrientationReport();
+                          }}
+                          style={{ marginLeft: 10, borderRadius: 10 }}
+                        >
+                          Gerar Declaração de Orientação
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            setDone(false);
+                            generateParticipationReport();
+                          }}
+                          style={{ marginLeft: 10, borderRadius: 10 }}
+                        >
+                          Gerar Declaração de Participação
                         </Button>
                         <Button
                           variant="contained"
