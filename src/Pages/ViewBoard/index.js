@@ -211,6 +211,38 @@ function ViewBoard() {
     });
   };
 
+  const generateOrientationReport = () => {
+    api
+      .get(`/documento/orientacao/${banca.id}`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        // RETRIEVE THE response AND CREATE LOCAL URL
+        setDone(true);
+        var _url = window.URL.createObjectURL(response.data);
+        window.open(_url, "_blank").focus(); // window.open + focus
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+  };
+
+  const generateParticipationReport = () => {
+    api
+      .get(`/documento/participacao/${banca.id}`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        // RETRIEVE THE response AND CREATE LOCAL URL
+        setDone(true);
+        var _url = window.URL.createObjectURL(response.data);
+        window.open(_url, "_blank").focus(); // window.open + focus
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+  };
+
   useEffect(() => {
     api.get(`/nota/${banca.id}`).then(function (response) {
       setNota(response.data.data || "");
@@ -532,6 +564,28 @@ function ViewBoard() {
                           style={{ marginLeft: 10, borderRadius: 10 }}
                         >
                           Gerar relatório
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            setDone(false);
+                            generateOrientationReport();
+                          }}
+                          style={{ marginLeft: 10, borderRadius: 10 }}
+                        >
+                          Gerar Declaração de Orientação
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            setDone(false);
+                            generateParticipationReport();
+                          }}
+                          style={{ marginLeft: 10, borderRadius: 10 }}
+                        >
+                          Gerar Declaração de Participação
                         </Button>
                         <Button
                           variant="contained"
