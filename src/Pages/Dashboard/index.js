@@ -401,7 +401,7 @@ function Dashboard() {
     { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
     { field: "autor", headerName: "Discente", width: 200 },
     { field: "orientador", headerName: "Orientador", width: 200 },
-    { field: "curso", headerName: "Curso", width: 200 },
+    { field: "sigla_curso", headerName: "Curso", width: 200 },
     { field: "local", headerName: "Local ou link", width: 300 },
   ];
 
@@ -417,7 +417,7 @@ function Dashboard() {
     { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
     { field: "autor", headerName: "Discente", width: 200 },
     { field: "orientador", headerName: "Orientador", width: 200 },
-    { field: "curso", headerName: "Curso", width: 200 },
+    { field: "sigla_curso", headerName: "Curso", width: 200 },
     { field: "local", headerName: "Local ou link", width: 300 },
   ];
 
