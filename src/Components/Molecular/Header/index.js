@@ -9,6 +9,7 @@ import { createTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import { makeStyles } from "@material-ui/core/styles";
 
+import InsitutoDeComputacao from "../../../Assets/Images/instituto_de_computacao.png";
 /*
   Componente responsável pela renderização do cabeçalho da aplicação
 */
@@ -132,7 +133,7 @@ const Header = () => {
           <div>
             <Link to="/" style={{ textDecoration: "none" }}>
               <img
-                src="/frontend/img/instituto_de_computacao.png"
+                src={InsitutoDeComputacao}
                 alt="Logos IC"
                 className="img-logo"
               />
