@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import api from "Config/http";
+import { Container } from "@material-ui/core";
 
 /*
   Componente responsável pela homepage
@@ -196,7 +197,7 @@ const Home = () => {
   };
 
   return (
-    <>
+    <Container maxWidth="xl">
       {!done ? (
         <div className="center">
           <ReactLoading
@@ -260,7 +261,7 @@ const Home = () => {
           </h3> */}
         </div>
       )}
-    </>
+    </Container>
   );
 };
 
