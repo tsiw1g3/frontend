@@ -1,28 +1,20 @@
 import React, { useContext, useState } from "react";
-import { MyContext } from "../../../Context";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { TextField, Button } from "@material-ui/core";
-import ReactLoading from "react-loading";
-import "./styles.css";
+import { Box, Button } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
-import { makeStyles } from "@material-ui/core/styles";
 
 import InsitutoDeComputacao from "../../../Assets/Images/instituto_de_computacao.png";
+import { MyContext } from "../../../Context";
+import "./styles.css";
 /*
   Componente responsável pela renderização do cabeçalho da aplicação
 */
-const useStyles = makeStyles({
-  root: {
-    height: 20,
-  },
-});
 
 const Header = () => {
-  const { loginUser, logoutUser, isLoggedIn } = useContext(MyContext);
+  const { logoutUser, isLoggedIn } = useContext(MyContext);
   const [isUserLogged, setIsUserLogged] = useState(isLoggedIn());
-  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
 
@@ -65,70 +57,15 @@ const Header = () => {
     },
   });
 
-  const themeTextField = createTheme({
-    overrides: {
-      MuiOutlinedInput: {
-        input: {
-          height: 20,
-        },
-      },
-    },
-  });
-
   const redirectTo = (path) => {
     history.push(path);
   };
 
   const [user, setUser] = useState(initialUser);
 
-  // On change input value (email & password)
-  const onChangeValue = (e) => {
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  // On Submit Login From
-  const submitForm = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    const data = await loginUser(user);
-    if (data.data) {
-      const {
-        data: { id, token, role, name },
-      } = data;
-
-      localStorage.setItem("loginToken", token);
-      localStorage.setItem("userId", id);
-      localStorage.setItem("role", role);
-      localStorage.setItem("nome", name);
-
-      setIsUserLogged(true);
-      setLoading(false);
-      redirectTo("dashboard");
-    } else {
-      setLoading(false);
-      alert("Usuário ou senha incorretos");
-    }
-  };
-
-  const reset_pass_btn = () => {
-    let path = `resetpass`;
-    history.push(path);
-  };
-
-  const classes = useStyles();
-
   return (
     <>
-      <div
-        className="header"
-        expand="lg"
-        // style={{
-        //   backgroundImage: `url(/frontend/img/header.png)`,
-        // }}
-      >
+      <div className="header" expand="lg">
         <div className="logo-container">
           <div>
             <Link to="/" style={{ textDecoration: "none" }}>
@@ -224,58 +161,27 @@ const Header = () => {
             </ThemeProvider>
           </div>
         ) : (
-          <form className="login-form" onSubmit={submitForm}>
-            {loading ? (
-              <div className="center">
-                <ReactLoading
-                  type={"spin"}
-                  color={"#41616c"}
-                  height={80}
-                  width={80}
-                />
-              </div>
-            ) : null}
-            <ThemeProvider theme={themeTextField}>
-              <TextField
-                className={classes.root}
-                name="username"
-                label="Usuário"
-                variant="outlined"
-                size="small"
-                style={{ marginLeft: 20 }}
-                onChange={onChangeValue}
-              />
-              <TextField
-                className={classes.root}
-                name="password"
-                label="Senha"
-                variant="outlined"
-                size="small"
-                type="password"
-                style={{ marginLeft: 20 }}
-                onChange={onChangeValue}
-              />
-            </ThemeProvider>
+          <div className="sign-in-buttons">
             <ThemeProvider theme={theme}>
-              <Button
-                className="login-button"
-                type="submit"
-                style={{
-                  marginLeft: 20,
-                  minWidth: 80,
-                  height: 40,
-                  borderRadius: 10,
-                }}
-                color="primary"
+              <Link
                 variant="contained"
+                color="primary"
+                component={Button}
+                to="login"
               >
-                Entrar
-              </Button>
+                Login
+              </Link>
+              <Box width={8} />
+              <Link
+                variant="text"
+                color="primary"
+                component={Button}
+                to="register"
+              >
+                Registre-se
+              </Link>
             </ThemeProvider>
-            <span role="link" className="forgot-pass" onClick={reset_pass_btn}>
-              Esqueceu a senha?
-            </span>
-          </form>
+          </div>
         )}
       </div>
     </>

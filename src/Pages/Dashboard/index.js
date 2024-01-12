@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./styles.css";
 import ReactLoading from "react-loading";
-import { Button } from "@material-ui/core";
+import { Button, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { DataGrid, ptBR } from "@mui/x-data-grid";
@@ -447,7 +447,8 @@ function Dashboard() {
           />
         </div>
       ) : (
-        <div className="container">
+        <Container maxWidth="xl">
+          <Box height={20} />
           <div className="tcc-list">
             <AppBar
               position="static"
@@ -804,7 +805,7 @@ function Dashboard() {
               </Modal>
             )}
           </div>
-        </div>
+        </Container>
       )}
     </>
   );

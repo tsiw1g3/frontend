@@ -4,7 +4,7 @@
   box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%);
 }
 
-.img-logo { 
+.img-logo {
   float: left;
   width: 50px;
   margin-left: 30px;
@@ -32,9 +32,16 @@
   margin-top: -16px;
 }
 
-.forgot-pass{
+.forgot-pass {
   position: absolute;
   margin-top: 40px;
   margin-left: 20px;
-  cursor:pointer;
+  cursor: pointer;
+}
+
+.sign-in-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
 }
