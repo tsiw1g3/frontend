@@ -1,122 +1,117 @@
-import React, { useContext, useState } from "react";
-import { MyContext } from "../../Context";
-import { useHistory } from "react-router-dom";
-import "./styles.css";
+import React from "react";
 
-/*
-  Componente responsável pela antiga página de login
-*/
+import ReactLoading from "react-loading";
+import {
+  Box,
+  Button,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+  styled,
+} from "@material-ui/core";
+import { Link } from "react-router-dom/cjs/react-router-dom";
+import { Field, Form } from "react-final-form";
+
+import { useAuth } from "Hooks/Authentication/useAuth";
+
+const SignInButton = styled(Button)({
+  backgroundColor: "#6c7ae0",
+  color: "white",
+  margin: 0,
+  "&:hover": {
+    backgroundColor: "#002884",
+  },
+});
+
+const ForgotPasswordLink = styled(Typography)({
+  textDecoration: "none",
+  textAlign: "center",
+  color: "#000000de",
+  display: "block",
+});
 
 function Login() {
-  const { loginUser } = useContext(MyContext);
+  const { loading, signIn } = useAuth();
 
-  const initialState = {
-    userInfo: {
-      username: "",
-      password: "",
-    },
-    errorMsg: "",
-    successMsg: "",
-  };
-
-  const roles = ["aluno", "docente", "admin"];
-
-  const history = useHistory();
-
-  const routeChange = () => {
-    let path = `dashboard`;
-    // history.push(path);
-  };
-
-  const [state, setState] = useState(initialState);
-
-  // On change input value (email & password)
-  const onChangeValue = (e) => {
-    setState({
-      ...state,
-      userInfo: {
-        ...state.userInfo,
-        [e.target.name]: e.target.value,
-      },
-    });
-  };
-
-  // On Submit Login From
-  const submitForm = async (event) => {
-    event.preventDefault();
-    const data = await loginUser(state.userInfo);
-    if (data.data) {
-      setState({
-        ...initialState,
-      });
-      localStorage.setItem("userId", data.data.id);
-      localStorage.setItem("loginToken", data.data.token);
-      localStorage.setItem("role", roles[Number(data.data.role) - 1]);
-      routeChange();
-      // await isLoggedIn();
-    } else {
-      setState({
-        ...state,
-        successMsg: "",
-      });
-    }
-  };
-
-  // Show Message on Error or Success
-  let successMsg = "";
-  let errorMsg = "";
-  if (state.errorMsg) {
-    errorMsg = <div className="error-msg">{state.errorMsg}</div>;
-  }
-  if (state.successMsg) {
-    successMsg = <div className="success-msg">{state.successMsg}</div>;
-  }
+  const validadeRequiredFields = (value) =>
+    value ? undefined : "Campo Obrigatório";
 
   return (
-    <div className="_loginRegister">
-      <div className="column">
-        <img
-          width="70%"
-          height="70%"
-          alt="Logo Ufba"
-          src="https://www.ufba.br/sites/portal.ufba.br/files/brasao_ufba.jpg"
-        />
-      </div>
-      <div className="column right">
-        <h1>Login</h1>
-        <form onSubmit={submitForm} noValidate>
-          <div className="form-control">
-            <label>Usuário</label>
-            <input
-              name="username"
-              type="text"
-              Obrigatório
-              placeholder="Usuário"
-              value={state.userInfo.email}
-              onChange={onChangeValue}
-            />
-          </div>
-          <p></p>
-          <div className="form-control">
-            <label>Senha</label>
-            <input
-              name="password"
-              type="password"
-              Obrigatório
-              placeholder="Digite sua senha"
-              value={state.userInfo.password}
-              onChange={onChangeValue}
-            />
-          </div>
-          {errorMsg}
-          {successMsg}
-          <p></p>
-          <div className="form-control">
-            <button /* onClick={routeChange}  */ type="submit">Login</button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <>
+      {loading && (
+        <div className="center">
+          <ReactLoading
+            type={"spin"}
+            color={"#41616c"}
+            height={80}
+            width={80}
+          />
+        </div>
+      )}
+      <Container maxWidth="sm">
+        <Box height={20} />
+        <Paper>
+          <Typography align="center" variant="h5">
+            Login
+          </Typography>
+          <Box margin={2}>
+            <Form onSubmit={signIn}>
+              {({ handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
+                  <Field name="username" validate={validadeRequiredFields}>
+                    {({ input, meta }) => (
+                      <TextField
+                        label="Nome de usuário"
+                        variant="outlined"
+                        margin="normal"
+                        name={input.name}
+                        value={input.value}
+                        onChange={input.onChange}
+                        helperText={
+                          Boolean(meta.error && meta.touched) && meta.error
+                        }
+                        error={Boolean(meta.error && meta.touched)}
+                      />
+                    )}
+                  </Field>
+                  <Field name="password" validate={validadeRequiredFields}>
+                    {({ input, meta }) => (
+                      <TextField
+                        label="Senha"
+                        variant="outlined"
+                        margin="normal"
+                        type="password"
+                        name={input.name}
+                        value={input.value}
+                        onChange={input.onChange}
+                        helperText={
+                          Boolean(meta.error && meta.touched) && meta.error
+                        }
+                        error={Boolean(meta.error && meta.touched)}
+                      />
+                    )}
+                  </Field>
+                  <SignInButton
+                    classes={{ root: "sign-in-button" }}
+                    className="sign-in-button"
+                    variant="contained"
+                    type="submit"
+                    fullWidth
+                  >
+                    Entrar
+                  </SignInButton>
+                </form>
+              )}
+            </Form>
+            <Box height={16} />
+            <ForgotPasswordLink component={Link} to="resetpass">
+              Esqueceu a senha?
+            </ForgotPasswordLink>
+          </Box>
+        </Paper>
+      </Container>
+    </>
   );
 }
 
