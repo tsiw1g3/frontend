@@ -401,18 +401,18 @@ function ViewBoard() {
                     <Grid item xs={3}>
                       <Field
                         component={Select}
-                        label="Pronome"
+                        label="Gênero"
                         name="pronome_autor"
                         formControlProps={{ className: "curso" }}
                       >
                         <MenuItem value="0" alignItems="flex-start">
-                          Ele/dele
+                          Masculino
                         </MenuItem>
                         <MenuItem value="1" alignItems="flex-start">
-                          Ela/dela
+                          Feminino
                         </MenuItem>
                         <MenuItem value="2" alignItems="flex-start">
-                          Elu/delu
+                          Outro
                         </MenuItem>
                       </Field>
                     </Grid>

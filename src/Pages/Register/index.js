@@ -158,16 +158,16 @@ function Register() {
                         name="pronoun"
                         value={state.userInfo.pronoun}
                         component={Select}
-                        label="Pronome"
+                        label="Gênero"
                       >
                         <MenuItem value="0" alignItems="flex-start">
-                          Ele/dele
+                          Masculino
                         </MenuItem>
                         <MenuItem value="1" alignItems="flex-start">
-                          Ela/dela
+                          Feminino
                         </MenuItem>
                         <MenuItem value="2" alignItems="flex-start">
-                          Elu/delu
+                          Outro
                         </MenuItem>
                       </Field>
                     </Grid>
