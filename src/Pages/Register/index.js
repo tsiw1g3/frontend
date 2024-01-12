@@ -8,14 +8,23 @@ import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Form, Field } from "react-final-form";
 import { TextField, Select } from "final-form-material-ui";
 import { Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
+import { useLocation } from "react-router-dom/cjs/react-router-dom";
 // Picker
 
 /*
   Componente responsável pela página de registro de usuários
 */
 
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
 function Register() {
   const { registerUser } = useContext(MyContext);
+  const query = useQuery();
+
   const initialState = {
     userInfo: {
       nome: "",
@@ -61,7 +70,7 @@ function Register() {
   const classesGrid = styles();
 
   const submitForm = async (event) => {
-    // Pass url hash to submit values.
+    event.hash = query.get("inv");
     await registerUser(event);
     goToHome();
   };
