@@ -22,13 +22,15 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { createTheme } from "@material-ui/core/styles";
 import api from "Config/http";
+import useTeachers from "Hooks/Users/useTeachers";
+import { isTeacher } from "Helpers/role";
 
 /*
   Componente responsável pela página de criação de bancas
 */
 
 function ExaminingBoard() {
-  //
+  const { loading: loadingTeachers, users: teachers } = useTeachers();
   const [tipo_banca, setTipo_banca] = useState(true);
   const [loading, setLoading] = useState(false);
   const [cursos, setCursos] = useState([]);
@@ -170,11 +172,14 @@ function ExaminingBoard() {
     if (!values.tipo_banca) {
       errors.tipo_banca = "Obrigatório";
     }
-    if (!values.autor) {
+    if (isTeacher() && !values.autor) {
       errors.autor = "Obrigatório";
     }
-    if (values.pronome_autor !== 0 && !values.pronome_autor) {
+    if (isTeacher() && values.pronome_autor !== 0 && !values.pronome_autor) {
       errors.pronome_autor = "Obrigatório";
+    }
+    if (isTeacher() && !values.matricula) {
+      errors.matricula = "Obrigatório";
     }
     if (!values.turma) {
       errors.turma = "Obrigatório";
@@ -185,9 +190,7 @@ function ExaminingBoard() {
     if (!values.semestre_letivo) {
       errors.semestre_letivo = "Obrigatório";
     }
-    if (!values.matricula) {
-      errors.matricula = "Obrigatório";
-    }
+
     return errors;
   };
 
@@ -221,12 +224,12 @@ function ExaminingBoard() {
         }}
       >
         <CssBaseline />
-        <h2 className="banca-form-header">Adicionar nova banca</h2>
+        <h2 className="banca-form-header">Adicionar Nova Banca</h2>
         <Form
           onSubmit={onSubmit}
           initialValues={{}}
           validate={validate}
-          render={({ handleSubmit, reset, submitting, pristine, values }) => (
+          render={({ handleSubmit, submitting }) => (
             <form onSubmit={handleSubmit} noValidate>
               <Grid
                 container
@@ -266,42 +269,63 @@ function ExaminingBoard() {
                     label="Abstract"
                   />
                 </Grid>
-                <Grid item xs={6}>
-                  <Field
-                    name="autor"
-                    fullWidth
-                    Obrigatório
-                    component={TextField}
-                    label="Autor"
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  <Field
-                    name="matricula"
-                    fullWidth
-                    Obrigatório
-                    component={TextField}
-                    label="Matrícula"
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  <Field
-                    component={Select}
-                    label="Gênero"
-                    name="pronome_autor"
-                    formControlProps={{ className: "curso" }}
-                  >
-                    <MenuItem value="0" alignItems="flex-start">
-                      Masculino
-                    </MenuItem>
-                    <MenuItem value="1" alignItems="flex-start">
-                      Feminino
-                    </MenuItem>
-                    <MenuItem value="2" alignItems="flex-start">
-                      Outro
-                    </MenuItem>
-                  </Field>
-                </Grid>
+                {isTeacher() ? (
+                  <>
+                    <Grid item xs={6}>
+                      <Field
+                        name="autor"
+                        fullWidth
+                        Obrigatório
+                        component={TextField}
+                        label="Autor"
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Field
+                        name="matricula"
+                        fullWidth
+                        Obrigatório
+                        component={TextField}
+                        label="Matrícula"
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Field
+                        component={Select}
+                        label="Gênero"
+                        name="pronome_autor"
+                        formControlProps={{ className: "curso" }}
+                      >
+                        <MenuItem value="0" alignItems="flex-start">
+                          Masculino
+                        </MenuItem>
+                        <MenuItem value="1" alignItems="flex-start">
+                          Feminino
+                        </MenuItem>
+                        <MenuItem value="2" alignItems="flex-start">
+                          Outro
+                        </MenuItem>
+                      </Field>
+                    </Grid>
+                  </>
+                ) : (
+                  <Grid item xs={12}>
+                    <Field
+                      name="docente"
+                      loading={loadingTeachers}
+                      component={Select}
+                      label="Orientador"
+                      formControlProps={{ className: "curso" }}
+                    >
+                      {teachers.map(({ id, nome }) => (
+                        <MenuItem value={id} key={id}>
+                          {nome}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                  </Grid>
+                )}
+
                 <Grid item xs={12}>
                   <Field
                     name="palavras_chave"

@@ -19,6 +19,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import api from "Config/http";
+import { isTeacher } from "Helpers/role";
 
 /*
   Componente responsável pela página de gerenciamento das minhas defesas
@@ -228,8 +229,9 @@ function Dashboard() {
 
   const onSubmitNota = async (values) => {
     setLoadingModal(true);
-    const banca = localStorage.getItem("banca");
+    const banca = JSON.parse(localStorage.getItem("banca"));
     const id = values.avaliador;
+    console.log(values);
     api
       .post(`/usuario-banca/nota/${banca}/${id}`, getFormData(values))
       .then(function (response) {
@@ -302,28 +304,30 @@ function Dashboard() {
 
   const renderDetailsButton = (params) => {
     return (
-      <div>
+      <>
         <button
           title="Editar banca"
           name="edit-board"
           type="submit"
           id="edit-board"
           onClick={() => editBanca(params.row)}
-        ></button>
+          hidden={!isTeacher()}
+        />
         <button
           title="Adicionar membro"
           name="add-user"
           type="submit"
           id="add-user"
           onClick={() => addUser(params.row.id)}
-        ></button>
+        />
         <button
           title="Enviar Email"
           name="send-email"
           type="submit"
           id="send-email"
           onClick={() => openModal(params.row.id)}
-        ></button>
+          hidden={!isTeacher()}
+        />
         <button
           title="Dar Nota"
           name="give-score"
@@ -332,8 +336,9 @@ function Dashboard() {
           onClick={() =>
             openModalNotaOwner(params.row.id, params.row.titulo_trabalho)
           }
-        ></button>
-      </div>
+          hidden={!isTeacher()}
+        />
+      </>
     );
   };
 
@@ -495,6 +500,13 @@ function Dashboard() {
                     className={classesGrid.root}
                     localeText={{
                       noRowsLabel: "Não há bancas registradas",
+                    }}
+                    initialState={{
+                      columns: {
+                        columnVisibilityModel: {
+                          actions: false,
+                        },
+                      },
                     }}
                   />
                 </ThemeProvider>
@@ -668,7 +680,9 @@ function Dashboard() {
                   </div>
                   <Form
                     onSubmit={onSubmitNota}
-                    initialValues={{ avaliador: 0 }}
+                    initialValues={{
+                      avaliador: JSON.parse(localStorage.getItem("userId")),
+                    }}
                     validate={validateNota}
                     render={({
                       handleSubmit,
