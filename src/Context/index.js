@@ -32,7 +32,6 @@ class MyContextProvider extends Component {
   };
 
   registerUser = async (user) => {
-    // console.log(user);
     // Sending the user registration request
     const register = await api.post("usuario", {
       nome: user.nome,
@@ -41,6 +40,7 @@ class MyContextProvider extends Component {
       password: user.password,
       school: user.universidade,
       academic_title: "Bacharelado",
+      registration_id: user.registration_id,
       status: "user",
       role: 1,
       pronoun: Number(user.pronoun),

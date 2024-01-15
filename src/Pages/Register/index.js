@@ -34,6 +34,7 @@ function Register() {
       academic_title: "",
       universidade: "",
       pronoun: "",
+      registration_id: "",
     },
     errorMsg: "",
     successMsg: "",
@@ -94,6 +95,9 @@ function Register() {
     }
     if (!values.universidade) {
       errors.universidade = "Obrigatório";
+    }
+    if (!query.get("inv") && !values.registration_id) {
+      errors.registration_id = "Obrigatório";
     }
     return errors;
   };
@@ -160,6 +164,31 @@ function Register() {
                     fullWidth
                     Obrigatório
                     multiline
+                    name="universidade"
+                    value={state.userInfo.universidade}
+                    component={TextField}
+                    type="text"
+                    label="Universidade"
+                  />
+                </Grid>
+                {!query.get("inv") && (
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      multiline
+                      name="registration_id"
+                      value={state.userInfo.registration_id}
+                      component={TextField}
+                      type="text"
+                      label="Matrícula"
+                    />
+                  </Grid>
+                )}
+                <Grid item xs={12}>
+                  <Field
+                    fullWidth
+                    Obrigatório
+                    multiline
                     name="username"
                     value={state.userInfo.username}
                     component={TextField}
@@ -176,18 +205,6 @@ function Register() {
                     component={TextField}
                     type="password"
                     label="Senha"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    multiline
-                    name="universidade"
-                    value={state.userInfo.universidade}
-                    component={TextField}
-                    type="text"
-                    label="Universidade"
                   />
                 </Grid>
                 <Grid item style={{ marginTop: 16 }}>
