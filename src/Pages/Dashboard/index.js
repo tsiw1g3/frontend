@@ -302,7 +302,7 @@ function Dashboard() {
     setValue(newValue);
   };
 
-  const renderDetailsButton = (params) => {
+  const renderDetailsTeacher = (params) => {
     return (
       <>
         <button
@@ -319,6 +319,7 @@ function Dashboard() {
           type="submit"
           id="add-user"
           onClick={() => addUser(params.row.id)}
+          hidden={!isTeacher()}
         />
         <button
           title="Enviar Email"
@@ -342,19 +343,18 @@ function Dashboard() {
     );
   };
 
-  const renderDetailsButton2 = (params) => {
+  const renderDetailsReviewer = (params) => {
     return (
-      <div>
-        <button
-          title="Dar Nota"
-          name="give-score"
-          type="submit"
-          id="give-score-solo"
-          onClick={() =>
-            openModalNota(params.row.id, params.row.titulo_trabalho)
-          }
-        ></button>
-      </div>
+      <button
+        title="Dar Nota"
+        name="give-score"
+        type="submit"
+        id="give-score"
+        onClick={() => {
+          openModalNota(params.row.id, params.row.titulo_trabalho);
+        }}
+        hidden={!isTeacher()}
+      />
     );
   };
 
@@ -365,7 +365,7 @@ function Dashboard() {
           onSubmit={onSubmitNotaOwner}
           initialValues={{ avaliador: params.id, modalOwner: true }}
           validate={validateNota}
-          render={({ handleSubmit, reset, submitting, pristine, values }) => (
+          render={({ handleSubmit, submitting }) => (
             <form onSubmit={handleSubmit} noValidate>
               <Field
                 fullWidth
@@ -399,7 +399,7 @@ function Dashboard() {
       field: "actions",
       headerName: "Ações",
       width: 200,
-      renderCell: renderDetailsButton,
+      renderCell: renderDetailsTeacher,
       disableClickEventBubbling: true,
     },
     { field: "formatedData", headerName: "Data", width: 140 },
@@ -414,8 +414,13 @@ function Dashboard() {
     {
       field: "actions",
       headerName: "Ações",
-      width: 50,
-      renderCell: renderDetailsButton2,
+      width: 200,
+      renderCell: (params) => {
+        const { row } = params;
+        return row.funcao === "orientador"
+          ? renderDetailsTeacher(params)
+          : renderDetailsReviewer(params);
+      },
       disableClickEventBubbling: true,
     },
     { field: "formatedData", headerName: "Data", width: 140 },
