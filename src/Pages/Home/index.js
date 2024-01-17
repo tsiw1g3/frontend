@@ -29,30 +29,6 @@ const Home = () => {
     history.push(path);
   }
 
-  const editBanca = (banca) => {
-    localStorage.setItem("banca", JSON.stringify(banca));
-    let path = `editarbanca`;
-    history.push(path);
-  };
-
-  const role = localStorage.getItem("role");
-
-  const reload = () => {
-    window.location.reload();
-  };
-
-  const removeBanca = (bancaId) => {
-    api
-      .delete(`/banca/${bancaId}/delete`)
-      .then(function (response) {
-        alert("Banca removida com sucesso");
-        reload();
-      })
-      .catch(function (error) {
-        alert(error.response.data.message);
-      });
-  };
-
   const renderDetailsButton = (params) => {
     return (
       <div>
@@ -62,25 +38,7 @@ const Home = () => {
           type="submit"
           id="see-board"
           onClick={() => goToViewBanca(params.row.id)}
-        ></button>
-        {role === "3" ? (
-          <>
-            <button
-              title="Editar banca"
-              name="edit-board"
-              type="submit"
-              id="edit-board"
-              onClick={() => editBanca(params.row)}
-            ></button>
-            <button
-              title="Remover banca"
-              name="trash"
-              type="submit"
-              id="trash"
-              onClick={() => removeBanca(params.row.id)}
-            ></button>
-          </>
-        ) : null}
+        />
       </div>
     );
   };

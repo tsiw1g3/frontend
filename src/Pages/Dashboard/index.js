@@ -302,6 +302,18 @@ function Dashboard() {
     setValue(newValue);
   };
 
+  const excluirBanca = (bancaId) => {
+    api
+      .delete(`/banca/${bancaId}/delete`)
+      .then(function (response) {
+        alert("Banca removida com sucesso");
+        window.location.reload();
+      })
+      .catch(function (error) {
+        alert(error.response.data.message);
+      });
+  };
+
   const renderDetailsTeacher = (params) => {
     return (
       <>
@@ -337,6 +349,18 @@ function Dashboard() {
           onClick={() =>
             openModalNotaOwner(params.row.id, params.row.titulo_trabalho)
           }
+          hidden={!isTeacher()}
+        />
+        <button
+          title="Excluir Banca"
+          name="trash"
+          id="trash"
+          onClick={() => {
+            const answer = window.confirm(
+              `Você tem certeza que deseja excluir a banca do projeto '${params.row.titulo_trabalho}'?`
+            );
+            if (answer) excluirBanca(params.row.id);
+          }}
           hidden={!isTeacher()}
         />
       </>
