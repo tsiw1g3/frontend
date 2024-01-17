@@ -163,7 +163,7 @@ function ViewBanca() {
                   <CardBanca text={banca.turma} title="Turma"></CardBanca>
                 </Grid>
                 <Grid item xs={4}>
-                  <CardBanca text={banca.curso} title="Curso"></CardBanca>
+                  <CardBanca text={banca.nome_curso} title="Curso"></CardBanca>
                 </Grid>
                 <Grid item xs={4}>
                   <CardBanca text={banca.ano} title="Ano"></CardBanca>
