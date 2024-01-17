@@ -188,6 +188,7 @@ function ViewBoard() {
       bodyFormData.append("disciplina", data.disciplina);
       bodyFormData.append("turma", data.turma);
       bodyFormData.append("titulo_trabalho", data.titulo_trabalho);
+      bodyFormData.append("nome_curso", data.nome_curso);
       bodyFormData.append("data", data.data);
       bodyFormData.append("horario", data.horario);
       bodyFormData.append("nota_orientador", data.nota_orientador);
