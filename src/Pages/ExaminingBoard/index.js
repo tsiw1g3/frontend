@@ -11,6 +11,8 @@ import {
   CssBaseline,
   MenuItem,
   ThemeProvider,
+  Checkbox,
+  FormControlLabel,
 } from "@material-ui/core";
 // Picker
 import DateFnsUtils from "@date-io/date-fns";
@@ -129,6 +131,7 @@ function ExaminingBoard() {
     hour.setMonth(date.getMonth());
     hour.setFullYear(date.getFullYear());
     values.data_realizacao = hour.toISOString().slice(0, 19).replace("T", " ");
+    values.visible = values.visible ? 1 : 0;
     setLoading(true);
 
     api
@@ -227,7 +230,7 @@ function ExaminingBoard() {
         <h2 className="banca-form-header">Adicionar Nova Banca</h2>
         <Form
           onSubmit={onSubmit}
-          initialValues={{}}
+          initialValues={{ visible: isTeacher() }}
           validate={validate}
           render={({ handleSubmit, submitting }) => (
             <form onSubmit={handleSubmit} noValidate>
@@ -237,7 +240,7 @@ function ExaminingBoard() {
                 spacing={2}
                 className={classesGrid.root}
               >
-                <Grid item xs={12}>
+                <Grid item xs={isTeacher() ? 10 : 12}>
                   <Field
                     fullWidth
                     Obrigatório
@@ -245,9 +248,40 @@ function ExaminingBoard() {
                     name="titulo_trabalho"
                     component={TextField}
                     type="text"
-                    label="Titulo"
+                    label="Título"
                   />
                 </Grid>
+                {isTeacher() && (
+                  <Grid
+                    xs={2}
+                    item
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    style={{
+                      padding: 0,
+                      marginTop: "auto",
+                      fontSize: "13px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Field name="visible" onClick={handleChange}>
+                      {({ input }) => (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={input.value}
+                              onChange={input.onChange}
+                            />
+                          }
+                          label={`Visibilidade: ${
+                            input.value ? "Pública" : "Privada"
+                          }`}
+                        />
+                      )}
+                    </Field>
+                  </Grid>
+                )}
                 <Grid item xs={12}>
                   <Field
                     fullWidth
