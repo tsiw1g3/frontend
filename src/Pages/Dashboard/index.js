@@ -425,13 +425,39 @@ function Dashboard() {
       width: 200,
       renderCell: renderDetailsTeacher,
       disableClickEventBubbling: true,
+      align: "center",
     },
-    { field: "formatedData", headerName: "Data", width: 140 },
-    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
-    { field: "autor", headerName: "Discente", width: 200 },
-    { field: "orientador", headerName: "Orientador", width: 200 },
-    { field: "sigla_curso", headerName: "Curso", width: 200 },
-    { field: "local", headerName: "Local ou link", width: 300 },
+    {
+      field: "formatedData",
+      headerName: "Data",
+      minWidth: 140,
+      align: "center",
+    },
+    {
+      field: "titulo_trabalho",
+      headerName: "Título do Trabalho",
+      minWidth: 500,
+      align: "center",
+    },
+    { field: "autor", headerName: "Discente", minWidth: 200, align: "center" },
+    {
+      field: "orientador",
+      headerName: "Orientador",
+      minWidth: 200,
+      align: "center",
+    },
+    {
+      field: "sigla_curso",
+      headerName: "Curso",
+      minWidth: 200,
+      align: "center",
+    },
+    {
+      field: "local",
+      headerName: "Local ou link",
+      minWidth: 300,
+      align: "center",
+    },
   ];
 
   const columns2 = [
@@ -446,24 +472,41 @@ function Dashboard() {
           : renderDetailsReviewer(params);
       },
       disableClickEventBubbling: true,
+      align: "center",
     },
     { field: "formatedData", headerName: "Data", width: 140 },
-    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
-    { field: "autor", headerName: "Discente", width: 200 },
-    { field: "orientador", headerName: "Orientador", width: 200 },
-    { field: "sigla_curso", headerName: "Curso", width: 200 },
-    { field: "local", headerName: "Local ou link", width: 300 },
+    {
+      field: "titulo_trabalho",
+      headerName: "Título do Trabalho",
+      minWidth: 500,
+      align: "center",
+    },
+    { field: "autor", headerName: "Discente", width: 200, align: "center" },
+    {
+      field: "orientador",
+      headerName: "Orientador",
+      width: 200,
+      align: "center",
+    },
+    { field: "sigla_curso", headerName: "Curso", width: 200, align: "center" },
+    {
+      field: "local",
+      headerName: "Local ou link",
+      width: 300,
+      align: "center",
+    },
   ];
 
   const columnsNota = [
-    { field: "nome", headerName: "Avaliador", width: 600 },
-    { field: "role", headerName: "Função", width: 150 },
+    { field: "nome", headerName: "Avaliador", width: 600, align: "center" },
+    { field: "role", headerName: "Função", width: 150, align: "center" },
     {
       field: "nota",
       headerName: "Nota",
       width: 290,
       renderCell: renderDetailsButton3,
       disableClickEventBubbling: true,
+      align: "center",
     },
   ];
 
@@ -537,6 +580,12 @@ function Dashboard() {
                         },
                       },
                     }}
+                    classes={{
+                      columnHeader: "dashboard-column",
+                    }}
+                    autoHeight={true}
+                    disableColumnMenu={true}
+                    disableColumnFilter={true}
                   />
                 </ThemeProvider>
               </div>
@@ -558,6 +607,12 @@ function Dashboard() {
                     localeText={{
                       noRowsLabel: "Não há bancas registradas",
                     }}
+                    classes={{
+                      columnHeader: "dashboard-column",
+                    }}
+                    autoHeight={true}
+                    disableColumnMenu={true}
+                    disableColumnFilter={true}
                   />
                 </ThemeProvider>
               </div>
@@ -838,6 +893,12 @@ function Dashboard() {
                                 noRowsLabel:
                                   "Não há membros registrados na banca",
                               }}
+                              classes={{
+                                columnHeader: "dashboard-column",
+                              }}
+                              autoHeight={true}
+                              disableColumnMenu={true}
+                              disableColumnFilter={true}
                             />
                           </div>
                         </Grid>

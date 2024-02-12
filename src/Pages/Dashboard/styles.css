@@ -19,6 +19,15 @@
   height: 438px;
 }
 
+.dashboard-column .MuiDataGrid-columnHeaderTitleContainer {
+  justify-content: center;
+}
+
+.dashboard-column:not(.MuiDataGrid-columnHeader--sorted)
+  .MuiDataGrid-iconButtonContainer {
+  display: none;
+}
+
 @media (max-width: 700px) {
   .footer {
     flex-direction: column;
@@ -59,13 +68,13 @@
 
 .user-right {
   color: rgb(65, 97, 108);
-  margin-left: auto; 
+  margin-left: auto;
   padding-right: 20px;
 }
 
 .user-role {
   color: rgb(65, 97, 108);
-  margin-left: 20px; 
+  margin-left: 20px;
 }
 
 .user-age {
@@ -79,33 +88,38 @@
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  z-index:1;
+  z-index: 1;
 }
 
-.left-btn { float: left; }
-.right-btn { float: right;  width:25%;}
+.left-btn {
+  float: left;
+}
+.right-btn {
+  float: right;
+  width: 25%;
+}
 
 #add-user {
-  padding:0px;
+  padding: 0px;
   margin: 0px 15px 0px 0px;
-  width:20px;
-  height:20px;
+  width: 20px;
+  height: 20px;
   padding: 0;
   border: none;
   background: none;
-  cursor:pointer;
-  background:url("/public/img/user-add_1.svg") 0 0 no-repeat;
+  cursor: pointer;
+  background: url("/public/img/user-add_1.svg") 0 0 no-repeat;
 }
 
 #edit-board {
   margin: 0px 15px 0px 0px;
-  width:20px;
-  height:20px;
+  width: 20px;
+  height: 20px;
   padding: 0;
   border: none;
   background: none;
-  cursor:pointer;
-  background:url("/public/img/edit_10.svg") 0 0 no-repeat;
+  cursor: pointer;
+  background: url("/public/img/edit_10.svg") 0 0 no-repeat;
 }
 
 #send-email {
@@ -115,8 +129,8 @@
   padding: 4px;
   border: none;
   background: none;
-  cursor:pointer;
-  background:url("/public/img/email_5.svg") 0 0 no-repeat;
+  cursor: pointer;
+  background: url("/public/img/email_5.svg") 0 0 no-repeat;
 }
 
 #give-score {
@@ -126,21 +140,21 @@
   padding: 2px;
   border: none;
   background: none;
-  cursor:pointer;
-  background:url("/public/img/star_34.svg") 0 0 no-repeat;
+  cursor: pointer;
+  background: url("/public/img/star_34.svg") 0 0 no-repeat;
 }
 
 #give-score-solo {
   margin: 0px 15px 0px 0px;
-  width:20px;
-  height:20px;
+  width: 20px;
+  height: 20px;
   padding: 4px;
   border: none;
   background: none;
-  cursor:pointer;
-  background:url("/public/img/star_34.svg") 0 0 no-repeat;
+  cursor: pointer;
+  background: url("/public/img/star_34.svg") 0 0 no-repeat;
 }
 
-.MuiDataGrid-row:nth-of-type(even){
+.MuiDataGrid-row:nth-of-type(even) {
   background-color: #f2f2f2;
 }
