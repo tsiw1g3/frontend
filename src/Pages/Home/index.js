@@ -178,6 +178,7 @@ const Home = () => {
                 id="banca-search"
                 label="Buscar defesas"
                 variant="outlined"
+                style={{ backgroundColor: "white" }}
               />
               <button
                 title="Pesquisar bancas"
