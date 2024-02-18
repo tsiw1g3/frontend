@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ReactLoading from "react-loading";
-import { Button, ThemeProvider } from "@material-ui/core";
+import { Button, Container, ThemeProvider } from "@material-ui/core";
 import { DataGrid } from "@mui/x-data-grid";
 import SelectSearch, { fuzzySearch } from "react-select-search";
 import { createTheme } from "@material-ui/core/styles";
@@ -159,13 +159,14 @@ function Addition() {
 
   const columnsNota = [
     { field: "role", headerName: "Função", width: 150 },
-    { field: "nome", headerName: "Nome", width: 1350 },
+    { field: "nome", headerName: "Nome", flex: 1, minWidth: 200 },
     {
       field: "actions",
       headerName: "Ações",
       width: 200,
       renderCell: renderDetailsButton,
       disableClickEventBubbling: true,
+      sortable: false,
     },
   ];
 
@@ -235,7 +236,7 @@ function Addition() {
   const classes = styles();
 
   return (
-    <>
+    <Container maxWidth="xl">
       {!done || !done2 || !done3 ? (
         <div className="center">
           <ReactLoading
@@ -300,7 +301,7 @@ function Addition() {
             </h4>
           </div>
           <div className="members-list">
-            <div style={{ height: 400, width: "100%" }}>
+            <div style={{ width: "100%" }}>
               <ThemeProvider theme={theme2}>
                 <DataGrid
                   rows={inn}
@@ -309,6 +310,9 @@ function Addition() {
                   rowsPerPageOptions={[5]}
                   rowHeight={62}
                   className={classes.root}
+                  autoHeight={true}
+                  disableColumnMenu={true}
+                  disableColumnFilter={true}
                 />
               </ThemeProvider>
             </div>
@@ -326,7 +330,7 @@ function Addition() {
           </ThemeProvider>
         </div>
       )}
-    </>
+    </Container>
   );
 }
 

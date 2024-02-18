@@ -31,7 +31,14 @@ const Home = () => {
 
   const renderDetailsButton = (params) => {
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
         <button
           title="Ver banca"
           name="see-board"
@@ -44,26 +51,24 @@ const Home = () => {
   };
 
   const columns = [
-    { field: "formatedData", headerName: "Data", width: 140 },
-    { field: "titulo_trabalho", headerName: "Título do Trabalho", width: 500 },
-    { field: "autor", headerName: "Discente", width: 200 },
-    { field: "orientador", headerName: "Orientador", width: 200 },
-    { field: "sigla_curso", headerName: "Curso", width: 200 },
-    { field: "local", headerName: "Local ou link", width: 300 },
+    { field: "formatedData", headerName: "Data", minWidth: 140 },
+    {
+      field: "titulo_trabalho",
+      headerName: "Título do Trabalho",
+      minWidth: 500,
+    },
+    { field: "autor", headerName: "Discente", flex: 1, minWidth: 150 },
+    { field: "orientador", headerName: "Orientador", flex: 1, minWidth: 150 },
+    { field: "sigla_curso", headerName: "Curso", minWidth: 100 },
+    { field: "local", headerName: "Local ou link", minWidth: 300 },
     {
       field: "actions",
       headerName: "Ações",
-      width: 370,
+      width: 100,
       renderCell: renderDetailsButton,
       disableClickEventBubbling: true,
     },
   ];
-
-  // const logout = () => {
-  //   let path = ``;
-  //   history.push(path);
-  //   localStorage.removeItem("loginToken");
-  // };
 
   const searchBoard = () => {
     let inputValue = document.getElementById("banca-search").value;
@@ -215,9 +220,6 @@ const Home = () => {
               columns={columns}
             />
           </TabPanel>
-          {/* <h3 className="left-btn" style={{ color: "#000" }}>
-            Próximas defesas
-          </h3> */}
         </div>
       )}
     </Container>

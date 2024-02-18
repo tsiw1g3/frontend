@@ -426,6 +426,7 @@ function Dashboard() {
       renderCell: renderDetailsTeacher,
       disableClickEventBubbling: true,
       align: "center",
+      sortable: false,
     },
     {
       field: "formatedData",
@@ -437,6 +438,7 @@ function Dashboard() {
       field: "titulo_trabalho",
       headerName: "Título do Trabalho",
       minWidth: 500,
+      flex: 1,
       align: "center",
     },
     { field: "autor", headerName: "Discente", minWidth: 200, align: "center" },
