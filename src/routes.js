@@ -8,9 +8,10 @@ import Register from "./Pages/Register";
 import Dashboard from "./Pages/Dashboard";
 import Addition from "./Pages/Addition";
 import ViewBoard from "./Pages/ViewBoard";
-import Users from "./Pages/Users";
 import ViewBanca from "./Pages/ViewBanca";
 import ResetPassword from "./Pages/ResetPassword";
+import SettingsPage from "Pages/Settings";
+import Users from "Pages/Users";
 
 const Routes = () => {
   return (
@@ -22,8 +23,9 @@ const Routes = () => {
       <Route component={Dashboard} path="/dashboard" exact />
       <Route component={ViewBanca} path="/verbanca" exact />
       <Route component={Addition} path="/addition" exact />
-      <Route component={ViewBoard} path="/editarbanca" exact />
+      <Route component={SettingsPage} path="/settings" exact />
       <Route component={Users} path="/users" exact />
+      <Route component={ViewBoard} path="/editarbanca" exact />
       <Route component={ResetPassword} path="/resetpass" exact />
     </>
   );

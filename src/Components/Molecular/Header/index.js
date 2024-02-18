@@ -105,10 +105,10 @@ const Header = () => {
                 <Button
                   className="login-button"
                   component={Link}
-                  to="/users"
+                  to="/settings"
                   style={{ marginTop: -20, marginLeft: 20 }}
                 >
-                  Ver Usuários
+                  Configurações
                 </Button>
               )}
               <Button
