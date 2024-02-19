@@ -39,7 +39,7 @@ function ExaminingBoard() {
   const history = useHistory();
 
   useEffect(() => {
-    api.get("curso").then(({ data: { data } }) => setCursos(data));
+    api.get("cursos").then(({ data: { data } }) => setCursos(data));
   }, []);
 
   const goToDashboard = () => {

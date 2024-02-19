@@ -84,7 +84,6 @@ export default function PermissionsTab() {
             columns={columns}
             pageSize={10}
             className={classes.root}
-            rowsPerPageOptions={[10, 20, 50]}
             autoHeight={true}
             disableColumnMenu={true}
             disableColumnFilter={true}

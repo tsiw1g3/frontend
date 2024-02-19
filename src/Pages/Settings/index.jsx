@@ -27,8 +27,8 @@ export default function SettingsPage() {
     <Container maxWidth="xl">
       <div className="settings-page-wrapper">
         <Tabs value={page} onChange={handlePageChange}>
-          <Tab label="Permissões" />
-          <Tab label="Cursos" />
+          <Tab label="Gerenciar Permissões" />
+          <Tab label="Gerenciar Cursos" />
         </Tabs>
         <TabPanel page={0} currentPage={page}>
           <PermissionsTab />

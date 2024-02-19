@@ -19,7 +19,10 @@ export default function useUsers(rank) {
 
   const memoizedUsers = useMemo(() => {
     if (query) {
-      return users.filter((user) => user.nome && user.nome.includes(query));
+      return users.filter(
+        (user) =>
+          user.nome && user.nome.toLowerCase().includes(query.toLowerCase())
+      );
     }
     return users;
   }, [users, query]);
