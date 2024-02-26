@@ -25,6 +25,13 @@ export default function useCourses() {
   }, []);
 
   const handleSearch = (query) => setQuery(query);
+  const handleCreate = (course) => {
+    setLoading(true);
+    api
+      .post(`/cursos`, course)
+      .then(refreshCourses)
+      .finally(() => setLoading(false));
+  };
   const handleEdit = (course) => {
     const { id } = course;
     setLoading(true);
@@ -34,5 +41,11 @@ export default function useCourses() {
       .finally(() => setLoading(false));
   };
 
-  return { loading, courses: memoizedCourses, handleSearch, handleEdit };
+  return {
+    loading,
+    courses: memoizedCourses,
+    handleSearch,
+    handleCreate,
+    handleEdit,
+  };
 }

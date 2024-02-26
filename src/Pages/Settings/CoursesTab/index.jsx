@@ -4,7 +4,15 @@ import { makeStyles } from "@material-ui/styles";
 import { DataGrid } from "@mui/x-data-grid";
 import ReactLoading from "react-loading";
 
-import { Box, Modal, TextField } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Grid,
+  Modal,
+  TextField,
+  ThemeProvider,
+  createTheme,
+} from "@material-ui/core";
 import useCourses from "Hooks/Users/useCourses";
 import CourseForm from "./CourseForm";
 
@@ -17,6 +25,14 @@ const useStyles = makeStyles({
     },
     "& .MuiDataGrid-columnHeaderTitle": {
       color: "white",
+    },
+  },
+});
+
+const themeButton = createTheme({
+  palette: {
+    primary: {
+      main: "#329F5B",
     },
   },
 });
@@ -63,7 +79,8 @@ function useCoursesModal() {
 
 export default function CoursesTab() {
   const classes = useStyles();
-  const { courses, loading, handleSearch, handleEdit } = useCourses();
+  const { courses, loading, handleSearch, handleCreate, handleEdit } =
+    useCourses();
   const { open, updateSelectedCourse, selectedCourse, openModal, closeModal } =
     useCoursesModal();
 
@@ -165,29 +182,62 @@ export default function CoursesTab() {
               <CourseForm
                 course={selectedCourse}
                 onSubmit={(values) => {
-                  handleEdit(values);
+                  const { id } = values;
+                  if (id) handleEdit(values);
+                  else handleCreate(values);
+
                   closeModal();
                 }}
               />
             </Box>
           </Modal>
-          <TextField
-            id="banca-search"
-            label="Buscar Usuários"
-            variant="outlined"
-            style={{ backgroundColor: "white", marginBottom: "1rem" }}
-            onChange={(e) => handleSearch(e.target.value || "")}
-          />
-          <DataGrid
-            rows={courses}
-            columns={columns}
-            pageSize={10}
-            className={classes.root}
-            autoHeight
-            disableColumnMenu
-            disableColumnFilter
-            disableSelectionOnClick
-          />
+          <Grid container spacing={2} style={{ marginBottom: "1rem" }}>
+            <Grid item xs={10}>
+              <TextField
+                id="banca-search"
+                label="Buscar Cursos"
+                variant="outlined"
+                style={{ backgroundColor: "white" }}
+                onChange={(e) => handleSearch(e.target.value || "")}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <ThemeProvider theme={themeButton}>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      updateSelectedCourse({
+                        nome: "",
+                        sigla: "",
+                        disciplina: "",
+                        coordenacao: "",
+                        cargo_coordenacao: "",
+                      });
+                      openModal();
+                    }}
+                    style={{ borderRadius: 10, width: "100%", height: "56px" }}
+                  >
+                    Cadastrar Curso
+                  </Button>
+                </ThemeProvider>
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <DataGrid
+                rows={courses}
+                columns={columns}
+                pageSize={10}
+                className={classes.root}
+                autoHeight
+                disableColumnMenu
+                disableColumnFilter
+                disableSelectionOnClick
+              />
+            </Grid>
+          </Grid>
         </>
       )}
     </>

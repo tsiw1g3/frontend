@@ -42,7 +42,7 @@ export default function CourseForm({ course, onSubmit }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", padding: "32px" }}>
       <Typography variant="h6" gutterBottom>
-        {course ? `Editar Curso - ${course.nome}` : "Adicionar Curso"}
+        {course?.id ? `Editar Curso - ${course.nome}` : "Adicionar Curso"}
       </Typography>
       <Form
         onSubmit={onSubmit}
