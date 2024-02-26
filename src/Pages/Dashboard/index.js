@@ -443,7 +443,7 @@ function Dashboard() {
     },
     { field: "autor", headerName: "Discente", minWidth: 200, align: "center" },
     {
-      field: "orientador",
+      field: "nome_orientador",
       headerName: "Orientador",
       minWidth: 200,
       align: "center",
@@ -485,7 +485,7 @@ function Dashboard() {
     },
     { field: "autor", headerName: "Discente", width: 200, align: "center" },
     {
-      field: "orientador",
+      field: "nome_orientador",
       headerName: "Orientador",
       width: 200,
       align: "center",

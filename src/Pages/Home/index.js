@@ -58,7 +58,12 @@ const Home = () => {
       minWidth: 500,
     },
     { field: "autor", headerName: "Discente", flex: 1, minWidth: 150 },
-    { field: "orientador", headerName: "Orientador", flex: 1, minWidth: 150 },
+    {
+      field: "nome_orientador",
+      headerName: "Orientador",
+      flex: 1,
+      minWidth: 150,
+    },
     { field: "sigla_curso", headerName: "Curso", minWidth: 100 },
     { field: "local", headerName: "Local ou link", minWidth: 300 },
     {
