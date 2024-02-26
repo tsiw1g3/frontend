@@ -551,7 +551,7 @@ function Dashboard() {
                     variant="contained"
                     color="primary"
                     onClick={addBanca}
-                    style={{ borderRadius: 10 }}
+                    style={{ borderRadius: 10, marginLeft: "auto" }}
                   >
                     Cadastrar Defesa de TCC
                   </Button>
