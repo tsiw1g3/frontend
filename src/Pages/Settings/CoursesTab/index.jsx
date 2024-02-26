@@ -7,6 +7,11 @@ import ReactLoading from "react-loading";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   Modal,
   TextField,
@@ -79,10 +84,24 @@ function useCoursesModal() {
 
 export default function CoursesTab() {
   const classes = useStyles();
-  const { courses, loading, handleSearch, handleCreate, handleEdit } =
-    useCourses();
+  const {
+    courses,
+    loading,
+    handleSearch,
+    handleCreate,
+    handleEdit,
+    handleDelete,
+  } = useCourses();
   const { open, updateSelectedCourse, selectedCourse, openModal, closeModal } =
     useCoursesModal();
+
+  const {
+    open: deleteConfirmationOpen,
+    updateSelectedCourse: updateSelectedCourseToDelete,
+    selectedCourse: selectedCourseToDelete,
+    openModal: openDeleteConfirmation,
+    closeModal: closeDeleteConfirmation,
+  } = useCoursesModal();
 
   const columns = [
     {
@@ -145,16 +164,32 @@ export default function CoursesTab() {
 
   function CoursesAction({ row }) {
     return (
-      <button
-        title="Editar banca"
-        name="edit-board"
-        type="submit"
-        id="edit-board"
-        onClick={() => {
-          updateSelectedCourse(row);
-          openModal();
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
-      />
+      >
+        <button
+          title="Editar Curso"
+          name="edit-course"
+          id="edit-board"
+          onClick={() => {
+            updateSelectedCourse(row);
+            openModal();
+          }}
+        />
+        <button
+          title="Excluir curso"
+          name="delete-course"
+          id="trash"
+          onClick={() => {
+            updateSelectedCourseToDelete(row);
+            openDeleteConfirmation();
+          }}
+        />
+      </div>
     );
   }
 
@@ -177,6 +212,36 @@ export default function CoursesTab() {
         </div>
       ) : (
         <>
+          <Dialog
+            open={deleteConfirmationOpen}
+            onClose={closeDeleteConfirmation}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Excluir Curso</DialogTitle>
+            <DialogContent>
+              {selectedCourseToDelete && (
+                <>
+                  <DialogContentText id="alert-dialog-description">
+                    Tem certeza que deseja excluir o curso{" "}
+                    {selectedCourseToDelete.nome}?
+                  </DialogContentText>
+                </>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={closeDeleteConfirmation}>Cancelar</Button>
+              <Button
+                onClick={() => {
+                  handleDelete(selectedCourseToDelete);
+                  closeDeleteConfirmation();
+                }}
+                autoFocus
+              >
+                Excluir Curso
+              </Button>
+            </DialogActions>
+          </Dialog>
           <Modal open={open} onClose={closeModal}>
             <Box sx={style}>
               <CourseForm

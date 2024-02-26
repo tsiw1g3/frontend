@@ -40,6 +40,14 @@ export default function useCourses() {
       .then(refreshCourses)
       .finally(() => setLoading(false));
   };
+  const handleDelete = (course) => {
+    const { id } = course;
+    setLoading(true);
+    api
+      .delete(`/cursos/${id}`, course)
+      .then(refreshCourses)
+      .finally(() => setLoading(false));
+  };
 
   return {
     loading,
@@ -47,5 +55,6 @@ export default function useCourses() {
     handleSearch,
     handleCreate,
     handleEdit,
+    handleDelete,
   };
 }
