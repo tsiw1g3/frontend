@@ -83,7 +83,16 @@ const Header = () => {
           <div className="login-form">
             <ThemeProvider theme={theme}>
               <div style={{ marginTop: 11, marginLeft: 20 }}>
-                Olá, {localStorage.getItem("nome")}
+                Olá,
+                <span
+                  style={{
+                    marginLeft: ".25rem",
+                    color: "#6c7ae0",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {localStorage.getItem("nome")}
+                </span>
               </div>
               <Button
                 className="login-button"
