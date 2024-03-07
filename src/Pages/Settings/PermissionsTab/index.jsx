@@ -29,7 +29,12 @@ const ROLES_DICT = {
 
 function RenderRolesCell({ row }) {
   const { role } = row;
-  return <>{ROLES_DICT[role] || "Indefinido"}</>;
+  return (
+    <>
+      {ROLES_DICT[role] || "Indefinido"}
+      <span style={{ marginLeft: "0.5rem" }} id="edit-board" />
+    </>
+  );
 }
 
 export default function PermissionsTab() {
@@ -48,7 +53,8 @@ export default function PermissionsTab() {
         label: ROLES_DICT[key],
         value: key,
       })),
-
+      headerAlign: "center",
+      align: "center",
       renderCell: RenderRolesCell,
     },
   ];
