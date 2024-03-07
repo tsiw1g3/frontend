@@ -76,12 +76,33 @@ const Home = () => {
   ];
 
   const searchBoard = () => {
+    const SEARCH_PROPERTIES = [
+      "ano",
+      "autor",
+      "formatedData",
+      "local",
+      "nome_orientador",
+      "palavras_chave",
+      "resumo",
+      "sigla_curso",
+      "titulo_trabalho",
+    ];
+
+    const matchSearchQuery = (element, query) =>
+      Boolean(
+        SEARCH_PROPERTIES.find((property) =>
+          String(element[property])
+            .toLocaleLowerCase()
+            .includes(query.toLocaleLowerCase())
+        )
+      );
+
     let inputValue = document.getElementById("banca-search").value;
-    let data1 = rawData[0].filter((a) =>
-      String(a.titulo_trabalho).toLowerCase().includes(inputValue.toLowerCase())
+    let data1 = rawData[0].filter((element) =>
+      matchSearchQuery(element, inputValue)
     );
-    let data2 = rawData[1].filter((a) =>
-      String(a.titulo_trabalho).toLowerCase().includes(inputValue.toLowerCase())
+    let data2 = rawData[1].filter((element) =>
+      matchSearchQuery(element, inputValue)
     );
     var allEvents = [];
     allEvents.push(data1);
