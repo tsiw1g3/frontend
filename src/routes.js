@@ -12,6 +12,7 @@ import ViewBanca from "./Pages/ViewBanca";
 import ResetPassword from "./Pages/ResetPassword";
 import SettingsPage from "Pages/Settings";
 import Users from "Pages/Users";
+import AccountSettings from "Pages/AccountSettings";
 
 const Routes = () => {
   return (
@@ -20,6 +21,7 @@ const Routes = () => {
       <Route component={ExaminingBoard} path="/addbanca" />
       <Route component={Login} path="/login" exact />
       <Route component={Register} path="/register" exact />
+      <Route component={AccountSettings} path="/account" exact />
       <Route component={Dashboard} path="/dashboard" exact />
       <Route component={ViewBanca} path="/verbanca" exact />
       <Route component={Addition} path="/addition" exact />

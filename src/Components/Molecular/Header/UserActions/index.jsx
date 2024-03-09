@@ -5,6 +5,7 @@ import { Avatar, Box, Menu, MenuItem, Tooltip } from "@material-ui/core";
 import { ROLES_DICT } from "Pages/Settings/PermissionsTab";
 import "./styles.css";
 import { Settings, ExitToApp } from "@material-ui/icons";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 function getInitials(name) {
   if (!name) return "";
@@ -21,12 +22,18 @@ export default function UserActions({ name, role, isLoggedIn, onClickLogout }) {
   const initials = getInitials(name);
   const open = Boolean(anchorEl);
 
+  const history = useHistory();
+
   const handleClose = () => {
     setAnchor(null);
   };
 
   const handleClick = (e) => {
     setAnchor(e.currentTarget);
+  };
+
+  const handleClickMyAccount = () => {
+    history.push("account");
   };
 
   return isLoggedIn ? (
@@ -61,7 +68,7 @@ export default function UserActions({ name, role, isLoggedIn, onClickLogout }) {
         }}
         arrow
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleClickMyAccount}>
           <Box display="flex" alignItems="center" justifyContent="center">
             <Box
               display="flex"
