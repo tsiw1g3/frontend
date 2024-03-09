@@ -24,7 +24,7 @@ const themeEditar = createTheme({
 export default function CourseForm({ course, onSubmit }) {
   const validate = (values) => {
     const errors = {};
-    const requiredFields = [
+    const REQUIRED_FIELDS_VALIDATION = [
       "nome",
       "sigla",
       "disciplina",
@@ -32,8 +32,23 @@ export default function CourseForm({ course, onSubmit }) {
       "cargo_coordenacao",
     ];
 
-    requiredFields.forEach((field) => {
+    const FIELD_LENGHT_VALIDATION = {
+      nome: 30,
+      sigla: 10,
+      disciplina: 10,
+      coordenacao: 50,
+      cargo_coordenacao: 100,
+    };
+
+    REQUIRED_FIELDS_VALIDATION.forEach((field) => {
       if (!values[field]) errors[field] = "Obrigatório";
+    });
+
+    Object.keys(FIELD_LENGHT_VALIDATION).forEach((key) => {
+      if (values[key] && values[key].length > FIELD_LENGHT_VALIDATION[key])
+        errors[
+          key
+        ] = `O tamanho máximo deste campo é de ${FIELD_LENGHT_VALIDATION[key]} caracteres.`;
     });
 
     return errors;

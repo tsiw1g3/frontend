@@ -77,25 +77,37 @@ function Register() {
   };
 
   const validate = (values) => {
+    const REQUIRED_FIELDS_VALIDATION = [
+      "nome",
+      "pronoun",
+      "email",
+      "username",
+      "password",
+      "universidade",
+    ];
+
+    const FIELD_LENGHT_VALIDATION = {
+      nome: 255,
+      email: 64,
+      username: 255,
+      password: 16,
+      universidade: 64,
+      registration_id: 9,
+    };
+
     const errors = {};
-    if (!values.nome) {
-      errors.nome = "Obrigatório";
-    }
-    if (!values.pronoun) {
-      errors.pronoun = "Obrigatório";
-    }
-    if (!values.email) {
-      errors.email = "Obrigatório";
-    }
-    if (!values.username) {
-      errors.username = "Obrigatório";
-    }
-    if (!values.password) {
-      errors.password = "Obrigatório";
-    }
-    if (!values.universidade) {
-      errors.universidade = "Obrigatório";
-    }
+
+    REQUIRED_FIELDS_VALIDATION.forEach((field) => {
+      if (!values[field]) errors[field] = "Obrigatório";
+    });
+
+    Object.keys(FIELD_LENGHT_VALIDATION).forEach((key) => {
+      if (values[key] && values[key].length > FIELD_LENGHT_VALIDATION[key])
+        errors[
+          key
+        ] = `O tamanho máximo deste campo é de ${FIELD_LENGHT_VALIDATION[key]} caracteres.`;
+    });
+
     if (!query.get("inv") && !values.registration_id) {
       errors.registration_id = "Obrigatório";
     }

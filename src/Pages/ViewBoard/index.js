@@ -132,46 +132,59 @@ function ViewBoard() {
   };
 
   const validate = (values) => {
+    const REQUIRED_FIELDS_VALIDATION = [
+      "titulo_trabalho",
+      "resumo",
+      "abstract",
+      "palavras_chave",
+      "data_realizacao",
+      "hora",
+      "local",
+      "curso",
+      "tipo_banca",
+      "turma",
+      "ano",
+      "semestre_letivo",
+    ];
+
+    const FIELD_LENGHT_VALIDATION = {
+      titulo_trabalho: 255,
+      resumo: 1024,
+      abstract: 1024,
+      palavras_chave: 512,
+      local: 255,
+      tipo_banca: 10,
+      autor: 255,
+      matricula: 10,
+      turma: 45,
+      ano: 4,
+    };
+
     const errors = {};
-    if (!values.titulo_trabalho) {
-      errors.titulo_trabalho = "Obrigatório";
-    }
-    if (!values.resumo) {
-      errors.resumo = "Obrigatório";
-    }
-    if (!values.abstract) {
-      errors.abstract = "Obrigatório";
-    }
-    if (!values.palavras_chave) {
-      errors.palavras_chave = "Obrigatório";
-    }
-    if (!values.local) {
-      errors.local = "Obrigatório";
-    }
-    if (!values.curso) {
-      errors.curso = "Obrigatório";
-    }
-    if (!values.tipo_banca) {
-      errors.tipo_banca = "Obrigatório";
-    }
-    if (!values.autor) {
+
+    REQUIRED_FIELDS_VALIDATION.forEach((key) => {
+      if (!values[key]) errors[key] = "Obrigatório";
+    });
+
+    console.log(values);
+
+    Object.keys(FIELD_LENGHT_VALIDATION).forEach((key) => {
+      if (values[key] && values[key].length > FIELD_LENGHT_VALIDATION[key])
+        errors[
+          key
+        ] = `O tamanho máximo deste campo é de ${FIELD_LENGHT_VALIDATION[key]} caracteres.`;
+    });
+
+    if (isTeacher() && !values.autor) {
       errors.autor = "Obrigatório";
     }
-    if (values.pronome_autor !== 0 && !values.pronome_autor) {
+    if (isTeacher() && values.pronome_autor !== 0 && !values.pronome_autor) {
       errors.pronome_autor = "Obrigatório";
     }
-    if (!values.turma) {
-      errors.turma = "Obrigatório";
-    }
-    if (!values.ano) {
-      errors.ano = "Obrigatório";
-    }
-    if (!values.semestre_letivo) {
-      errors.semestre_letivo = "Obrigatório";
-    }
-    if (!values.matricula) {
+    if (isTeacher() && !values.matricula) {
       errors.matricula = "Obrigatório";
     }
+
     return errors;
   };
 
@@ -527,16 +540,18 @@ function ViewBoard() {
                     </Grid>
                     <Grid item xs={3}>
                       <Field
-                        name="semestre_letivo"
-                        fullWidth
-                        Obrigatório
-                        component={TextField}
+                        component={Select}
                         label="Semestre Letivo"
-                        type="number"
-                        InputProps={{
-                          inputProps: { min: 1, max: 9, type: "number" },
-                        }}
-                      />
+                        name="semestre_letivo"
+                        formControlProps={{ className: "curso" }}
+                      >
+                        <MenuItem value="1" alignItems="flex-start">
+                          Primeiro Semestre
+                        </MenuItem>
+                        <MenuItem value="2" alignItems="flex-start">
+                          Segundo Semestre
+                        </MenuItem>
+                      </Field>
                     </Grid>
                     <Grid item xs={6}>
                       <Field
