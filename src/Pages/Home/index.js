@@ -11,11 +11,25 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import api from "Config/http";
-import { Container } from "@material-ui/core";
+import {
+  Button,
+  Container,
+  ThemeProvider,
+  createTheme,
+} from "@material-ui/core";
+import { isTeacher } from "Helpers/role";
 
 /*
   Componente responsável pela homepage
 */
+
+const themeButton = createTheme({
+  palette: {
+    primary: {
+      main: "#329F5B",
+    },
+  },
+});
 
 const Home = () => {
   const [rawData, setRawData] = useState([]);
@@ -231,6 +245,19 @@ const Home = () => {
             >
               <Tab label="Próximas defesas" {...a11yProps(0)} />
               <Tab label="Defesas anteriores" {...a11yProps(1)} />
+              {isTeacher() && (
+                <ThemeProvider theme={themeButton}>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    onClick={() => history.push("addbanca")}
+                    style={{ borderRadius: 10, marginLeft: "auto" }}
+                  >
+                    Cadastrar Defesa de TCC
+                  </Button>
+                </ThemeProvider>
+              )}
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
