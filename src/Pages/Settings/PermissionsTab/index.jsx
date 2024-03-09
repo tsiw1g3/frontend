@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ROLES_DICT = {
+export const ROLES_DICT = {
   0: "Discente",
   1: "Orientador",
   2: "Coorientador",
