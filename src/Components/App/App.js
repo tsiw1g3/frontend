@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import Routes from "../../routes";
 import Header from "../Molecular/Header";
@@ -12,15 +12,15 @@ import Context from "../../Context";
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Context>
         <Header />
         <div
           className="app-container"
           style={{
             minHeight: "79vh",
-            maxHeight:"85vh",
-            maxWidth:"99.9vw"
+            maxHeight: "85vh",
+            maxWidth: "99.9vw",
           }}
         >
           <div
@@ -33,7 +33,7 @@ function App() {
         </div>
       </Context>
       <Footer />
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
