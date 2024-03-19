@@ -183,6 +183,18 @@ function Register() {
                     label="Universidade"
                   />
                 </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    fullWidth
+                    Obrigatório
+                    multiline
+                    name="academic_title"
+                    value={state.userInfo.academic_title}
+                    component={TextField}
+                    type="text"
+                    label="Título Acadêmico"
+                  />
+                </Grid>
                 {!query.get("inv") && (
                   <Grid item xs={12}>
                     <Field

@@ -39,7 +39,7 @@ class MyContextProvider extends Component {
       username: user.username,
       password: user.password,
       school: user.universidade,
-      academic_title: "Bacharelado",
+      academic_title: user.academic_title,
       registration_id: user.registration_id,
       status: "user",
       role: 0,
