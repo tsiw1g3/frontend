@@ -78,7 +78,7 @@ export default function UserActions({ name, role, isLoggedIn, onClickLogout }) {
             >
               <Settings className="icon" />
             </Box>
-            Minha Conta
+            Editar Informações
           </Box>
         </MenuItem>
         <MenuItem onClick={onClickLogout}>

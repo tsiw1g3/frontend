@@ -84,7 +84,7 @@ const Header = () => {
                   component={Link}
                   to="/settings"
                 >
-                  Configurações
+                  Painel Administrativo
                 </Button>
               )}
               <UserActions
