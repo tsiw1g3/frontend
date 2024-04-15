@@ -333,7 +333,7 @@ function Dashboard() {
           hidden={!isTeacher()}
         />
         <button
-          title="Enviar Email"
+          title="Convidar pessoas para a defesa"
           name="send-email"
           type="submit"
           id="send-email"
