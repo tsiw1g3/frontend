@@ -138,7 +138,7 @@ function Register() {
                     value={state.userInfo.nome}
                     component={TextField}
                     type="text"
-                    label="Nome Completo"
+                    label="Nome completo"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -192,7 +192,8 @@ function Register() {
                     value={state.userInfo.academic_title}
                     component={TextField}
                     type="text"
-                    label="Título Acadêmico"
+                    label="Título acadêmico"
+                    placeholder="Exemplo: Doutor, Mestre, Bacharel.."
                   />
                 </Grid>
                 {!query.get("inv") && (

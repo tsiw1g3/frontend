@@ -105,7 +105,7 @@ function AccountSettings() {
                       name="nome"
                       component={TextField}
                       type="text"
-                      label="Nome Completo"
+                      label="Nome completo"
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -151,7 +151,7 @@ function AccountSettings() {
                       name="academic_title"
                       component={TextField}
                       type="text"
-                      label="Título Acadêmico"
+                      label="Título acadêmico"
                     />
                   </Grid>
                   {!user.role && (
