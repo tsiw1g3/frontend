@@ -1,3 +1,4 @@
+import { Box, ThemeProvider, createTheme, Button } from "@material-ui/core";
 import React from "react";
 
 import { makeStyles } from "@material-ui/styles";
@@ -6,6 +7,7 @@ import ReactLoading from "react-loading";
 
 import useUsers from "Hooks/Users/useUsers";
 import { TextField } from "@material-ui/core";
+import useAdminActions from "Hooks/Admin/useAdminActions";
 
 const useStyles = makeStyles({
   root: {
@@ -39,6 +41,8 @@ function RenderRolesCell({ row }) {
 
 export default function PermissionsTab() {
   const { users, loading, handleEditRole, handleSearch } = useUsers();
+  const { loading: adminActionsLoading, generateInvitationLink } =
+    useAdminActions();
   const classes = useStyles();
 
   const columns = [
@@ -59,9 +63,17 @@ export default function PermissionsTab() {
     },
   ];
 
+  const themeButton = createTheme({
+    palette: {
+      primary: {
+        main: "#329F5B",
+      },
+    },
+  });
+
   return (
     <>
-      {loading ? (
+      {loading || adminActionsLoading ? (
         <div
           style={{
             display: "flex",
@@ -78,13 +90,31 @@ export default function PermissionsTab() {
         </div>
       ) : (
         <>
-          <TextField
-            id="banca-search"
-            label="Buscar Usuários"
-            variant="outlined"
-            style={{ backgroundColor: "white", marginBottom: "1rem" }}
-            onChange={(e) => handleSearch(e.target.value || "")}
-          />
+          <Box
+            display="flex"
+            flexDirection="row"
+            marginBottom="1rem"
+            height="56px"
+          >
+            <TextField
+              id="banca-search"
+              label="Buscar Usuários"
+              variant="outlined"
+              style={{ backgroundColor: "white" }}
+              onChange={(e) => handleSearch(e.target.value || "")}
+            />
+            <ThemeProvider theme={themeButton}>
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                onClick={generateInvitationLink}
+                style={{ borderRadius: 10, marginLeft: "1rem" }}
+              >
+                Gerar Link de Convite
+              </Button>
+            </ThemeProvider>
+          </Box>
           <DataGrid
             rows={users}
             columns={columns}
