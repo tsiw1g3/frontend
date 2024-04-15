@@ -212,9 +212,11 @@ function Dashboard() {
 
   const onSubmitEmail = async (values) => {
     setLoading(true);
-    values.banca = localStorage.getItem("banca");
     api
-      .post("/usuario-banca/usuarios/email", getFormData(values))
+      .post("/usuario-banca/usuarios/email", {
+        ...values,
+        banca: JSON.parse(localStorage.getItem("banca")),
+      })
       .then(function (response) {
         setLoading(false);
         alert(response.data.data);
