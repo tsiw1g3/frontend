@@ -231,22 +231,21 @@ function Dashboard() {
     setLoadingModal(true);
     const banca = JSON.parse(localStorage.getItem("banca"));
     const id = values.avaliador;
-    console.log(values);
+
     api
       .post(`/usuario-banca/nota/${banca}/${id}`, getFormData(values))
       .then(function (response) {
         setLoadingModal(false);
         alert("Nota enviada com sucesso");
-        if (!values.modalOwner) {
-          closeModalNota();
-        }
+        closeModalNotaOwner();
+        if (!values.modalOwner) closeModalNota();
+        else closeModalNotaOwner();
       })
       .catch(function (error) {
         setLoadingModal(false);
         alert("Ocorreu um erro ao tentar dar a nota");
-        if (!values.modalOwner) {
-          closeModalNota();
-        }
+        if (!values.modalOwner) closeModalNota();
+        else closeModalNotaOwner();
       });
   };
 
