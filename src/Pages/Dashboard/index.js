@@ -342,7 +342,7 @@ function Dashboard() {
           hidden={!isTeacher()}
         />
         <button
-          title="Dar Nota"
+          title="Avaliar"
           name="give-score"
           type="submit"
           id="give-score"
@@ -500,12 +500,12 @@ function Dashboard() {
   ];
 
   const columnsNota = [
-    { field: "nome", headerName: "Avaliador", width: 600, align: "center" },
-    { field: "role", headerName: "Função", width: 150, align: "center" },
+    { field: "nome", headerName: "Avaliador", width: 400, align: "center" },
+    { field: "role", headerName: "Função", width: 250, align: "center" },
     {
       field: "nota",
       headerName: "Nota",
-      width: 290,
+      width: 390,
       renderCell: renderDetailsButton3,
       disableClickEventBubbling: true,
       align: "center",

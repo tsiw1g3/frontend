@@ -135,13 +135,13 @@
 
 #give-score {
   margin: 0px 15px 0px 0px;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   padding: 2px;
   border: none;
   background: none;
   cursor: pointer;
-  background: url("/public/img/star_34.svg") 0 0 no-repeat;
+  background: url("/public/img/grade.svg") 0 0 no-repeat;
 }
 
 #give-score-solo {
