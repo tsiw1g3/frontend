@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 export const ROLES_DICT = {
   0: "Discente",
   1: "Orientador",
-  2: "Coorientador",
+  2: "Avaliador",
   3: "Administrador",
 };
 

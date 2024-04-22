@@ -1,18 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ReactLoading from "react-loading";
-import { Button, Container, ThemeProvider } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Container,
+  Modal,
+  ThemeProvider,
+} from "@material-ui/core";
 import { DataGrid } from "@mui/x-data-grid";
 import SelectSearch, { fuzzySearch } from "react-select-search";
 import { createTheme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import api from "Config/http";
 import "./styles.css";
+import { MailOutline } from "@material-ui/icons";
+import usePreRegister from "Hooks/Addition/usePreRegister";
+import UserForm from "Components/User/UserForm";
 /*
   Componente responsável pela página de adição de usuários à bancas
 */
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 800,
+  bgcolor: "background.paper",
+  borderRadius: 4,
+  padding: "4px",
+};
+
 function Addition() {
+  const { open, loading, openModal, closeModal, onSubmit } = usePreRegister();
+
   const [data, setData] = useState([]);
   const [usuario, setUsuario] = useState({ name: "", value: 0 });
   const [cargo, setCargo] = useState("");
@@ -261,6 +283,35 @@ function Addition() {
                   onChange={userChange}
                   placeholder="Usuário"
                 />
+              </div>
+              <div className="user-name">
+                ou
+                <ThemeProvider theme={theme}>
+                  <Button
+                    onClick={openModal}
+                    className="user-role"
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    style={{ marginLeft: 16, borderRadius: 10 }}
+                  >
+                    <MailOutline style={{ marginRight: "0.5rem" }} />
+                    Pré cadastrar componente
+                  </Button>
+                </ThemeProvider>
+                <Modal open={open} onClose={closeModal}>
+                  <Box sx={style}>
+                    <UserForm
+                      onSubmit={onSubmit}
+                      onCancel={closeModal}
+                      labels={{
+                        submit: "Concluir pré-cadastro",
+                        title: "Pré-cadastrar usuário",
+                      }}
+                      loading={loading}
+                    />
+                  </Box>
+                </Modal>
               </div>
               <div className="user-right" style={{ display: "flex" }}>
                 <SelectSearch
