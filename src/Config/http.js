@@ -20,7 +20,7 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 403) {
+    if (error.response.status === 403 && localStorage.getItem("loginToken")) {
       localStorage.clear();
       window.location.href = "/";
     }
