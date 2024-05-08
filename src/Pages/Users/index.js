@@ -76,18 +76,13 @@ function Users() {
     var bodyFormData = new FormData();
     bodyFormData.append("user_id", userId);
     bodyFormData.append("invite_hash", Math.random());
-    // setDone(false);
+
     api.post("/invite", bodyFormData).then(function (response) {
       const baseUrl = window.location.hostname;
-      navigator.clipboard.writeText(
-        `${baseUrl}/#/register?inv=` + response.data.data
-      );
-      alert(
-        `O link de convite: ${baseUrl}/#/register?inv=` +
-          response.data.data +
-          " foi copiado"
-      );
-      // reload();
+
+      const inviteLink = `${baseUrl}/register?inv=${response.data.data}`;
+      navigator.clipboard.writeText(inviteLink);
+      alert(`O link de convite: ${inviteLink} foi copiado.`);
     });
   };
 
