@@ -9,7 +9,7 @@ export function useAuth() {
   const history = useHistory();
 
   const signIn = useCallback(
-    (user) => {
+    (user, ref) => {
       setLoading(true);
       loginUser(user)
         .then((response) => {
@@ -23,8 +23,11 @@ export function useAuth() {
             localStorage.setItem("role", role);
             localStorage.setItem("nome", name);
 
-            history.push("dashboard");
-            window.location.reload();
+            if (ref) window.location.href = ref;
+            else {
+              history.push("dashboard");
+              window.location.reload();
+            }
           } else alert("Usuário ou senha incorretos");
         })
         .finally(() => setLoading(false));

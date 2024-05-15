@@ -14,6 +14,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom";
 import { Field, Form } from "react-final-form";
 
 import { useAuth } from "Hooks/Authentication/useAuth";
+import { useQuery } from "Hooks/Helpers/useQuery";
 
 const SignInButton = styled(Button)({
   backgroundColor: "#6c7ae0",
@@ -33,6 +34,7 @@ const ForgotPasswordLink = styled(Typography)({
 
 function Login() {
   const { loading, signIn } = useAuth();
+  const query = useQuery();
 
   const validadeRequiredFields = (value) =>
     value ? undefined : "Campo Obrigatório";
@@ -56,7 +58,7 @@ function Login() {
             Login
           </Typography>
           <Box margin={2}>
-            <Form onSubmit={signIn}>
+            <Form onSubmit={(values) => signIn(values, query.get("ref"))}>
               {({ handleSubmit }) => (
                 <form onSubmit={handleSubmit}>
                   <Field name="username" validate={validadeRequiredFields}>

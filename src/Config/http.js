@@ -22,7 +22,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response.status === 403 && localStorage.getItem("loginToken")) {
       localStorage.clear();
-      window.location.href = "/";
+      window.location.href = `/login?ref=${window.location.href}`;
     }
     return Promise.reject(error);
   }
