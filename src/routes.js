@@ -27,7 +27,7 @@ const Routes = () => {
       <Route component={Addition} path="/addition" exact />
       <Route component={SettingsPage} path="/settings" exact />
       <Route component={Users} path="/users" exact />
-      <Route component={ViewBoard} path="/editarbanca" exact />
+      <Route component={ViewBoard} path="/editarbanca/:id" exact />
       <Route component={ResetPassword} path="/resetpass" exact />
     </>
   );

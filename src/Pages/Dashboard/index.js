@@ -45,8 +45,7 @@ function Dashboard() {
   };
 
   const editBanca = (banca) => {
-    localStorage.setItem("banca", JSON.stringify(banca));
-    let path = `editarbanca`;
+    let path = `editarbanca/${banca.id}`;
     history.push(path);
   };
 

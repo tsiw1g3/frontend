@@ -26,28 +26,28 @@ import { makeStyles } from "@material-ui/core/styles";
 import { createTheme } from "@material-ui/core/styles";
 import api from "Config/http";
 import { isTeacher } from "Helpers/role";
+import { useBanca } from "Hooks/Banca/useBanca";
+import { useParams } from "react-router-dom/cjs/react-router-dom";
 
 /*
   Componente responsável pela página de visualização de bancas
 */
-
 function ViewBoard() {
-  const banca = JSON.parse(localStorage.getItem("banca"));
-  banca.data_realizacao = new Date(banca.data_realizacao);
-
   const [tipo_banca, setTipo_banca] = useState(true);
   const [done, setDone] = useState(undefined);
   const [cursos, setCursos] = useState([]);
   const [nota, setNota] = useState([]);
 
   const history = useHistory();
+  const { id } = useParams();
+  const { banca, loading } = useBanca(id);
 
   useEffect(() => {
     api.get("cursos").then(({ data: { data } }) => setCursos(data));
   }, []);
 
   const goToDashboard = () => {
-    let path = `dashboard`;
+    let path = `/dashboard`;
     history.push(path);
   };
 
@@ -264,12 +264,14 @@ function ViewBoard() {
   };
 
   useEffect(() => {
-    api.get(`/nota/${banca.id}`).then(function (response) {
-      setNota(response.data.data || "");
-      setDone(true);
-      return response;
-    });
-  }, [banca.id]);
+    if (banca?.id) {
+      api.get(`/nota/${banca.id}`).then(function (response) {
+        setNota(response.data.data || "");
+        setDone(true);
+        return response;
+      });
+    }
+  }, [banca?.id]);
 
   const styles = makeStyles({
     root: {
@@ -310,7 +312,7 @@ function ViewBoard() {
 
   return (
     <>
-      {!done ? (
+      {loading || !done ? (
         <div className="center">
           <ReactLoading
             type={"spin"}
