@@ -198,6 +198,9 @@ function ExaminingBoard() {
       errors.matricula = "Obrigatório";
     }
 
+    if (values.ano && !Number(values.ano))
+      errors.ano = "Insira um valor válido";
+
     return errors;
   };
 

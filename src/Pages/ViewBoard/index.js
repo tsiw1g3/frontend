@@ -166,8 +166,6 @@ function ViewBoard() {
       if (!values[key]) errors[key] = "Obrigatório";
     });
 
-    console.log(values);
-
     Object.keys(FIELD_LENGHT_VALIDATION).forEach((key) => {
       if (values[key] && values[key].length > FIELD_LENGHT_VALIDATION[key])
         errors[
@@ -184,6 +182,9 @@ function ViewBoard() {
     if (isTeacher() && !values.matricula) {
       errors.matricula = "Obrigatório";
     }
+
+    if (values.ano && !Number(values.ano))
+      errors.ano = "Insira um valor válido";
 
     return errors;
   };
