@@ -4,7 +4,7 @@ import { Avatar, Box, Menu, MenuItem, Tooltip } from "@material-ui/core";
 
 import { ROLES_DICT } from "Pages/Settings/PermissionsTab";
 import "./styles.css";
-import { Settings, ExitToApp } from "@material-ui/icons";
+import { Settings, ExitToApp, Create } from "@material-ui/icons";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 function getInitials(name) {
@@ -76,9 +76,9 @@ export default function UserActions({ name, role, isLoggedIn, onClickLogout }) {
               justifyContent="center"
               marginRight={1}
             >
-              <Settings className="icon" />
+              <Create className="icon" />
             </Box>
-            Editar Informações
+            Editar informações
           </Box>
         </MenuItem>
         <MenuItem onClick={onClickLogout}>

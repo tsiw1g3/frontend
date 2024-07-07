@@ -100,15 +100,24 @@ const Home = () => {
       "resumo",
       "sigla_curso",
       "titulo_trabalho",
+      "membros",
     ];
 
     const matchSearchQuery = (element, query) =>
       Boolean(
-        SEARCH_PROPERTIES.find((property) =>
-          String(element[property])
+        SEARCH_PROPERTIES.find((property) => {
+          console.log(element[property], Array.isArray(element[property]));
+          if (Array.isArray(element[property]))
+            return Boolean(
+              element[property].find((item) =>
+                item.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+              )
+            );
+
+          return String(element[property])
             .toLocaleLowerCase()
-            .includes(query.toLocaleLowerCase())
-        )
+            .includes(query.toLocaleLowerCase());
+        })
       );
 
     let inputValue = document.getElementById("banca-search").value;
