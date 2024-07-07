@@ -69,7 +69,7 @@ const Home = () => {
     {
       field: "titulo_trabalho",
       headerName: "Título do Trabalho",
-      minWidth: 500,
+      minWidth: 650,
     },
     { field: "autor", headerName: "Discente", flex: 1, minWidth: 150 },
     {
@@ -78,7 +78,7 @@ const Home = () => {
       flex: 1,
       minWidth: 150,
     },
-    { field: "sigla_curso", headerName: "Curso", minWidth: 100 },
+    { field: "sigla_curso", headerName: "Curso", minWidth: 50 },
     { field: "local", headerName: "Local ou link", minWidth: 300 },
     {
       field: "actions",
@@ -106,7 +106,6 @@ const Home = () => {
     const matchSearchQuery = (element, query) =>
       Boolean(
         SEARCH_PROPERTIES.find((property) => {
-          console.log(element[property], Array.isArray(element[property]));
           if (Array.isArray(element[property]))
             return Boolean(
               element[property].find((item) =>
@@ -230,7 +229,7 @@ const Home = () => {
             <div>
               <TextField
                 id="banca-search"
-                label="Buscar defesas"
+                label="Buscar defesas, alunos, orientadores ou avaliadores"
                 variant="outlined"
                 style={{ backgroundColor: "white" }}
               />

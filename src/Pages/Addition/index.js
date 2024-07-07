@@ -199,7 +199,6 @@ function Addition() {
   };
 
   const userChange = (value, obj) => {
-    console.log(obj);
     setUsuario(obj);
   };
 

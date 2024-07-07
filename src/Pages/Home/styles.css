@@ -19,8 +19,8 @@
   height: 438px;
 }
 
-.search-form{
-  margin:20px 0px;
+.search-form {
+  margin: 20px 0px;
   background-color: #dbd9d9;
 }
 
@@ -47,7 +47,6 @@
   /* margin-left: 20px; */
 }
 
-
 .user {
   list-style: none;
   margin: 10px 0;
@@ -69,13 +68,13 @@
 
 .user-right {
   color: rgb(65, 97, 108);
-  margin-left: auto; 
+  margin-left: auto;
   padding-right: 20px;
 }
 
 .user-role {
   color: rgb(65, 97, 108);
-  margin-left: 20px; 
+  margin-left: 20px;
 }
 
 .user-age {
@@ -91,27 +90,31 @@
   transform: translate(-50%, -50%);
 }
 
-.left-btn { float: left;}
-.right-btn { float: right; }
+.left-btn {
+  float: left;
+}
+.right-btn {
+  float: right;
+}
 
 .MuiBox-root {
   padding: 0px !important;
 }
 
-.MuiPaper-root{
+.MuiPaper-root {
   padding: 20px 0px !important;
   margin: 0px 1px !important;
 }
 
-.MuiPaper-elevation4{
+.MuiPaper-elevation4 {
   box-shadow: none !important;
 }
 
-.MuiTextField-root{
-  width:100%;
+.MuiTextField-root {
+  width: 100%;
 }
 
-.MuiOutlinedInput-input{
+.MuiOutlinedInput-input {
   padding: 18.5px 50px 18.5px 14px !important;
 }
 
@@ -124,8 +127,8 @@
   height: 25px;
   padding: 0;
   border: none;
-  cursor:pointer;
-  background:url("/public/img/search_19.svg") 0 0 no-repeat;
+  cursor: pointer;
+  background: url("/public/img/search_19.svg") 0 0 no-repeat;
 }
 
 #see-board {
@@ -137,23 +140,23 @@
   height: 25px;
   padding: 2px;
   border: none;
-  cursor:pointer;
-  background:url("/public/img/eye-open_2.svg") 0 0 no-repeat;
+  cursor: pointer;
+  background: url("/public/img/eye-open_2.svg") 0 0 no-repeat;
 }
 
 #trash {
   margin: 0px 15px 0px 0px;
-  width:20px;
-  height:20px;
+  width: 20px;
+  height: 20px;
   padding: 0;
   border: none;
   background: none;
-  cursor:pointer;
-  background:url("/public/img/trash_24.svg") 0 0 no-repeat;
+  cursor: pointer;
+  background: url("/public/img/trash_24.svg") 0 0 no-repeat;
 }
 
-.MuiDataGrid-selectedRowCount{
-  display:none !important;
+.MuiDataGrid-selectedRowCount {
+  display: none !important;
 }
 
 /* .MuiDataGrid-columnsContainer{
