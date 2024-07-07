@@ -306,9 +306,10 @@ function Addition() {
                       onCancel={closeModal}
                       labels={{
                         submit: "Concluir pré-cadastro",
-                        title: "Pré-cadastrar usuário",
+                        title: "Pré-cadastrar componente",
                       }}
                       loading={loading}
+                      withUsernameField={false}
                     />
                   </Box>
                 </Modal>

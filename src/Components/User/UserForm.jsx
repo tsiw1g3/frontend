@@ -14,6 +14,7 @@ import ReactLoading from "react-loading";
 
 function UserForm({
   withRegistrationId = false,
+  withUsernameField = true,
   withPassword = false,
   loading = false,
   onCancel,
@@ -59,12 +60,12 @@ function UserForm({
       "email",
       "username",
       "universidade",
-    ];
+    ].filter((field) => withUsernameField || field !== "username");
 
     const FIELD_LENGHT_VALIDATION = {
       nome: 255,
       email: 64,
-      username: 255,
+      username: 64,
       universidade: 64,
       registration_id: 9,
     };
@@ -214,17 +215,19 @@ function UserForm({
                       />
                     </Grid>
                   )}
-                  <Grid item xs={12}>
-                    <Field
-                      fullWidth
-                      multiline
-                      name="username"
-                      value={values.username}
-                      component={TextField}
-                      type="text"
-                      label="Username"
-                    />
-                  </Grid>
+                  {withUsernameField && (
+                    <Grid item xs={12}>
+                      <Field
+                        fullWidth
+                        multiline
+                        name="username"
+                        value={values.username}
+                        component={TextField}
+                        type="text"
+                        label="Username"
+                      />
+                    </Grid>
+                  )}
                   {withPassword && (
                     <Grid item xs={12}>
                       <Field
