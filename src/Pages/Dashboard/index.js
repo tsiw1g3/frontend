@@ -324,7 +324,6 @@ function Dashboard() {
           type="submit"
           id="edit-board"
           onClick={() => editBanca(params.row)}
-          hidden={!isTeacher()}
         />
         <button
           title="Adicionar membro"
@@ -362,7 +361,6 @@ function Dashboard() {
             );
             if (answer) excluirBanca(params.row.id);
           }}
-          hidden={!isTeacher()}
         />
       </>
     );

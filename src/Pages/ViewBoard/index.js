@@ -14,6 +14,7 @@ import {
   ThemeProvider,
   FormControlLabel,
   Checkbox,
+  Box,
 } from "@material-ui/core";
 // Picker
 import DateFnsUtils from "@date-io/date-fns";
@@ -597,52 +598,13 @@ function ViewBoard() {
                         />
                       </Grid>
                     </MuiPickersUtilsProvider>
-                    <Grid item style={{ marginTop: 16 }}>
-                      <ThemeProvider theme={themeEditar}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          type="submit"
-                          disabled={submitting}
-                          style={{ borderRadius: 10 }}
-                        >
-                          Editar
-                        </Button>
-                      </ThemeProvider>
+                    <Box
+                      display="flex"
+                      justifyContent="flex-end"
+                      width="100%"
+                      gridGap={8}
+                    >
                       <ThemeProvider theme={theme}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => {
-                            setDone(false);
-                            generateReport();
-                          }}
-                          style={{ marginLeft: 10, borderRadius: 10 }}
-                        >
-                          Gerar relatório
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => {
-                            setDone(false);
-                            generateOrientationReport();
-                          }}
-                          style={{ marginLeft: 10, borderRadius: 10 }}
-                        >
-                          Gerar Declaração de Orientação
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => {
-                            setDone(false);
-                            generateParticipationReport();
-                          }}
-                          style={{ marginLeft: 10, borderRadius: 10 }}
-                        >
-                          Gerar Declaração de Participação
-                        </Button>
                         <Button
                           variant="contained"
                           color="secondary"
@@ -654,7 +616,57 @@ function ViewBoard() {
                           Voltar
                         </Button>
                       </ThemeProvider>
-                    </Grid>
+                      <ThemeProvider theme={theme}>
+                        {isTeacher() && (
+                          <>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => {
+                                setDone(false);
+                                generateReport();
+                              }}
+                              style={{ marginLeft: 10, borderRadius: 10 }}
+                            >
+                              Gerar relatório
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => {
+                                setDone(false);
+                                generateOrientationReport();
+                              }}
+                              style={{ marginLeft: 10, borderRadius: 10 }}
+                            >
+                              Gerar Declaração de Orientação
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => {
+                                setDone(false);
+                                generateParticipationReport();
+                              }}
+                              style={{ marginLeft: 10, borderRadius: 10 }}
+                            >
+                              Gerar Declaração de Participação
+                            </Button>
+                          </>
+                        )}
+                      </ThemeProvider>
+                      <ThemeProvider theme={themeEditar}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          type="submit"
+                          disabled={submitting}
+                          style={{ borderRadius: 10 }}
+                        >
+                          Editar
+                        </Button>
+                      </ThemeProvider>
+                    </Box>
                   </Grid>
                 </form>
               )}
