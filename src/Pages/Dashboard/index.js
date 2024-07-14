@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./styles.css";
 import ReactLoading from "react-loading";
@@ -315,6 +315,26 @@ function Dashboard() {
       });
   };
 
+  const RenderLocal = ({ value, row }) => {
+    const isRemote = useMemo(() => row.tipo_banca === "remoto", [row]);
+    return (
+      <>
+        {isRemote ? (
+          <a
+            href={value}
+            target="_blank"
+            rel="noreferrer"
+            className="local-cell"
+          >
+            {value}
+          </a>
+        ) : (
+          value
+        )}
+      </>
+    );
+  };
+
   const renderDetailsTeacher = (params) => {
     return (
       <>
@@ -462,6 +482,7 @@ function Dashboard() {
       headerName: "Local ou link",
       minWidth: 300,
       align: "center",
+      renderCell: RenderLocal,
     },
   ];
 
@@ -499,6 +520,7 @@ function Dashboard() {
       headerName: "Local ou link",
       width: 300,
       align: "center",
+      renderCell: RenderLocal,
     },
   ];
 
