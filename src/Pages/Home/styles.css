@@ -162,3 +162,7 @@
 /* .MuiDataGrid-columnsContainer{
   background:black;
 } */
+
+.MuiDataGrid-cell.lowercase {
+  text-transform: lowercase;
+}

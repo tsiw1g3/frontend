@@ -148,13 +148,10 @@ function Dashboard() {
         events.forEach((e) => {
           e.data = new Date(e.data_realizacao);
           e.data.setSeconds(0);
-          e.formatedData = e.data.toLocaleString("pt-BR", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          });
+          e.formatedData = `${e.data.toLocaleDateString()} às ${e.data.toLocaleTimeString(
+            [],
+            { hour: "2-digit", minute: "2-digit" }
+          )}h`;
         });
       }
       setDataDefesasParticipo(events);
@@ -166,13 +163,10 @@ function Dashboard() {
         events.forEach((e) => {
           e.data = new Date(e.data_realizacao);
           e.data.setSeconds(0);
-          e.formatedData = e.data.toLocaleString("pt-BR", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          });
+          e.formatedData = `${e.data.toLocaleDateString()} às ${e.data.toLocaleTimeString(
+            [],
+            { hour: "2-digit", minute: "2-digit" }
+          )}h`;
         });
       }
       setDataMinhasDefesas(events);
@@ -454,8 +448,9 @@ function Dashboard() {
     {
       field: "formatedData",
       headerName: "Data",
-      minWidth: 140,
+      minWidth: 160,
       align: "center",
+      cellClassName: "lowercase",
     },
     {
       field: "titulo_trabalho",
@@ -500,7 +495,12 @@ function Dashboard() {
       disableClickEventBubbling: true,
       align: "center",
     },
-    { field: "formatedData", headerName: "Data", width: 140 },
+    {
+      field: "formatedData",
+      headerName: "Data",
+      width: 160,
+      cellClassName: "lowercase",
+    },
     {
       field: "titulo_trabalho",
       headerName: "Título do Trabalho",

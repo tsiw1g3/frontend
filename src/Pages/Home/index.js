@@ -65,7 +65,12 @@ const Home = () => {
   };
 
   const columns = [
-    { field: "formatedData", headerName: "Data", minWidth: 140 },
+    {
+      field: "formatedData",
+      headerName: "Data",
+      minWidth: 160,
+      cellClassName: "lowercase",
+    },
     {
       field: "titulo_trabalho",
       headerName: "Título do Trabalho",
@@ -144,14 +149,10 @@ const Home = () => {
         events.forEach((e) => {
           e.data = new Date(e.data_realizacao);
           e.data.setSeconds(0);
-          e.formatedData = e.data.toLocaleString("pt-BR", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-          // console.log(e.formatedData);
+          e.formatedData = `${e.data.toLocaleDateString()} às ${e.data.toLocaleTimeString(
+            [],
+            { hour: "2-digit", minute: "2-digit" }
+          )}h`;
           // e.autor = "Frederico Durão";
         });
         const dt = new Date();

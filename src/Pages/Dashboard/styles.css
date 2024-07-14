@@ -165,3 +165,7 @@ a.local-cell {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.MuiDataGrid-cell.lowercase {
+  text-transform: lowercase;
+}
