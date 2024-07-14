@@ -63,7 +63,6 @@ function Dashboard() {
   const openModalNota = (banca, titulo) => {
     localStorage.setItem("banca", JSON.stringify(banca));
     localStorage.setItem("titulo", titulo);
-    getBancaUsuarios(banca);
     setOpenNota(true);
   };
 
@@ -205,6 +204,8 @@ function Dashboard() {
     const errors = {};
     if (!values.nota) {
       errors.nota = "Obrigatório";
+    } else if (Number(values.nota) > 10 || Number(values.nota) < 0) {
+      errors.nota = "Insira um valor válido";
     }
     return errors;
   };
@@ -368,6 +369,7 @@ function Dashboard() {
   };
 
   const renderDetailsReviewer = (params) => {
+    console.log("render reviewer", params);
     return (
       <button
         title="Dar Nota"
@@ -377,7 +379,6 @@ function Dashboard() {
         onClick={() => {
           openModalNota(params.row.id, params.row.titulo_trabalho);
         }}
-        hidden={!isTeacher()}
       />
     );
   };
@@ -387,7 +388,11 @@ function Dashboard() {
       <div>
         <Form
           onSubmit={onSubmitNotaOwner}
-          initialValues={{ avaliador: params.id, modalOwner: true }}
+          initialValues={{
+            avaliador: params.id,
+            nota: params.value,
+            modalOwner: true,
+          }}
           validate={validateNota}
           render={({ handleSubmit, submitting }) => (
             <form onSubmit={handleSubmit} noValidate>
@@ -396,8 +401,8 @@ function Dashboard() {
                 Obrigatório
                 name="nota"
                 component={TextField}
-                type="number"
                 InputProps={{ inputProps: { min: 0, max: 10, type: "number" } }}
+                type="number"
                 label="Nota"
               />
               <ThemeProvider theme={themeButton}>
@@ -501,11 +506,12 @@ function Dashboard() {
 
   const columnsNota = [
     { field: "nome", headerName: "Avaliador", width: 400, align: "center" },
-    { field: "role", headerName: "Função", width: 250, align: "center" },
+    { field: "role", headerName: "Função", width: 150, align: "center" },
     {
       field: "nota",
       headerName: "Nota",
-      width: 390,
+      minWidth: 300,
+      flex: 1,
       renderCell: renderDetailsButton3,
       disableClickEventBubbling: true,
       align: "center",
@@ -770,13 +776,7 @@ function Dashboard() {
                       avaliador: JSON.parse(localStorage.getItem("userId")),
                     }}
                     validate={validateNota}
-                    render={({
-                      handleSubmit,
-                      reset,
-                      submitting,
-                      pristine,
-                      values,
-                    }) => (
+                    render={({ handleSubmit, submitting }) => (
                       <form onSubmit={handleSubmit} noValidate>
                         <Paper
                           className={classes.elevation1}
