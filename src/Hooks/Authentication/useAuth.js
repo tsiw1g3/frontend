@@ -15,10 +15,11 @@ export function useAuth() {
         .then((response) => {
           if (response) {
             const {
-              data: { id, token, role, name },
+              data: { id, token, refresh_token, role, name },
             } = response;
 
-            localStorage.setItem("loginToken", token);
+            localStorage.setItem("refresh_token", refresh_token);
+            localStorage.setItem("token", token);
             localStorage.setItem("userId", id);
             localStorage.setItem("role", role);
             localStorage.setItem("nome", name);

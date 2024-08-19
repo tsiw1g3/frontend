@@ -5,11 +5,14 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("loginToken");
+  const token = localStorage.getItem("token");
+  const refreshToken = localStorage.getItem("refresh_token");
+
   if (token) {
     config.headers = {
       ...config.headers,
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
+      RefreshToken: `${refreshToken}`,
     };
   }
   return Promise.resolve(config);
@@ -19,8 +22,13 @@ api.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
-    if (error.response.status === 403 && localStorage.getItem("loginToken")) {
+  async (error) => {
+    if (
+      [401, 403].includes(error.response.status) &&
+      localStorage.getItem("token")
+    ) {
+      await api.delete("/login");
+
       localStorage.clear();
       window.location.href = `/login?ref=${window.location.href}`;
     }

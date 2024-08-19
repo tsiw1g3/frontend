@@ -23,7 +23,9 @@ class MyContextProvider extends Component {
   };
 
   // On Click the Log out button
-  logoutUser = () => {
+  logoutUser = async () => {
+    await api.delete("/login");
+
     localStorage.clear();
     this.setState({
       ...this.state,
@@ -56,9 +58,7 @@ class MyContextProvider extends Component {
     bodyFormData.append("password", user.password);
 
     const res = await api
-      .post("/login", bodyFormData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+      .post("/login", bodyFormData)
       .then(function (response) {
         return response;
       })
@@ -73,7 +73,7 @@ class MyContextProvider extends Component {
 
   // Checking user logged in or not
   isLoggedIn = () => {
-    return localStorage.getItem("loginToken") !== null;
+    return localStorage.getItem("token") !== null;
   };
 
   render() {
