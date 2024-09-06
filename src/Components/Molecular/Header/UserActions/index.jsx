@@ -9,8 +9,9 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 function getInitials(name) {
   if (!name) return "";
+
   const [first, second] = name.split(" ");
-  return `${first[0]}${second[0]}`;
+  return `${first[0]}${second?.lenght ? second[0] : ""}`;
 }
 
 function getRoleName(role) {
