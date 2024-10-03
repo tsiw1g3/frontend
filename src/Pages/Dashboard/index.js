@@ -577,7 +577,7 @@ function Dashboard() {
     {
       field: "local",
       headerName: "Local ou link",
-      width: 300,
+      flex: 1,
       align: "center",
       renderCell: RenderLocal,
     },

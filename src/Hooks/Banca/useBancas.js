@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export function useBancas() {
   const [loading, setLoading] = useState(false);
-  const [bancas, setBancas] = useState();
+  const [bancas, setBancas] = useState([]);
 
   useEffect(() => {
     setLoading(true);
