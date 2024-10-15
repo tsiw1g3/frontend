@@ -20,7 +20,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import api from "Config/http";
 import { isTeacher } from "Helpers/role";
-
+import botonLock from './components/lock-alt-regular-24.png'
+import botomunloked from './components/lock-open-alt-regular-24.png'
 /*
   Componente responsável pela página de gerenciamento das minhas defesas
 */
@@ -332,6 +333,37 @@ function Dashboard() {
   const renderDetailsTeacher = (params) => {
     return (
       <>
+       <button
+        title={`Visibilidade: ${params.row.visible ? "Pública" : "Privada"}`}
+        name="edit-publicprivate"
+        type="button"
+        onClick={() => {
+          
+          const updatedVisibility = !params.row.visible;
+          api.put(`/banca/${params.row.id}`, { visible: updatedVisibility })
+            .then((response) => {
+              alert(
+                `A visibilidade foi alterada para ${
+                  updatedVisibility ? "Pública" : "Privada"
+                }`
+              );
+              window.location.reload();
+            })
+            .catch((err) => {
+              console.error(err);
+              alert("Erro ao alterar a visibilidade.");
+            });
+        }}
+        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+      >
+        <img
+          src={params.row.visible ? botomunloked : botonLock}
+          alt={params.row.visible ? "Destrancado" : "Trancado"}
+          style={{ width: 18, height: 18 }}
+        />
+      </button>
+
+
         <button
           title="Editar banca"
           name="edit-board"
