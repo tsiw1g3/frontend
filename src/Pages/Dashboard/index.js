@@ -329,31 +329,39 @@ function Dashboard() {
       </>
     );
   };
+  /* const handleVisibilityToggle = async (row) => {
+    try {
+     
+      const updatedVisibility = !row.visible;
+  
+      
+      const response = await api.put(`/banca/${row.id}`, {
+        visible: updatedVisibility,
+      });
+  
+      if (response.status === 200 || response.status === 204) {
+       
+        alert(`A visibilidade foi alterada para ${updatedVisibility ? "Pública" : "Privada"}`);
+
+        row.visible = updatedVisibility;
+      } else {
+        throw new Error("Erro inesperado ao alterar a visibilidade.");
+      }
+    } catch (error) {
+      console.error("Erro ao alterar a visibilidade: ", error);
+      alert("Erro ao alterar a visibilidade.");
+    }
+  }; */
+  
 
   const renderDetailsTeacher = (params) => {
     return (
       <>
-       <button
+      {/* <button
         title={`Visibilidade: ${params.row.visible ? "Pública" : "Privada"}`}
         name="edit-publicprivate"
         type="button"
-        onClick={() => {
-          
-          const updatedVisibility = !params.row.visible;
-          api.put(`/banca/${params.row.id}`, { visible: updatedVisibility })
-            .then((response) => {
-              alert(
-                `A visibilidade foi alterada para ${
-                  updatedVisibility ? "Pública" : "Privada"
-                }`
-              );
-              window.location.reload();
-            })
-            .catch((err) => {
-              console.error(err);
-              alert("Erro ao alterar a visibilidade.");
-            });
-        }}
+        onClick={() => handleVisibilityToggle(params.row)}
         style={{ background: 'none', border: 'none', cursor: 'pointer' }}
       >
         <img
@@ -361,7 +369,8 @@ function Dashboard() {
           alt={params.row.visible ? "Destrancado" : "Trancado"}
           style={{ width: 18, height: 18 }}
         />
-      </button>
+      </button> */}
+
 
 
         <button
