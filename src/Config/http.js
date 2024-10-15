@@ -24,7 +24,7 @@ api.interceptors.response.use(
   },
   async (error) => {
     if (
-      [401, 403].includes(error.response.status) &&
+      [401].includes(error.response.status) &&
       localStorage.getItem("token")
     ) {
       await api.delete("/login");

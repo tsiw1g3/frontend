@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import "./styles.css";
 import Container from "@material-ui/core/Container";
 import ReactLoading from "react-loading";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import CardBanca from "../../Components/Card";
 import { Grid, Button, CssBaseline, ThemeProvider } from "@material-ui/core";
@@ -15,7 +15,9 @@ import api from "Config/http";
 */
 
 function ViewBanca() {
+  const location = useLocation();
   const history = useHistory();
+
   const [banca, setBanca] = useState([]);
   const [inn, setInn] = useState([]);
   const [done, setDone] = useState(false);
@@ -23,8 +25,9 @@ function ViewBanca() {
   const [date, setDate] = useState("");
 
   const goToHome = useCallback(() => {
-    history.push("");
-  }, [history]);
+    if (location.key) history.goBack();
+    else history.push("");
+  }, [history, location]);
 
   const theme = createTheme({
     palette: {

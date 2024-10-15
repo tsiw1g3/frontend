@@ -50,6 +50,7 @@ export default function DataTable(params) {
           localeText={{
             noRowsLabel: "Não há bancas registradas",
           }}
+          loading={params.loading}
           autoHeight={true}
           disableColumnMenu={true}
           disableColumnFilter={true}

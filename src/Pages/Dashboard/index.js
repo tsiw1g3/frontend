@@ -20,6 +20,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import api from "Config/http";
 import { isTeacher } from "Helpers/role";
+import { useBancas } from "Hooks/Banca/useBancas";
+import DataTable from "Components/Molecular/Table";
 import botonLock from './components/lock-alt-regular-24.png'
 import botomunloked from './components/lock-open-alt-regular-24.png'
 /*
@@ -36,6 +38,8 @@ function Dashboard() {
   const [inn, setInn] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingModal, setLoadingModal] = useState(false);
+
+  const { bancas, loading: loadingBancas } = useBancas();
 
   const history = useHistory();
   localStorage.removeItem("bancaId");
@@ -419,8 +423,12 @@ function Dashboard() {
     );
   };
 
+  function goToViewBanca(banca) {
+    let path = `verbanca?id=` + banca;
+    history.push(path);
+  }
+
   const renderDetailsReviewer = (params) => {
-    console.log("render reviewer", params);
     return (
       <button
         title="Dar Nota"
@@ -433,6 +441,57 @@ function Dashboard() {
       />
     );
   };
+
+  const renderDetailsBanca = (params) => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <button
+          title="Ver banca"
+          name="see-board"
+          type="submit"
+          id="see-board"
+          onClick={() => goToViewBanca(params.row.id)}
+        />
+      </div>
+    );
+  };
+
+  const columns3 = [
+    {
+      field: "formatedData",
+      headerName: "Data",
+      minWidth: 160,
+      cellClassName: "lowercase",
+    },
+    {
+      field: "titulo_trabalho",
+      headerName: "Título do Trabalho",
+      minWidth: 650,
+    },
+    { field: "autor", headerName: "Discente", flex: 1, minWidth: 150 },
+    {
+      field: "nome_orientador",
+      headerName: "Orientador",
+      flex: 1,
+      minWidth: 150,
+    },
+    { field: "sigla_curso", headerName: "Curso", minWidth: 50 },
+    { field: "local", headerName: "Local ou link", minWidth: 300 },
+    {
+      field: "actions",
+      headerName: "Ações",
+      width: 100,
+      renderCell: renderDetailsBanca,
+      disableClickEventBubbling: true,
+    },
+  ];
 
   const renderDetailsButton3 = (params) => {
     return (
@@ -557,7 +616,7 @@ function Dashboard() {
     {
       field: "local",
       headerName: "Local ou link",
-      width: 300,
+      flex: 1,
       align: "center",
       renderCell: RenderLocal,
     },
@@ -608,8 +667,9 @@ function Dashboard() {
                 aria-label="simple tabs example"
                 style={{ width: "100%" }}
               >
-                <Tab label="Minhas defesas" {...a11yProps(0)} />
-                <Tab label="Defesas em que participo" {...a11yProps(1)} />
+                <Tab label="Defesas" {...a11yProps(0)} />
+                <Tab label="Minhas defesas" {...a11yProps(1)} />
+                <Tab label="Defesas em que participo" {...a11yProps(2)} />
                 <ThemeProvider theme={themeButton}>
                   <Button
                     type="button"
@@ -624,6 +684,13 @@ function Dashboard() {
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
+              <DataTable
+                rows={bancas}
+                columns={columns3}
+                loading={loadingBancas}
+              />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
               <div
                 style={{
                   height: dataMinhasDefesas.length > 0 ? 400 : 200,
@@ -657,7 +724,7 @@ function Dashboard() {
                 </ThemeProvider>
               </div>
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={value} index={2}>
               <div
                 style={{
                   height: dataDefesasParticipo.length > 0 ? 400 : 200,
