@@ -16,6 +16,7 @@ import { useQuery } from "Hooks/Helpers/useQuery";
 */
 
 function Register() {
+  
   const { registerUser } = useContext(MyContext);
   const query = useQuery();
 
@@ -33,7 +34,7 @@ function Register() {
     errorMsg: "",
     successMsg: "",
   };
-  const [state] = useState(initialState);
+  const [state, setState] = useState(initialState);
 
   const history = useHistory();
 
@@ -64,8 +65,48 @@ function Register() {
 
   const classesGrid = styles();
 
+  //verificação de usuario
+  const ckeckUserExist = async (email) => {
+    //colocar rota do backend
+    const response = await fetch(`/api/checkUser?email=${email}`)
+    const data = await response.json()
+    return data.exists;
+  };
+
   const submitForm = async (event) => {
     event.hash = query.get("inv");
+    try{
+      const userExists = await ckeckUserExist(event.email);
+      if(userExists){
+        setState((prevState) => ({
+          ...prevState,
+          errorMsg : "Usuario existente", 
+          successMsg : '',
+        }))
+
+        alert("Usuário já existe !");
+        return;
+      }
+
+      setState((prevState) => ({
+        ...prevState,
+        erroMsg: "",
+        successMsg:"Usuario cadastrado com sucesso",
+      }))
+
+      alert("Usúario cadastrado com sucesso !");
+      goToHome();
+
+    }catch(error){
+      setState((prevState) => ({
+        ...prevState,
+        errorMsg : "error ao cadastrar usuario,tente novamente",
+        successMsg :"",
+      }));
+
+    }
+
+
     await registerUser(event);
     goToHome();
   };

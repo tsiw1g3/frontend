@@ -22,7 +22,8 @@ import api from "Config/http";
 import { isTeacher } from "Helpers/role";
 import { useBancas } from "Hooks/Banca/useBancas";
 import DataTable from "Components/Molecular/Table";
-
+import botonLock from './components/lock-alt-regular-24.png'
+import botomunloked from './components/lock-open-alt-regular-24.png'
 /*
   Componente responsável pela página de gerenciamento das minhas defesas
 */
@@ -332,10 +333,48 @@ function Dashboard() {
       </>
     );
   };
+  /* const handleVisibilityToggle = async (row) => {
+    try {
+     
+      const updatedVisibility = !row.visible;
+  
+      
+      const response = await api.put(`/banca/${row.id}`, {
+        visible: updatedVisibility,
+      });
+  
+      if (response.status === 200 || response.status === 204) {
+       
+        alert(`A visibilidade foi alterada para ${updatedVisibility ? "Pública" : "Privada"}`);
+
+        row.visible = updatedVisibility;
+      } else {
+        throw new Error("Erro inesperado ao alterar a visibilidade.");
+      }
+    } catch (error) {
+      console.error("Erro ao alterar a visibilidade: ", error);
+      alert("Erro ao alterar a visibilidade.");
+    }
+  }; */
+  
 
   const renderDetailsTeacher = (params) => {
     return (
       <>
+      {/* <button
+        title={`Visibilidade: ${params.row.visible ? "Pública" : "Privada"}`}
+        name="edit-publicprivate"
+        type="button"
+        onClick={() => handleVisibilityToggle(params.row)}
+        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+      >
+        <img
+          src={params.row.visible ? botomunloked : botonLock}
+          alt={params.row.visible ? "Destrancado" : "Trancado"}
+          style={{ width: 18, height: 18 }}
+        />
+      </button> */}
+
         <button
           title="Editar banca"
           name="edit-board"
