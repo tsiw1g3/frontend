@@ -371,8 +371,6 @@ function Dashboard() {
         />
       </button> */}
 
-
-
         <button
           title="Editar banca"
           name="edit-board"
