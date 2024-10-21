@@ -5,7 +5,7 @@ import ReactLoading from "react-loading";
 import { Button, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
-import { DataGrid, ptBR } from "@mui/x-data-grid";
+import { DataGrid, GridEditInputCell, ptBR } from "@mui/x-data-grid";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -22,8 +22,8 @@ import api from "Config/http";
 import { isTeacher } from "Helpers/role";
 import { useBancas } from "Hooks/Banca/useBancas";
 import DataTable from "Components/Molecular/Table";
-import botonLock from './components/lock-alt-regular-24.png'
-import botomunloked from './components/lock-open-alt-regular-24.png'
+import botonLock from "./components/lock-alt-regular-24.png";
+import botomunloked from "./components/lock-open-alt-regular-24.png";
 /*
   Componente responsável pela página de gerenciamento das minhas defesas
 */
@@ -40,6 +40,8 @@ function Dashboard() {
   const [loadingModal, setLoadingModal] = useState(false);
 
   const { bancas, loading: loadingBancas } = useBancas();
+
+  const [notas, setNotas] = useState([]);
 
   const history = useHistory();
   localStorage.removeItem("bancaId");
@@ -95,6 +97,10 @@ function Dashboard() {
     setOpenNotaOwner(false);
   };
 
+  const onSubmitSaveGradeBatch = () => {
+    onSubmitNotas(notas);
+  };
+
   const userId = localStorage.getItem("userId");
 
   const themeButton = createTheme({
@@ -140,8 +146,12 @@ function Dashboard() {
   const getBancaUsuarios = async (bancaId) => {
     setLoading(true);
     api.get(`/usuario-banca/usuarios/${bancaId}`).then(function (response) {
+      const notas = response.data.data;
       setLoading(false);
-      setInn(response.data.data);
+      setNotas(
+        notas.map(({ id, nota }) => ({ avaliador: id, nota: Number(nota) }))
+      );
+      setInn(notas);
       return response;
     });
   };
@@ -250,6 +260,24 @@ function Dashboard() {
       });
   };
 
+  const onSubmitNotas = async (notas) => {
+    setLoadingModal(true);
+    const banca = JSON.parse(localStorage.getItem("banca"));
+
+    api
+      .post(`/usuario-banca/notas/${banca}`, { notas })
+      .then(function () {
+        alert("Notas enviadas com sucesso!");
+        setLoadingModal(false);
+        closeModalNotaOwner();
+      })
+      .catch(function () {
+        alert("Não foi possível salvar as notas atribuídas.");
+        setLoadingModal(false);
+        closeModalNotaOwner();
+      });
+  };
+
   const theme = createTheme(
     {
       palette: {
@@ -293,10 +321,6 @@ function Dashboard() {
   }
 
   const [value, setValue] = React.useState(0);
-
-  const onSubmitNotaOwner = async (values) => {
-    onSubmitNota(values);
-  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -356,12 +380,11 @@ function Dashboard() {
       alert("Erro ao alterar a visibilidade.");
     }
   }; */
-  
 
   const renderDetailsTeacher = (params) => {
     return (
       <>
-      {/* <button
+        {/* <button
         title={`Visibilidade: ${params.row.visible ? "Pública" : "Privada"}`}
         name="edit-publicprivate"
         type="button"
@@ -493,46 +516,6 @@ function Dashboard() {
     },
   ];
 
-  const renderDetailsButton3 = (params) => {
-    return (
-      <div>
-        <Form
-          onSubmit={onSubmitNotaOwner}
-          initialValues={{
-            avaliador: params.id,
-            nota: params.value,
-            modalOwner: true,
-          }}
-          validate={validateNota}
-          render={({ handleSubmit, submitting }) => (
-            <form onSubmit={handleSubmit} noValidate>
-              <Field
-                fullWidth
-                Obrigatório
-                name="nota"
-                component={TextField}
-                InputProps={{ inputProps: { min: 0, max: 10, type: "number" } }}
-                type="number"
-                label="Nota"
-              />
-              <ThemeProvider theme={themeButton}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={submitting}
-                  style={{ marginLeft: "15px", borderRadius: 10 }}
-                >
-                  Enviar
-                </Button>
-              </ThemeProvider>
-            </form>
-          )}
-        />
-      </div>
-    );
-  };
-
   const columns = [
     {
       field: "actions",
@@ -622,6 +605,31 @@ function Dashboard() {
     },
   ];
 
+  const RenderGradesCell = ({ row }) => {
+    const { nota } = row;
+    return (
+      <>
+        {nota ?? "0"}
+        <span
+          style={{ marginLeft: "0.5rem", width: 12, height: 12 }}
+          id="edit-board"
+        />
+      </>
+    );
+  };
+
+  const RenderGradesEditCell = (params) => {
+    return (
+      <GridEditInputCell
+        {...params}
+        inputProps={{
+          max: 10,
+          min: 0,
+        }}
+      />
+    );
+  };
+
   const columnsNota = [
     { field: "nome", headerName: "Avaliador", width: 400, align: "center" },
     { field: "role", headerName: "Função", width: 150, align: "center" },
@@ -630,11 +638,27 @@ function Dashboard() {
       headerName: "Nota",
       minWidth: 300,
       flex: 1,
-      renderCell: renderDetailsButton3,
       disableClickEventBubbling: true,
       align: "center",
+      editable: true,
+      type: "number",
+      renderCell: RenderGradesCell,
+      renderEditCell: RenderGradesEditCell,
+      valueParser: (value) => {
+        return Math.min(10, Math.max(0, value));
+      },
     },
   ];
+
+  const onGradeCellEditCommit = ({ id, value }) => {
+    setNotas((grades) => [
+      ...grades.filter((grade) => grade.avaliador !== id),
+      {
+        avaliador: id,
+        nota: Number(Math.min(10, Math.max(0, value))).toFixed(2),
+      },
+    ]);
+  };
 
   const classesGrid = styles();
 
@@ -1013,6 +1037,7 @@ function Dashboard() {
                             <DataGrid
                               rows={inn}
                               columns={columnsNota}
+                              onCellEditCommit={onGradeCellEditCommit}
                               pageSize={5}
                               rowsPerPageOptions={[5]}
                               rowHeight={62}
@@ -1028,6 +1053,26 @@ function Dashboard() {
                               disableColumnMenu={true}
                               disableColumnFilter={true}
                             />
+                            <Box
+                              marginTop={2}
+                              display="flex"
+                              justifyContent="flex-end"
+                            >
+                              <ThemeProvider theme={themeButton}>
+                                <Button
+                                  variant="contained"
+                                  type="button"
+                                  color="primary"
+                                  onClick={onSubmitSaveGradeBatch}
+                                  style={{
+                                    borderRadius: 10,
+                                    marginLeft: "auto",
+                                  }}
+                                >
+                                  Salvar Notas
+                                </Button>
+                              </ThemeProvider>
+                            </Box>
                           </div>
                         </Grid>
                       </Grid>
