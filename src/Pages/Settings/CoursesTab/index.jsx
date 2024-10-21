@@ -169,6 +169,7 @@ export default function CoursesTab() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          gap: "8px",
         }}
       >
         <button

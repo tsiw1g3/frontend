@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./styles.css";
 import ReactLoading from "react-loading";
@@ -156,8 +156,8 @@ function Dashboard() {
     });
   };
 
-  useEffect(() => {
-    api.get(`/usuario/${userId}/banca`).then(function (response) {
+  const refreshDefesasParticipo = useCallback(() => {
+    api.get(`/usuario/${userId}/banca`).then((response) => {
       var events = response.data.data;
       if (events) {
         events.forEach((e) => {
@@ -171,6 +171,10 @@ function Dashboard() {
       }
       setDataDefesasParticipo(events);
     });
+  }, [userId]);
+
+  useEffect(() => {
+    refreshDefesasParticipo();
 
     api.get(`/banca/${userId}/bancas`).then(function (response) {
       var events = response.data.data;
@@ -187,7 +191,7 @@ function Dashboard() {
       setDataMinhasDefesas(events);
       setDone(true);
     });
-  }, [userId]);
+  }, [userId, refreshDefesasParticipo]);
 
   function getFormData(object) {
     const formData = new FormData();
@@ -357,21 +361,21 @@ function Dashboard() {
       </>
     );
   };
-  /* const handleVisibilityToggle = async (row) => {
+  const handleVisibilityToggle = async (row) => {
     try {
-     
-      const updatedVisibility = !row.visible;
-  
-      
-      const response = await api.put(`/banca/${row.id}`, {
-        visible: updatedVisibility,
-      });
-  
-      if (response.status === 200 || response.status === 204) {
-       
-        alert(`A visibilidade foi alterada para ${updatedVisibility ? "Pública" : "Privada"}`);
+      const isWorkVisible = Boolean(row.visible !== "0");
 
-        row.visible = updatedVisibility;
+      const response = await api.put(`/banca/visibilidade/${row.id}`, {
+        visible: !isWorkVisible,
+      });
+
+      if (response.status === 200 || response.status === 204) {
+        alert(
+          `A visibilidade foi alterada para ${
+            !isWorkVisible ? "Pública" : "Privada"
+          }`
+        );
+        refreshDefesasParticipo();
       } else {
         throw new Error("Erro inesperado ao alterar a visibilidade.");
       }
@@ -379,24 +383,33 @@ function Dashboard() {
       console.error("Erro ao alterar a visibilidade: ", error);
       alert("Erro ao alterar a visibilidade.");
     }
-  }; */
+  };
 
   const renderDetailsTeacher = (params) => {
     return (
-      <>
-        {/* <button
-        title={`Visibilidade: ${params.row.visible ? "Pública" : "Privada"}`}
-        name="edit-publicprivate"
-        type="button"
-        onClick={() => handleVisibilityToggle(params.row)}
-        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-      >
-        <img
-          src={params.row.visible ? botomunloked : botonLock}
-          alt={params.row.visible ? "Destrancado" : "Trancado"}
-          style={{ width: 18, height: 18 }}
-        />
-      </button> */}
+      <div class="grid-actions">
+        <button
+          title={`${
+            params.row.visible !== "0" ? "Bloquear" : "Permitir"
+          } visualização da banca`}
+          name="edit-publicprivate"
+          type="button"
+          onClick={() => handleVisibilityToggle(params.row)}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+          }}
+        >
+          <img
+            src={params.row.visible !== "0" ? botomunloked : botonLock}
+            alt={`${
+              params.row.visible !== "0" ? "Bloquear" : "Permitir"
+            } visualização da banca`}
+            style={{ width: 24, height: 24 }}
+          />
+        </button>
 
         <button
           title="Editar banca"
@@ -442,7 +455,7 @@ function Dashboard() {
             if (answer) excluirBanca(params.row.id);
           }}
         />
-      </>
+      </div>
     );
   };
 
