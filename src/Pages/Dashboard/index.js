@@ -519,7 +519,13 @@ function Dashboard() {
       minWidth: 150,
     },
     { field: "sigla_curso", headerName: "Curso", minWidth: 50 },
-    { field: "local", headerName: "Local ou link", minWidth: 300 },
+    {
+      field: "local",
+      headerName: "Local ou link",
+      minWidth: 300,
+      align: "center",
+      renderCell: RenderLocal,
+    },
     {
       field: "actions",
       headerName: "Ações",
