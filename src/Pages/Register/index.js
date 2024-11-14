@@ -62,54 +62,66 @@ function Register() {
       },
     },
   });
-
   const classesGrid = styles();
 
   //verificação de usuario
-  const ckeckUserExist = async (email) => {
-    //colocar rota do backend
-    const response = await fetch(`/api/checkUser?email=${email}`)
-    const data = await response.json()
-    return data.exists;
+  const checkUserExist = async (email) => {
+    try {
+      // requisição API
+      const response = await fetch(`/api/checkUser?email=${email}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // (status 200)
+      if (!response.ok) {
+        console.error(`Erro na resposta da API: ${response.status}`);
+        return false;
+      }
+      const data = await response.json();
+      console.log("Resposta da API:", data);
+      return data.exists;
+    } catch (error) {
+      console.error("Erro ao verificar usuário:", error);
+      return false;
+    }
   };
+  
+  
 
-  const submitForm = async (event) => {
-    event.hash = query.get("inv");
-    try{
-      const userExists = await ckeckUserExist(event.email);
-      if(userExists){
+  const submitForm = async (values) => {
+    values.hash = query.get("inv");
+    try {
+      const userExists = await checkUserExist(values.email);
+      if (userExists) {
+        alert("Usuário já existe!");
         setState((prevState) => ({
           ...prevState,
-          errorMsg : "Usuario existente", 
-          successMsg : '',
-        }))
-
-        alert("Usuário já existe !");
+          errorMsg: "Usuário já existe",
+          successMsg: "",
+        }));
         return;
       }
-
+      await registerUser(values);
       setState((prevState) => ({
         ...prevState,
-        erroMsg: "",
-        successMsg:"Usuario cadastrado com sucesso",
-      }))
-
-      alert("Usúario cadastrado com sucesso !");
-      goToHome();
-
-    }catch(error){
-      setState((prevState) => ({
-        ...prevState,
-        errorMsg : "error ao cadastrar usuario,tente novamente",
-        successMsg :"",
+        errorMsg: "",
+        successMsg: "Usuário cadastrado com sucesso",
       }));
-
+      alert("Usuário cadastrado com sucesso!");
+      goToHome();
+    } catch (error) {
+      setState((prevState) => ({
+        ...prevState,
+        errorMsg: "Erro ao cadastrar usuário, tente novamente",
+        successMsg: "",
+      }));
+      alert("Usuario já existe! Tente Novamente");
+      console.error("Erro:", error);
     }
-
-
-    await registerUser(event);
-    goToHome();
   };
+  
 
   const validate = (values) => {
     const REQUIRED_FIELDS_VALIDATION = [
