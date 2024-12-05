@@ -16,7 +16,6 @@ import { useQuery } from "Hooks/Helpers/useQuery";
 */
 
 function Register() {
-  
   const { registerUser } = useContext(MyContext);
   const query = useQuery();
 
@@ -68,21 +67,21 @@ function Register() {
   //verificação de usuario
   const ckeckUserExist = async (email) => {
     //colocar rota do backend
-    const response = await fetch(`/api/checkUser?email=${email}`)
-    const data = await response.json()
+    const response = await fetch(`/api/checkUser?email=${email}`);
+    const data = await response.json();
     return data.exists;
   };
 
   const submitForm = async (event) => {
     event.hash = query.get("inv");
-    try{
+    try {
       const userExists = await ckeckUserExist(event.email);
-      if(userExists){
+      if (userExists) {
         setState((prevState) => ({
           ...prevState,
-          errorMsg : "Usuario existente", 
-          successMsg : '',
-        }))
+          errorMsg: "Usuario existente",
+          successMsg: "",
+        }));
 
         alert("Usuário já existe !");
         return;
@@ -91,21 +90,18 @@ function Register() {
       setState((prevState) => ({
         ...prevState,
         erroMsg: "",
-        successMsg:"Usuario cadastrado com sucesso",
-      }))
+        successMsg: "Usuario cadastrado com sucesso",
+      }));
 
       alert("Usúario cadastrado com sucesso !");
       goToHome();
-
-    }catch(error){
+    } catch (error) {
       setState((prevState) => ({
         ...prevState,
-        errorMsg : "error ao cadastrar usuario,tente novamente",
-        successMsg :"",
+        errorMsg: "error ao cadastrar usuario,tente novamente",
+        successMsg: "",
       }));
-
     }
-
 
     await registerUser(event);
     goToHome();
@@ -188,9 +184,6 @@ function Register() {
                     </MenuItem>
                     <MenuItem value="1" alignItems="flex-start">
                       Feminino
-                    </MenuItem>
-                    <MenuItem value="2" alignItems="flex-start">
-                      Outro
                     </MenuItem>
                   </Field>
                 </Grid>

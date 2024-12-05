@@ -343,9 +343,6 @@ function ExaminingBoard() {
                         <MenuItem value="1" alignItems="flex-start">
                           Feminino
                         </MenuItem>
-                        <MenuItem value="2" alignItems="flex-start">
-                          Outro
-                        </MenuItem>
                       </Field>
                     </Grid>
                   </>
