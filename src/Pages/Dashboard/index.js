@@ -395,6 +395,7 @@ function Dashboard() {
           name="edit-publicprivate"
           type="button"
           onClick={() => handleVisibilityToggle(params.row)}
+          hidden={!isTeacher()}
           style={{
             background: "none",
             border: "none",
