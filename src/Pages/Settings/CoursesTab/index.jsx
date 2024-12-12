@@ -20,6 +20,7 @@ import {
 } from "@material-ui/core";
 import useCourses from "Hooks/Users/useCourses";
 import CourseForm from "./CourseForm";
+import { ptBRGrid } from "Assets/Locales/grid.locale";
 
 const useStyles = makeStyles({
   root: {
@@ -296,8 +297,10 @@ export default function CoursesTab() {
                 rows={courses}
                 columns={columns}
                 pageSize={10}
+                rowsPerPageOptions={[5, 10, 20]}
                 className={classes.root}
                 autoHeight
+                localeText={ptBRGrid}
                 disableColumnMenu
                 disableColumnFilter
                 disableSelectionOnClick

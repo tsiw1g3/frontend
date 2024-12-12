@@ -2,6 +2,7 @@ import * as React from "react";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { DataGrid, ptBR } from "@mui/x-data-grid";
 import { makeStyles } from "@material-ui/core/styles";
+import { ptBRGrid } from "Assets/Locales/grid.locale";
 
 /*
   Componente responsável pela renderização da tabela de defesas
@@ -44,12 +45,10 @@ export default function DataTable(params) {
           }}
           rows={params.rows}
           columns={params.columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          pageSize={10}
+          rowsPerPageOptions={[5, 10, 20]}
           className={classes.root}
-          localeText={{
-            noRowsLabel: "Não há bancas registradas",
-          }}
+          localeText={{ ...ptBRGrid, noRowsLabel: "Não há bancas registradas" }}
           loading={params.loading}
           autoHeight={true}
           disableColumnMenu={true}

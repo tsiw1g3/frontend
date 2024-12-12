@@ -8,6 +8,7 @@ import ReactLoading from "react-loading";
 import useUsers from "Hooks/Users/useUsers";
 import { TextField } from "@material-ui/core";
 import useAdminActions from "Hooks/Admin/useAdminActions";
+import { ptBRGrid } from "Assets/Locales/grid.locale";
 
 const useStyles = makeStyles({
   root: {
@@ -119,8 +120,10 @@ export default function PermissionsTab() {
             rows={users}
             columns={columns}
             pageSize={10}
+            rowsPerPageOptions={[5, 10, 20]}
             className={classes.root}
             autoHeight={true}
+            localeText={ptBRGrid}
             disableColumnMenu={true}
             disableColumnFilter={true}
             onCellEditCommit={({ id, value: role }) => handleEditRole(id, role)}

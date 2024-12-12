@@ -21,7 +21,7 @@ export default function useAdminActions() {
         alert(
           `O link de convite: ${baseUrl}/register?inv=` +
             response.data.data +
-            " foi copiado"
+            " foi copiado para a área de transferência!"
         );
       })
       .finally(() => setLoading(false));

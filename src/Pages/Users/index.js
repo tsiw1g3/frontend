@@ -82,7 +82,9 @@ function Users() {
 
       const inviteLink = `${baseUrl}/register?inv=${response.data.data}`;
       navigator.clipboard.writeText(inviteLink);
-      alert(`O link de convite: ${inviteLink} foi copiado.`);
+      alert(
+        `O link de convite: ${inviteLink} foi copiado para a área de transferência.`
+      );
     });
   };
 

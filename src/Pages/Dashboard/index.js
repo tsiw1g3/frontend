@@ -24,6 +24,7 @@ import { useBancas } from "Hooks/Banca/useBancas";
 import DataTable from "Components/Molecular/Table";
 import botonLock from "./components/lock-alt-regular-24.png";
 import botomunloked from "./components/lock-open-alt-regular-24.png";
+import { ptBRGrid } from "Assets/Locales/grid.locale";
 /*
   Componente responsável pela página de gerenciamento das minhas defesas
 */
@@ -615,11 +616,11 @@ function Dashboard() {
       width: 200,
       align: "center",
     },
-    { field: "sigla_curso", headerName: "Curso", width: 200, align: "center" },
+    { field: "sigla_curso", headerName: "Curso", width: 100, align: "center" },
     {
       field: "local",
       headerName: "Local ou link",
-      flex: 1,
+      width: 200,
       align: "center",
       renderCell: RenderLocal,
     },
@@ -745,10 +746,11 @@ function Dashboard() {
                   <DataGrid
                     rows={dataMinhasDefesas}
                     columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
+                    pageSize={10}
+                    rowsPerPageOptions={[5, 10, 20]}
                     className={classesGrid.root}
                     localeText={{
+                      ...ptBRGrid,
                       noRowsLabel: "Não há bancas registradas",
                     }}
                     initialState={{
@@ -779,10 +781,11 @@ function Dashboard() {
                   <DataGrid
                     rows={dataDefesasParticipo}
                     columns={columns2}
-                    pageSize={5}
+                    pageSize={10}
                     rowsPerPageOptions={[5]}
                     className={classesGrid.root}
                     localeText={{
+                      ...ptBRGrid,
                       noRowsLabel: "Não há bancas registradas",
                     }}
                     classes={{
@@ -1058,11 +1061,12 @@ function Dashboard() {
                               rows={inn}
                               columns={columnsNota}
                               onCellEditCommit={onGradeCellEditCommit}
-                              pageSize={5}
-                              rowsPerPageOptions={[5]}
+                              pageSize={10}
+                              rowsPerPageOptions={[5, 10, 20]}
                               rowHeight={62}
                               className={classesGrid.root}
                               localeText={{
+                                ...ptBRGrid,
                                 noRowsLabel:
                                   "Não há membros registrados na banca",
                               }}

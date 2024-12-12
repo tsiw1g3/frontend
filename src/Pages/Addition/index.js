@@ -17,6 +17,8 @@ import "./styles.css";
 import { MailOutline } from "@material-ui/icons";
 import usePreRegister from "Hooks/Addition/usePreRegister";
 import UserForm from "Components/User/UserForm";
+import { isTeacher } from "Helpers/role";
+import { ptBRGrid } from "Assets/Locales/grid.locale";
 /*
   Componente responsável pela página de adição de usuários à bancas
 */
@@ -283,36 +285,38 @@ function Addition() {
                   placeholder="Usuário"
                 />
               </div>
-              <div className="user-name">
-                ou
-                <ThemeProvider theme={theme}>
-                  <Button
-                    onClick={openModal}
-                    className="user-role"
-                    type="button"
-                    variant="contained"
-                    color="primary"
-                    style={{ marginLeft: 16, borderRadius: 10 }}
-                  >
-                    <MailOutline style={{ marginRight: "0.5rem" }} />
-                    Pré cadastrar componente
-                  </Button>
-                </ThemeProvider>
-                <Modal open={open} onClose={closeModal}>
-                  <Box sx={style}>
-                    <UserForm
-                      onSubmit={onSubmit}
-                      onCancel={closeModal}
-                      labels={{
-                        submit: "Concluir pré-cadastro",
-                        title: "Pré-cadastrar componente",
-                      }}
-                      loading={loading}
-                      withUsernameField={false}
-                    />
-                  </Box>
-                </Modal>
-              </div>
+              {isTeacher() && (
+                <div className="user-name">
+                  ou
+                  <ThemeProvider theme={theme}>
+                    <Button
+                      onClick={openModal}
+                      className="user-role"
+                      type="button"
+                      variant="contained"
+                      color="primary"
+                      style={{ marginLeft: 16, borderRadius: 10 }}
+                    >
+                      <MailOutline style={{ marginRight: "0.5rem" }} />
+                      Pré-cadastrar componente
+                    </Button>
+                  </ThemeProvider>
+                  <Modal open={open} onClose={closeModal}>
+                    <Box sx={style}>
+                      <UserForm
+                        onSubmit={onSubmit}
+                        onCancel={closeModal}
+                        labels={{
+                          submit: "Concluir pré-cadastro",
+                          title: "Pré-cadastrar componente",
+                        }}
+                        loading={loading}
+                        withUsernameField={false}
+                      />
+                    </Box>
+                  </Modal>
+                </div>
+              )}
               <div className="user-right" style={{ display: "flex" }}>
                 <SelectSearch
                   id="role-select"
@@ -357,9 +361,10 @@ function Addition() {
                 <DataGrid
                   rows={inn}
                   columns={columnsNota}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
+                  pageSize={10}
+                  rowsPerPageOptions={[5, 10, 20]}
                   rowHeight={62}
+                  localeText={ptBRGrid}
                   className={classes.root}
                   autoHeight={true}
                   disableColumnMenu={true}
