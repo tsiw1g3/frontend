@@ -26,6 +26,7 @@ import { createTheme } from "@material-ui/core/styles";
 import api from "Config/http";
 import useTeachers from "Hooks/Users/useTeachers";
 import { isTeacher } from "Helpers/role";
+import { toast } from "react-toastify";
 
 /*
   Componente responsável pela página de criação de bancas
@@ -142,7 +143,7 @@ function ExaminingBoard() {
       })
       .catch((error) => {
         setLoading(false);
-        alert("Ocorreu um erro ao tentar cadastrar a banca");
+        toast.error("Ocorreu um erro ao tentar cadastrar a banca");
         goToDashboard();
       });
   };

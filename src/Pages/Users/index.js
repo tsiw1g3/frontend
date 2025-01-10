@@ -6,6 +6,7 @@ import { Button, ThemeProvider } from "@material-ui/core";
 import SelectSearch, { fuzzySearch } from "react-select-search";
 import { createTheme } from "@material-ui/core/styles";
 import api from "Config/http";
+import { toast } from "react-toastify";
 
 /*
   Componente responsável pela página de adição de usuários à bancas
@@ -82,7 +83,7 @@ function Users() {
 
       const inviteLink = `${baseUrl}/register?inv=${response.data.data}`;
       navigator.clipboard.writeText(inviteLink);
-      alert(
+      toast.error(
         `O link de convite: ${inviteLink} foi copiado para a área de transferência.`
       );
     });

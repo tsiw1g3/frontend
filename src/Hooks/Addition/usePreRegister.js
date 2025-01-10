@@ -1,5 +1,6 @@
 import api from "Config/http";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function usePreRegister() {
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,7 @@ export default function usePreRegister() {
         status: "user",
       })
       .then(() => {
-        alert(
+        toast.error(
           `O cadastro do usuário '${user.nome}' foi concluído com sucesso!`
         );
         window.location.reload();
@@ -39,12 +40,12 @@ export default function usePreRegister() {
             };
 
             const firstKey = keys[0];
-            alert(
+            toast.error(
               `O ${KEY_MAP[firstKey]} '${user[firstKey]}' já está em uso. Escolha outro e tente novamente.`
             );
           }
         } else {
-          alert(
+          toast.error(
             error.response?.data?.message ||
               "Ocorreu um erro ao tentar cadastrar o usuário."
           );
