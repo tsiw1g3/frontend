@@ -9,6 +9,7 @@ import { TextField } from "final-form-material-ui";
 import { Grid, Button, CssBaseline } from "@material-ui/core";
 import api from "Config/http";
 import "./styles.css";
+import { toast } from "react-toastify";
 
 /*
   Componente responsável pela página de registro de usuários
@@ -54,13 +55,13 @@ function Register() {
         },
       })
       .then(function (response) {
-        alert("O Email de redefinição de senha foi enviado");
+        toast.error("O Email de redefinição de senha foi enviado");
         goToHome();
         // reload();
       })
       .catch(function (error) {
         // setLoading(false);
-        alert("Ocorreu um erro ao tentar enviar o email");
+        toast.error("Ocorreu um erro ao tentar enviar o email");
         goToHome();
       });
   };
@@ -77,13 +78,13 @@ function Register() {
         },
       })
       .then(function (response) {
-        alert("Senha redefinida com sucesso!");
+        toast.error("Senha redefinida com sucesso!");
         goToHome();
         // reload();
       })
       .catch(function (error) {
         // setLoading(false);
-        alert("Ocorreu um erro ao tentar redefinir a senha");
+        toast.error("Ocorreu um erro ao tentar redefinir a senha");
         goToHome();
       });
   };
@@ -111,7 +112,7 @@ function Register() {
               setHash(hash);
               setDone(true);
             } else {
-              alert("O link que você tentou acessar é inválido.");
+              toast.error("O link que você tentou acessar é inválido.");
               goToHome();
             }
           });

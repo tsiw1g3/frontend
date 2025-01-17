@@ -1,5 +1,6 @@
 import api from "Config/http";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function useAdminActions() {
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ export default function useAdminActions() {
         navigator.clipboard.writeText(
           `${baseUrl}/#/register?inv=` + response.data.data
         );
-        alert(
+        toast.error(
           `O link de convite: ${baseUrl}/register?inv=` +
             response.data.data +
             " foi copiado para a área de transferência!"

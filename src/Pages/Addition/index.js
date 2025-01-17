@@ -19,6 +19,7 @@ import usePreRegister from "Hooks/Addition/usePreRegister";
 import UserForm from "Components/User/UserForm";
 import { isTeacher } from "Helpers/role";
 import { ptBRGrid } from "Assets/Locales/grid.locale";
+import { toast } from "react-toastify";
 /*
   Componente responsável pela página de adição de usuários à bancas
 */
@@ -116,7 +117,7 @@ function Addition() {
         reload();
       })
       .catch(function (error) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       });
   };
 
@@ -131,7 +132,7 @@ function Addition() {
         reload();
       })
       .catch(function (error) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       });
   };
 
@@ -197,7 +198,7 @@ function Addition() {
   const goToDashboard = () => {
     let path = `dashboard`;
     history.push(path);
-    alert("Membros da banca atualizados com sucesso!");
+    toast.error("Membros da banca atualizados com sucesso!");
   };
 
   const userChange = (value, obj) => {

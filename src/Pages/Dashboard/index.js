@@ -25,6 +25,7 @@ import DataTable from "Components/Molecular/Table";
 import botonLock from "./components/lock-alt-regular-24.png";
 import botomunloked from "./components/lock-open-alt-regular-24.png";
 import { ptBRGrid } from "Assets/Locales/grid.locale";
+import { toast } from "react-toastify";
 /*
   Componente responsável pela página de gerenciamento das minhas defesas
 */
@@ -233,12 +234,12 @@ function Dashboard() {
       })
       .then(function (response) {
         setLoading(false);
-        alert(response.data.data);
+        toast.error(response.data.data);
         closeModal();
       })
       .catch(function (error) {
         setLoading(false);
-        alert("Ocorreu um erro ao tentar enviar o email");
+        toast.error("Ocorreu um erro ao tentar enviar o email");
         closeModal();
       });
   };
@@ -252,14 +253,14 @@ function Dashboard() {
       .post(`/usuario-banca/nota/${banca}/${id}`, getFormData(values))
       .then(function (response) {
         setLoadingModal(false);
-        alert("Nota enviada com sucesso");
+        toast.error("Nota enviada com sucesso");
         closeModalNotaOwner();
         if (!values.modalOwner) closeModalNota();
         else closeModalNotaOwner();
       })
       .catch(function (error) {
         setLoadingModal(false);
-        alert("Ocorreu um erro ao tentar dar a nota");
+        toast.error("Ocorreu um erro ao tentar dar a nota");
         if (!values.modalOwner) closeModalNota();
         else closeModalNotaOwner();
       });
@@ -272,12 +273,12 @@ function Dashboard() {
     api
       .post(`/usuario-banca/notas/${banca}`, { notas })
       .then(function () {
-        alert("Notas enviadas com sucesso!");
+        toast.error("Notas enviadas com sucesso!");
         setLoadingModal(false);
         closeModalNotaOwner();
       })
       .catch(function () {
-        alert("Não foi possível salvar as notas atribuídas.");
+        toast.error("Não foi possível salvar as notas atribuídas.");
         setLoadingModal(false);
         closeModalNotaOwner();
       });
@@ -335,11 +336,11 @@ function Dashboard() {
     api
       .delete(`/banca/${bancaId}/delete`)
       .then(function (response) {
-        alert("Banca removida com sucesso");
+        toast.error("Banca removida com sucesso");
         window.location.reload();
       })
       .catch(function (error) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       });
   };
 
@@ -371,7 +372,7 @@ function Dashboard() {
       });
 
       if (response.status === 200 || response.status === 204) {
-        alert(
+        toast.error(
           `A visibilidade foi alterada para ${
             !isWorkVisible ? "Pública" : "Privada"
           }`
@@ -382,7 +383,7 @@ function Dashboard() {
       }
     } catch (error) {
       console.error("Erro ao alterar a visibilidade: ", error);
-      alert("Erro ao alterar a visibilidade.");
+      toast.error("Erro ao alterar a visibilidade.");
     }
   };
 

@@ -9,6 +9,7 @@ import { Form, Field } from "react-final-form";
 import { TextField, Select } from "final-form-material-ui";
 import { Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
 import { useQuery } from "Hooks/Helpers/useQuery";
+import { toast } from "react-toastify";
 // Picker
 
 /*
@@ -83,7 +84,7 @@ function Register() {
           successMsg: "",
         }));
 
-        alert("Usuário já existe !");
+        toast.error("Usuário já existe !");
         return;
       }
 
@@ -93,7 +94,7 @@ function Register() {
         successMsg: "Usuario cadastrado com sucesso",
       }));
 
-      alert("Usúario cadastrado com sucesso !");
+      toast.error("Usúario cadastrado com sucesso !");
       goToHome();
     } catch (error) {
       setState((prevState) => ({

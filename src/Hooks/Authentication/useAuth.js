@@ -2,6 +2,10 @@ import { MyContext } from "Context";
 import { useCallback, useContext, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
+
+
 export function useAuth() {
   const { loginUser, isLoggedIn } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
@@ -29,7 +33,7 @@ export function useAuth() {
               history.push("dashboard");
               window.location.reload();
             }
-          } else alert("Usuário ou senha incorretos");
+          } else toast.error("Usuário ou senha incorretos");
         })
         .finally(() => setLoading(false));
     },
