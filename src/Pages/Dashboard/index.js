@@ -234,7 +234,7 @@ function Dashboard() {
       })
       .then(function (response) {
         setLoading(false);
-        toast.error(response.data.data);
+        toast.success(response.data.data);
         closeModal();
       })
       .catch(function (error) {
@@ -253,7 +253,7 @@ function Dashboard() {
       .post(`/usuario-banca/nota/${banca}/${id}`, getFormData(values))
       .then(function (response) {
         setLoadingModal(false);
-        toast.error("Nota enviada com sucesso");
+        toast.success("Nota enviada com sucesso");
         closeModalNotaOwner();
         if (!values.modalOwner) closeModalNota();
         else closeModalNotaOwner();
@@ -273,7 +273,7 @@ function Dashboard() {
     api
       .post(`/usuario-banca/notas/${banca}`, { notas })
       .then(function () {
-        toast.error("Notas enviadas com sucesso!");
+        toast.success("Notas enviadas com sucesso!");
         setLoadingModal(false);
         closeModalNotaOwner();
       })
@@ -336,7 +336,7 @@ function Dashboard() {
     api
       .delete(`/banca/${bancaId}/delete`)
       .then(function (response) {
-        toast.error("Banca removida com sucesso");
+        toast.success("Banca removida com sucesso");
         window.location.reload();
       })
       .catch(function (error) {
@@ -372,7 +372,7 @@ function Dashboard() {
       });
 
       if (response.status === 200 || response.status === 204) {
-        toast.error(
+        toast.success(
           `A visibilidade foi alterada para ${
             !isWorkVisible ? "Pública" : "Privada"
           }`
