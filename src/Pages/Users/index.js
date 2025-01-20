@@ -83,7 +83,7 @@ function Users() {
 
       const inviteLink = `${baseUrl}/register?inv=${response.data.data}`;
       navigator.clipboard.writeText(inviteLink);
-      toast.error(
+      toast.success(
         `O link de convite: ${inviteLink} foi copiado para a área de transferência.`
       );
     });

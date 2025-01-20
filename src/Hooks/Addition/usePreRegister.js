@@ -24,7 +24,7 @@ export default function usePreRegister() {
         status: "user",
       })
       .then(() => {
-        toast.error(
+        toast.success(
           `O cadastro do usuário '${user.nome}' foi concluído com sucesso!`
         );
         window.location.reload();

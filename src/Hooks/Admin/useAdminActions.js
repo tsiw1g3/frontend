@@ -19,7 +19,7 @@ export default function useAdminActions() {
         navigator.clipboard.writeText(
           `${baseUrl}/#/register?inv=` + response.data.data
         );
-        toast.error(
+        toast.success(
           `O link de convite: ${baseUrl}/register?inv=` +
             response.data.data +
             " foi copiado para a área de transferência!"

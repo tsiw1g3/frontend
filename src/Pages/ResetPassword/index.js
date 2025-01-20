@@ -55,7 +55,7 @@ function Register() {
         },
       })
       .then(function (response) {
-        toast.error("O Email de redefinição de senha foi enviado");
+        toast.success("O Email de redefinição de senha foi enviado");
         goToHome();
         // reload();
       })
@@ -78,7 +78,7 @@ function Register() {
         },
       })
       .then(function (response) {
-        toast.error("Senha redefinida com sucesso!");
+        toast.success("Senha redefinida com sucesso!");
         goToHome();
         // reload();
       })

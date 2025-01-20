@@ -84,7 +84,9 @@ function Register() {
           successMsg: "",
         }));
 
-        toast.error("Usuário já existe !");
+        toast.error(
+          "Já existe um usuário cadastrado com este e-mail no sistema!"
+        );
         return;
       }
 
@@ -94,7 +96,7 @@ function Register() {
         successMsg: "Usuario cadastrado com sucesso",
       }));
 
-      toast.error("Usúario cadastrado com sucesso !");
+      toast.success("Usúario cadastrado com sucesso !");
       goToHome();
     } catch (error) {
       setState((prevState) => ({

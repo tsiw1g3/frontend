@@ -198,7 +198,7 @@ function Addition() {
   const goToDashboard = () => {
     let path = `dashboard`;
     history.push(path);
-    toast.error("Membros da banca atualizados com sucesso!");
+    toast.success("Membros da banca atualizados com sucesso!");
   };
 
   const userChange = (value, obj) => {
