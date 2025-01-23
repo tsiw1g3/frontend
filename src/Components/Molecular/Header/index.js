@@ -64,8 +64,10 @@ const Header = () => {
   };
 
   const onClickEvaluate = () => {
-    window.location.href =
-      "https://docs.google.com/forms/d/1_kGlkMi9KywxwHiVuBCyJt-vfgcb93MwXQUuNAEUL6U";
+    window.open(
+      "https://docs.google.com/forms/d/1_kGlkMi9KywxwHiVuBCyJt-vfgcb93MwXQUuNAEUL6U",
+      "_blank"
+    );
   };
 
   return (
