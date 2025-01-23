@@ -4,7 +4,7 @@ import React from "react";
 export default function Evaluation() {
   return (
     <Container maxWidth="md">
-      <h1>Sistema de Defesas de TCC</h1>
+      <h1>Avaliação do Sistema de Defesas de TCC</h1>
       <p style={{ fontSize: 16, padding: "16px 0", textAlign: "justify" }}>
         Olá, me chamo <strong>João Pedro Brito Silva</strong>, aluno do curso de
         Bacharelado em Ciência da Computação e este projeto faz parte da
