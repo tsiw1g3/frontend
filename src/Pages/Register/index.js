@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useContext, useState, useCallback, useMemo } from "react";
 import { MyContext } from "../../Context";
 import { useHistory } from "react-router-dom";
 import "./styles.css";
@@ -9,161 +9,115 @@ import { Form, Field } from "react-final-form";
 import { TextField, Select } from "final-form-material-ui";
 import { Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
 import { useQuery } from "Hooks/Helpers/useQuery";
-// Picker
+import * as Yup from "yup"; 
 
-/*
-  Componente responsável pela página de registro de usuários
-*/
+const yupSync = (schema) => async (values) => {
+  try {
+    await schema.validate(values, { abortEarly: false }); 
+    return {};
+  } catch (error) {
+    return error.inner.reduce((errors, err) => {
+      errors[err.path] = err.message; 
+      return errors;
+    }, {});
+  }
+};
+
+// validação Yup 
+const validationSchema = Yup.object().shape({
+  nome: Yup.string().max(255, "Máximo de 255 caracteres").required("Obrigatório"),
+  email: Yup.string()
+    .email("Email inválido") 
+    .max(64, "Máximo de 64 caracteres")
+    .required("Obrigatório"),
+  username: Yup.string().max(255, "Máximo de 255 caracteres").required("Obrigatório"),
+  password: Yup.string()
+    .min(6, "Mínimo de 6 caracteres") 
+    .max(16, "Máximo de 16 caracteres")
+    .required("Obrigatório"),
+  universidade: Yup.string().max(64, "Máximo de 64 caracteres").required("Obrigatório"),
+  pronoun: Yup.string().required("Obrigatório"),
+  registration_id: Yup.string()
+    .max(9, "Máximo de 9 caracteres")
+    .when("$requiresRegistrationId", {
+      is: true,
+      then: (schema) => schema.required("Obrigatório"),
+    }),
+});
 
 function Register() {
-  
   const { registerUser } = useContext(MyContext);
   const query = useQuery();
+  const history = useHistory();
 
-  const initialState = {
-    userInfo: {
-      nome: "",
-      email: "",
-      username: "",
-      password: "",
-      academic_title: "",
-      universidade: "",
-      pronoun: "",
-      registration_id: "",
-    },
+  const validate = useMemo(() => yupSync(validationSchema), []);
+
+  const [state, setState] = useState({
     errorMsg: "",
     successMsg: "",
-  };
-  const [state, setState] = useState(initialState);
-
-  const history = useHistory();
+  });
 
   const goToHome = useCallback(() => {
     history.push("");
   }, [history]);
 
-  const themeButton = createTheme({
-    palette: {
-      primary: {
-        main: "#329F5B",
-      },
-    },
-  });
-
-  const styles = makeStyles({
-    root: {
-      boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
-      padding: "16px",
-      "& .MuiFormControl-root": {
-        display: "flex",
-      },
-      "& .MuiSelect-select.MuiSelect-select": {
-        textAlign: "left",
-      },
-    },
-  });
-  const classesGrid = styles();
-
-  //verificação de usuario
   const checkUserExist = async (email) => {
     try {
-      // requisição API
       const response = await fetch(`/api/checkUser?email=${email}`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
-      // (status 200)
       if (!response.ok) {
         console.error(`Erro na resposta da API: ${response.status}`);
         return false;
       }
       const data = await response.json();
-      console.log("Resposta da API:", data);
       return data.exists;
     } catch (error) {
       console.error("Erro ao verificar usuário:", error);
       return false;
     }
   };
-  
-  
 
+  // Função para submeter o formulário
   const submitForm = async (values) => {
     values.hash = query.get("inv");
     try {
       const userExists = await checkUserExist(values.email);
       if (userExists) {
+        setState({ errorMsg: "Usuário já existe", successMsg: "" });
         alert("Usuário já existe!");
-        setState((prevState) => ({
-          ...prevState,
-          errorMsg: "Usuário já existe",
-          successMsg: "",
-        }));
         return;
       }
       await registerUser(values);
-      setState((prevState) => ({
-        ...prevState,
-        errorMsg: "",
-        successMsg: "Usuário cadastrado com sucesso",
-      }));
+      setState({ errorMsg: "", successMsg: "Usuário cadastrado com sucesso" });
       alert("Usuário cadastrado com sucesso!");
       goToHome();
     } catch (error) {
-      setState((prevState) => ({
-        ...prevState,
-        errorMsg: "Erro ao cadastrar usuário, tente novamente",
-        successMsg: "",
-      }));
-      alert("Usuario já existe! Tente Novamente");
+      setState({ errorMsg: "Erro ao cadastrar usuário", successMsg: "" });
+      alert("Erro ao cadastrar! Tente novamente.");
       console.error("Erro:", error);
     }
   };
-  
 
-  const validate = (values) => {
-    const REQUIRED_FIELDS_VALIDATION = [
-      "nome",
-      "pronoun",
-      "email",
-      "username",
-      "password",
-      "universidade",
-    ];
+  // Estilos do botão
+  const themeButton = createTheme({
+    palette: { primary: { main: "#329F5B" } },
+  });
 
-    const FIELD_LENGHT_VALIDATION = {
-      nome: 255,
-      email: 64,
-      username: 255,
-      password: 16,
-      universidade: 64,
-      registration_id: 9,
-    };
-
-    const errors = {};
-
-    REQUIRED_FIELDS_VALIDATION.forEach((field) => {
-      if (!values[field]) errors[field] = "Obrigatório";
-    });
-
-    Object.keys(FIELD_LENGHT_VALIDATION).forEach((key) => {
-      if (values[key] && values[key].length > FIELD_LENGHT_VALIDATION[key])
-        errors[
-          key
-        ] = `O tamanho máximo deste campo é de ${FIELD_LENGHT_VALIDATION[key]} caracteres.`;
-    });
-
-    if (!query.get("inv") && !values.registration_id) {
-      errors.registration_id = "Obrigatório";
-    }
-    return errors;
-  };
+  const styles = makeStyles({
+    root: {
+      boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
+      padding: "16px",
+      "& .MuiFormControl-root": { display: "flex" },
+      "& .MuiSelect-select.MuiSelect-select": { textAlign: "left" },
+    },
+  });
+  const classesGrid = styles();
 
   return (
     <Container className="App">
-      <div style={{ padding: 16, margin: "auto", maxWidth: 2000 }}>
+      <div style={{ padding: 16, margin: "auto", maxWidth: 800 }}>
         <CssBaseline />
         <Form
           onSubmit={submitForm}
@@ -171,122 +125,47 @@ function Register() {
           validate={validate}
           render={({ handleSubmit, submitting }) => (
             <form onSubmit={handleSubmit} noValidate>
-              <Grid
-                container
-                alignItems="flex-start"
-                spacing={2}
-                className={classesGrid.root}
-              >
+              <Grid container alignItems="flex-start" spacing={2} className={classesGrid.root}>
                 <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    name="nome"
-                    value={state.userInfo.nome}
-                    component={TextField}
-                    type="text"
-                    label="Nome completo"
-                  />
+                  <Field fullWidth name="nome" component={TextField} type="text" label="Nome completo" />
                 </Grid>
                 <Grid item xs={12}>
-                  <Field
-                    name="pronoun"
-                    value={state.userInfo.pronoun}
-                    component={Select}
-                    label="Gênero"
-                  >
-                    <MenuItem value="0" alignItems="flex-start">
-                      Masculino
-                    </MenuItem>
-                    <MenuItem value="1" alignItems="flex-start">
-                      Feminino
-                    </MenuItem>
-                    <MenuItem value="2" alignItems="flex-start">
-                      Outro
-                    </MenuItem>
+                  <Field name="pronoun" component={Select} label="Gênero">
+                    <MenuItem value="0">Masculino</MenuItem>
+                    <MenuItem value="1">Feminino</MenuItem>
+                    <MenuItem value="2">Outro</MenuItem>
                   </Field>
                 </Grid>
                 <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    multiline
-                    name="email"
-                    value={state.userInfo.email}
-                    component={TextField}
-                    type="text"
-                    label="Email"
-                  />
+                  <Field fullWidth name="email" component={TextField} type="text" label="Email" />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field fullWidth name="universidade" component={TextField} type="text" label="Universidade" />
                 </Grid>
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    Obrigatório
-                    multiline
-                    name="universidade"
-                    value={state.userInfo.universidade}
-                    component={TextField}
-                    type="text"
-                    label="Universidade"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    multiline
                     name="academic_title"
-                    value={state.userInfo.academic_title}
                     component={TextField}
                     type="text"
                     label="Título acadêmico"
-                    placeholder="Exemplo: Doutor, Mestre, Bacharel.."
+                    placeholder="Exemplo: Doutor, Mestre, Bacharel..."
                   />
                 </Grid>
                 {!query.get("inv") && (
                   <Grid item xs={12}>
-                    <Field
-                      fullWidth
-                      multiline
-                      name="registration_id"
-                      value={state.userInfo.registration_id}
-                      component={TextField}
-                      type="text"
-                      label="Matrícula"
-                    />
+                    <Field fullWidth name="registration_id" component={TextField} type="text" label="Matrícula" />
                   </Grid>
                 )}
                 <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    multiline
-                    name="username"
-                    value={state.userInfo.username}
-                    component={TextField}
-                    type="text"
-                    label="Username"
-                  />
+                  <Field fullWidth name="username" component={TextField} type="text" label="Username" />
                 </Grid>
                 <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    name="password"
-                    value={state.userInfo.password}
-                    component={TextField}
-                    type="password"
-                    label="Senha"
-                  />
+                  <Field fullWidth name="password" component={TextField} type="password" label="Senha" />
                 </Grid>
                 <Grid item style={{ marginTop: 16 }}>
                   <ThemeProvider theme={themeButton}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      type="submit"
-                      disabled={submitting}
-                    >
+                    <Button variant="contained" color="primary" type="submit" disabled={submitting}>
                       Registrar
                     </Button>
                   </ThemeProvider>
