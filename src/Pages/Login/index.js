@@ -64,7 +64,7 @@ function Login() {
                   <Field name="username" validate={validadeRequiredFields}>
                     {({ input, meta }) => (
                       <TextField
-                        label="Nome de usuário"
+                        label="Nome de usuário ou E-mail"
                         variant="outlined"
                         margin="normal"
                         name={input.name}
