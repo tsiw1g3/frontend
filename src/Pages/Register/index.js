@@ -10,6 +10,10 @@ import { TextField, Select } from "final-form-material-ui";
 import { Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
 import { useQuery } from "Hooks/Helpers/useQuery";
 import { toast } from "react-toastify";
+import { isEmailValid } from "Helpers/validators";
+
+import ReactLoading from "react-loading";
+
 // Picker
 
 /*
@@ -18,6 +22,7 @@ import { toast } from "react-toastify";
 
 function Register() {
   const { registerUser } = useContext(MyContext);
+  const [loading, setLoading] = useState(false);
   const query = useQuery();
 
   const initialState = {
@@ -75,6 +80,8 @@ function Register() {
 
   const submitForm = async (event) => {
     event.hash = query.get("inv");
+    setLoading(true);
+
     try {
       const userExists = await ckeckUserExist(event.email);
       if (userExists) {
@@ -87,6 +94,7 @@ function Register() {
         toast.error(
           "Já existe um usuário cadastrado com este e-mail no sistema!"
         );
+        setLoading(false);
         return;
       }
 
@@ -96,9 +104,14 @@ function Register() {
         successMsg: "Usuario cadastrado com sucesso",
       }));
 
+      setLoading(false);
       toast.success("Usúario cadastrado com sucesso !");
       goToHome();
     } catch (error) {
+      setLoading(false);
+      toast.error(
+        "Não foi possível finalizar o cadastro com os dados informados. Tente novamente mais tarde."
+      );
       setState((prevState) => ({
         ...prevState,
         errorMsg: "error ao cadastrar usuario,tente novamente",
@@ -145,141 +158,151 @@ function Register() {
     if (!query.get("inv") && !values.registration_id) {
       errors.registration_id = "Obrigatório";
     }
+
+    if (values.email && !isEmailValid(values.email))
+      errors.email = "Insira um e-mail válido";
+
     return errors;
   };
 
   return (
     <Container className="App">
-      <div style={{ padding: 16, margin: "auto", maxWidth: 2000 }}>
-        <CssBaseline />
-        <Form
-          onSubmit={submitForm}
-          initialValues={{}}
-          validate={validate}
-          render={({ handleSubmit, submitting }) => (
-            <form onSubmit={handleSubmit} noValidate>
-              <Grid
-                container
-                alignItems="flex-start"
-                spacing={2}
-                className={classesGrid.root}
-              >
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    name="nome"
-                    value={state.userInfo.nome}
-                    component={TextField}
-                    type="text"
-                    label="Nome completo"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    name="pronoun"
-                    value={state.userInfo.pronoun}
-                    component={Select}
-                    label="Gênero"
-                  >
-                    <MenuItem value="0" alignItems="flex-start">
-                      Masculino
-                    </MenuItem>
-                    <MenuItem value="1" alignItems="flex-start">
-                      Feminino
-                    </MenuItem>
-                  </Field>
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    multiline
-                    name="email"
-                    value={state.userInfo.email}
-                    component={TextField}
-                    type="text"
-                    label="Email"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    multiline
-                    name="universidade"
-                    value={state.userInfo.universidade}
-                    component={TextField}
-                    type="text"
-                    label="Universidade"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    multiline
-                    name="academic_title"
-                    value={state.userInfo.academic_title}
-                    component={TextField}
-                    type="text"
-                    label="Título acadêmico"
-                    placeholder="Exemplo: Doutor, Mestre, Bacharel.."
-                  />
-                </Grid>
-                {!query.get("inv") && (
+      {loading ? (
+        <div className="center">
+          <ReactLoading
+            type={"spin"}
+            color={"#41616c"}
+            height={100}
+            width={100}
+          />
+        </div>
+      ) : (
+        <div style={{ padding: 16, margin: "auto", maxWidth: 2000 }}>
+          <CssBaseline />
+          <Form
+            onSubmit={submitForm}
+            initialValues={{}}
+            validate={validate}
+            render={({ handleSubmit }) => (
+              <form onSubmit={handleSubmit} noValidate>
+                <Grid
+                  container
+                  alignItems="flex-start"
+                  spacing={2}
+                  className={classesGrid.root}
+                >
                   <Grid item xs={12}>
                     <Field
                       fullWidth
-                      multiline
-                      name="registration_id"
-                      value={state.userInfo.registration_id}
+                      Obrigatório
+                      name="nome"
+                      value={state.userInfo.nome}
                       component={TextField}
                       type="text"
-                      label="Matrícula"
+                      label="Nome completo"
                     />
                   </Grid>
-                )}
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    multiline
-                    name="username"
-                    value={state.userInfo.username}
-                    component={TextField}
-                    type="text"
-                    label="Username"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    Obrigatório
-                    name="password"
-                    value={state.userInfo.password}
-                    component={TextField}
-                    type="password"
-                    label="Senha"
-                  />
-                </Grid>
-                <Grid item style={{ marginTop: 16 }}>
-                  <ThemeProvider theme={themeButton}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      type="submit"
-                      disabled={submitting}
+                  <Grid item xs={12}>
+                    <Field
+                      name="pronoun"
+                      value={state.userInfo.pronoun}
+                      component={Select}
+                      label="Gênero"
                     >
-                      Registrar
-                    </Button>
-                  </ThemeProvider>
+                      <MenuItem value="0" alignItems="flex-start">
+                        Masculino
+                      </MenuItem>
+                      <MenuItem value="1" alignItems="flex-start">
+                        Feminino
+                      </MenuItem>
+                    </Field>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      Obrigatório
+                      multiline
+                      name="email"
+                      value={state.userInfo.email}
+                      component={TextField}
+                      type="text"
+                      label="Email"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      Obrigatório
+                      multiline
+                      name="universidade"
+                      value={state.userInfo.universidade}
+                      component={TextField}
+                      type="text"
+                      label="Universidade"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      Obrigatório
+                      multiline
+                      name="academic_title"
+                      value={state.userInfo.academic_title}
+                      component={TextField}
+                      type="text"
+                      label="Título acadêmico"
+                      placeholder="Exemplo: Doutor, Mestre, Bacharel.."
+                    />
+                  </Grid>
+                  {!query.get("inv") && (
+                    <Grid item xs={12}>
+                      <Field
+                        fullWidth
+                        multiline
+                        name="registration_id"
+                        value={state.userInfo.registration_id}
+                        component={TextField}
+                        type="text"
+                        label="Matrícula"
+                      />
+                    </Grid>
+                  )}
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      Obrigatório
+                      multiline
+                      name="username"
+                      value={state.userInfo.username}
+                      component={TextField}
+                      type="text"
+                      label="Username"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      fullWidth
+                      Obrigatório
+                      name="password"
+                      value={state.userInfo.password}
+                      component={TextField}
+                      type="password"
+                      label="Senha"
+                    />
+                  </Grid>
+                  <Grid item style={{ marginTop: 16 }}>
+                    <ThemeProvider theme={themeButton}>
+                      <Button variant="contained" color="primary" type="submit">
+                        Registrar
+                      </Button>
+                    </ThemeProvider>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </form>
-          )}
-        />
-      </div>
+              </form>
+            )}
+          />
+        </div>
+      )}
     </Container>
   );
 }
