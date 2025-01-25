@@ -150,8 +150,8 @@ function ViewBoard() {
 
     const FIELD_LENGHT_VALIDATION = {
       titulo_trabalho: 255,
-      resumo: 1024,
-      abstract: 1024,
+      resumo: 4096,
+      abstract: 4096,
       palavras_chave: 512,
       local: 255,
       tipo_banca: 10,
