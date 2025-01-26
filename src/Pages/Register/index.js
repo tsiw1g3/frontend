@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useContext, useState, useCallback, useMemo } from "react";
 import { MyContext } from "../../Context";
 import { useHistory } from "react-router-dom";
 import "./styles.css";
@@ -10,160 +10,128 @@ import { TextField, Select } from "final-form-material-ui";
 import { Grid, Button, CssBaseline, MenuItem } from "@material-ui/core";
 import { useQuery } from "Hooks/Helpers/useQuery";
 import { toast } from "react-toastify";
-import { isEmailValid } from "Helpers/validators";
 
 import ReactLoading from "react-loading";
 
-// Picker
+import * as Yup from "yup";
 
-/*
-  Componente responsável pela página de registro de usuários
-*/
+const yupSync = (schema) => async (values) => {
+  try {
+    await schema.validate(values, { abortEarly: false });
+    return {};
+  } catch (error) {
+    return error.inner.reduce((errors, err) => {
+      errors[err.path] = err.message;
+      return errors;
+    }, {});
+  }
+};
+
+// validação Yup
+const validationSchema = Yup.object().shape({
+  nome: Yup.string()
+    .max(255, "Máximo de 255 caracteres")
+    .required("Campo Obrigatório"),
+  email: Yup.string()
+    .email("Insira um e-mail válido")
+    .max(64, "Máximo de 64 caracteres")
+    .required("Campo Obrigatório"),
+  username: Yup.string()
+    .max(255, "Máximo de 255 caracteres")
+    .required("Campo Obrigatório"),
+  password: Yup.string()
+    .min(6, "Mínimo de 6 caracteres")
+    .max(16, "Máximo de 16 caracteres")
+    .required("Campo Obrigatório"),
+  universidade: Yup.string()
+    .max(64, "Máximo de 64 caracteres")
+    .required("Campo Obrigatório"),
+  pronoun: Yup.string().required("Campo Obrigatório"),
+  academic_title: Yup.string().required("Campo Obrigatório"),
+  registration_id: Yup.string()
+    .max(9, "Máximo de 9 caracteres")
+    .when("$requiresRegistrationId", {
+      is: true,
+      then: (schema) => schema.required("Campo Obrigatório"),
+    }),
+});
 
 function Register() {
   const { registerUser } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
   const query = useQuery();
+  const history = useHistory();
 
-  const initialState = {
-    userInfo: {
-      nome: "",
-      email: "",
-      username: "",
-      password: "",
-      academic_title: "",
-      universidade: "",
-      pronoun: "",
-      registration_id: "",
-    },
+  const validate = useMemo(() => yupSync(validationSchema), []);
+
+  const [state, setState] = useState({
     errorMsg: "",
     successMsg: "",
-  };
-  const [state, setState] = useState(initialState);
-
-  const history = useHistory();
+  });
 
   const goToHome = useCallback(() => {
     history.push("");
   }, [history]);
 
+  const checkUserExist = async (email) => {
+    try {
+      const response = await fetch(`/api/checkUser?email=${email}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) {
+        console.error(`Erro na resposta da API: ${response.status}`);
+        return false;
+      }
+      const data = await response.json();
+      return data.exists;
+    } catch (error) {
+      console.error("Erro ao verificar usuário:", error);
+      return false;
+    }
+  };
+
+  // Função para submeter o formulário
+  const submitForm = async (values) => {
+    values.hash = query.get("inv");
+    try {
+      setLoading(true);
+      const userExists = await checkUserExist(values.email);
+      if (userExists) {
+        setState({ errorMsg: "Usuário já existe", successMsg: "" });
+        toast.error("Usuário já existe!");
+        setLoading(false);
+        return;
+      }
+      await registerUser(values);
+      setState({ errorMsg: "", successMsg: "Usuário cadastrado com sucesso" });
+      toast.success("Usuário cadastrado com sucesso!");
+      goToHome();
+      setLoading(false);
+    } catch (error) {
+      setState({ errorMsg: "Erro ao cadastrar usuário", successMsg: "" });
+      toast.error(
+        "Não foi possível cadastrar o usuário. Tente novamente mais tarde."
+      );
+      console.error("Erro:", error);
+      setLoading(false);
+    }
+  };
+
+  // Estilos do botão
   const themeButton = createTheme({
-    palette: {
-      primary: {
-        main: "#329F5B",
-      },
-    },
+    palette: { primary: { main: "#329F5B" } },
   });
 
   const styles = makeStyles({
     root: {
       boxShadow: "0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%)",
       padding: "16px",
-      "& .MuiFormControl-root": {
-        display: "flex",
-      },
-      "& .MuiSelect-select.MuiSelect-select": {
-        textAlign: "left",
-      },
+      "& .MuiFormControl-root": { display: "flex" },
+      "& .MuiSelect-select.MuiSelect-select": { textAlign: "left" },
     },
   });
-
   const classesGrid = styles();
-
-  //verificação de usuario
-  const ckeckUserExist = async (email) => {
-    //colocar rota do backend
-    const response = await fetch(`/api/checkUser?email=${email}`);
-    const data = await response.json();
-    return data.exists;
-  };
-
-  const submitForm = async (event) => {
-    event.hash = query.get("inv");
-    setLoading(true);
-
-    try {
-      const userExists = await ckeckUserExist(event.email);
-      if (userExists) {
-        setState((prevState) => ({
-          ...prevState,
-          errorMsg: "Usuario existente",
-          successMsg: "",
-        }));
-
-        toast.error(
-          "Já existe um usuário cadastrado com este e-mail no sistema!"
-        );
-        setLoading(false);
-        return;
-      }
-
-      setState((prevState) => ({
-        ...prevState,
-        erroMsg: "",
-        successMsg: "Usuario cadastrado com sucesso",
-      }));
-
-      setLoading(false);
-      toast.success("Usúario cadastrado com sucesso !");
-      goToHome();
-    } catch (error) {
-      setLoading(false);
-      toast.error(
-        "Não foi possível finalizar o cadastro com os dados informados. Tente novamente mais tarde."
-      );
-      setState((prevState) => ({
-        ...prevState,
-        errorMsg: "error ao cadastrar usuario,tente novamente",
-        successMsg: "",
-      }));
-    }
-
-    await registerUser(event);
-    goToHome();
-  };
-
-  const validate = (values) => {
-    const REQUIRED_FIELDS_VALIDATION = [
-      "nome",
-      "pronoun",
-      "email",
-      "username",
-      "password",
-      "universidade",
-    ];
-
-    const FIELD_LENGHT_VALIDATION = {
-      nome: 255,
-      email: 64,
-      username: 255,
-      password: 16,
-      universidade: 64,
-      registration_id: 9,
-    };
-
-    const errors = {};
-
-    REQUIRED_FIELDS_VALIDATION.forEach((field) => {
-      if (!values[field]) errors[field] = "Obrigatório";
-    });
-
-    Object.keys(FIELD_LENGHT_VALIDATION).forEach((key) => {
-      if (values[key] && values[key].length > FIELD_LENGHT_VALIDATION[key])
-        errors[
-          key
-        ] = `O tamanho máximo deste campo é de ${FIELD_LENGHT_VALIDATION[key]} caracteres.`;
-    });
-
-    if (!query.get("inv") && !values.registration_id) {
-      errors.registration_id = "Obrigatório";
-    }
-
-    if (values.email && !isEmailValid(values.email))
-      errors.email = "Insira um e-mail válido";
-
-    return errors;
-  };
 
   return (
     <Container className="App">
@@ -181,7 +149,16 @@ function Register() {
           <CssBaseline />
           <Form
             onSubmit={submitForm}
-            initialValues={{}}
+            initialValues={{
+              nome: "",
+              email: "",
+              username: "",
+              password: "",
+              universidade: "",
+              academic_title: "",
+              pronoun: "",
+              registration_id: "",
+            }}
             validate={validate}
             render={({ handleSubmit }) => (
               <form onSubmit={handleSubmit} noValidate>
@@ -196,7 +173,7 @@ function Register() {
                       fullWidth
                       Obrigatório
                       name="nome"
-                      value={state.userInfo.nome}
+                      value={state.nome}
                       component={TextField}
                       type="text"
                       label="Nome completo"
@@ -205,7 +182,7 @@ function Register() {
                   <Grid item xs={12}>
                     <Field
                       name="pronoun"
-                      value={state.userInfo.pronoun}
+                      value={state.pronoun}
                       component={Select}
                       label="Gênero"
                     >
@@ -223,7 +200,7 @@ function Register() {
                       Obrigatório
                       multiline
                       name="email"
-                      value={state.userInfo.email}
+                      value={state.email}
                       component={TextField}
                       type="text"
                       label="Email"
@@ -235,7 +212,7 @@ function Register() {
                       Obrigatório
                       multiline
                       name="universidade"
-                      value={state.userInfo.universidade}
+                      value={state.universidade}
                       component={TextField}
                       type="text"
                       label="Universidade"
@@ -247,7 +224,7 @@ function Register() {
                       Obrigatório
                       multiline
                       name="academic_title"
-                      value={state.userInfo.academic_title}
+                      value={state.academic_title}
                       component={TextField}
                       type="text"
                       label="Título acadêmico"
@@ -260,7 +237,7 @@ function Register() {
                         fullWidth
                         multiline
                         name="registration_id"
-                        value={state.userInfo.registration_id}
+                        value={state.registration_id}
                         component={TextField}
                         type="text"
                         label="Matrícula"
@@ -273,7 +250,7 @@ function Register() {
                       Obrigatório
                       multiline
                       name="username"
-                      value={state.userInfo.username}
+                      value={state.username}
                       component={TextField}
                       type="text"
                       label="Username"
@@ -284,7 +261,7 @@ function Register() {
                       fullWidth
                       Obrigatório
                       name="password"
-                      value={state.userInfo.password}
+                      value={state.password}
                       component={TextField}
                       type="password"
                       label="Senha"

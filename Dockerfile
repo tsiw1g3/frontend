@@ -3,8 +3,8 @@ FROM node:14-alpine as build
 WORKDIR /app
 COPY . .
 
-RUN npm install
-RUN npm run build
+RUN yarn
+RUN yarn build
 
 FROM nginx:stable-alpine
 
