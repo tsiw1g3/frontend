@@ -3,7 +3,7 @@ FROM node:14-alpine as build
 WORKDIR /app
 COPY . .
 
-RUN yarn
+RUN yarn --network-timeout=30000
 RUN yarn build
 
 FROM nginx:stable-alpine
