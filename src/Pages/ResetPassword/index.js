@@ -9,13 +9,14 @@ import { TextField } from "final-form-material-ui";
 import { Grid, Button, CssBaseline } from "@material-ui/core";
 import api from "Config/http";
 import "./styles.css";
+import { toast } from "react-toastify";
 
 /*
   Componente responsável pela página de registro de usuários
 */
 
 function Register() {
-  const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [hash, setHash] = useState("");
 
   const history = useHistory();
@@ -46,6 +47,8 @@ function Register() {
     bodyFormData.append("email", values.email);
     bodyFormData.append("reset_password_hash", Math.random());
 
+    setLoading(true);
+
     api
       .post("/reset-password", bodyFormData, {
         headers: {
@@ -54,22 +57,23 @@ function Register() {
         },
       })
       .then(function (response) {
-        alert("O Email de redefinição de senha foi enviado");
+        toast.success("O Email de redefinição de senha foi enviado!");
+        setLoading(false);
         goToHome();
         // reload();
       })
       .catch(function (error) {
-        // setLoading(false);
-        alert("Ocorreu um erro ao tentar enviar o email");
-        goToHome();
+        setLoading(false);
+        toast.error("Ocorreu um erro na tentativa de redefinição de senha.");
       });
   };
   const changePassword = async (values) => {
     var bodyFormData = new FormData();
     bodyFormData.append("new_password", values.password);
     bodyFormData.append("hash", hash);
-    // setDone(false);
-    api
+
+    setLoading(true);
+    return api
       .post("/reset-password/reset", bodyFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -77,13 +81,14 @@ function Register() {
         },
       })
       .then(function (response) {
-        alert("Senha redefinida com sucesso!");
+        setLoading(false);
+        toast.success("Senha redefinida com sucesso!");
         goToHome();
         // reload();
       })
       .catch(function (error) {
-        // setLoading(false);
-        alert("Ocorreu um erro ao tentar redefinir a senha");
+        setLoading(false);
+        toast.error("Ocorreu um erro ao tentar redefinir a senha");
         goToHome();
       });
   };
@@ -96,7 +101,7 @@ function Register() {
       match = regex.exec(url);
       if (match == null) {
         setHash(false);
-        setDone(true);
+        setLoading(false);
       } else {
         hash = match[2];
         api
@@ -109,9 +114,9 @@ function Register() {
           .then(function (response) {
             if (response.data.data === true) {
               setHash(hash);
-              setDone(true);
+              setLoading(false);
             } else {
-              alert("O link que você tentou acessar é inválido.");
+              toast.error("O link que você tentou acessar é inválido.");
               goToHome();
             }
           });
@@ -140,7 +145,7 @@ function Register() {
 
   return (
     <>
-      {!done ? (
+      {loading ? (
         <div className="center">
           <ReactLoading
             type={"spin"}
@@ -158,7 +163,7 @@ function Register() {
                 onSubmit={generateLink}
                 initialValues={{}}
                 validate={validate}
-                render={({ handleSubmit, submitting }) => (
+                render={({ handleSubmit }) => (
                   <form onSubmit={handleSubmit} noValidate>
                     <Grid
                       container
@@ -182,7 +187,7 @@ function Register() {
                             variant="contained"
                             color="primary"
                             type="submit"
-                            disabled={submitting}
+                            disabled={loading}
                             style={{ borderRadius: 10 }}
                           >
                             Enviar email de redefinição de senha
@@ -199,7 +204,7 @@ function Register() {
                   onSubmit={changePassword}
                   initialValues={{}}
                   validate={validate2}
-                  render={({ handleSubmit, submitting }) => (
+                  render={({ handleSubmit }) => (
                     <form onSubmit={handleSubmit} noValidate>
                       <Grid
                         container
@@ -233,7 +238,7 @@ function Register() {
                               variant="contained"
                               color="primary"
                               type="submit"
-                              disabled={submitting}
+                              disabled={loading}
                               style={{ borderRadius: 10 }}
                             >
                               Redefinir senha

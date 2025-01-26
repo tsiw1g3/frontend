@@ -8,6 +8,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Select, TextField } from "final-form-material-ui";
+import { isEmailValid } from "Helpers/validators";
 import React from "react";
 import { Field, Form } from "react-final-form";
 import ReactLoading from "react-loading";
@@ -91,6 +92,9 @@ function UserForm({
     if (values.password && values.password.length > 16)
       errors.password = `O tamanho máximo deste campo é de 16 caracteres.`;
 
+    if (values.email && !isEmailValid(values.email))
+      errors.email = "Insira um e-mail válido";
+
     return errors;
   };
 
@@ -162,9 +166,6 @@ function UserForm({
                       </MenuItem>
                       <MenuItem value="1" alignItems="flex-start">
                         Feminino
-                      </MenuItem>
-                      <MenuItem value="2" alignItems="flex-start">
-                        Outro
                       </MenuItem>
                     </Field>
                   </Grid>

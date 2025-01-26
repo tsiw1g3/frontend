@@ -13,6 +13,7 @@ import ResetPassword from "./Pages/ResetPassword";
 import SettingsPage from "Pages/Settings";
 import Users from "Pages/Users";
 import AccountSettings from "Pages/AccountSettings";
+import Evaluation from "Pages/Evaluation/Evaluation";
 
 const Routes = () => {
   return (
@@ -29,6 +30,7 @@ const Routes = () => {
       <Route component={Users} path="/users" exact />
       <Route component={ViewBoard} path="/editarbanca/:id" exact />
       <Route component={ResetPassword} path="/resetpass" exact />
+      <Route component={Evaluation} path="/experimento" exact />
     </>
   );
 };

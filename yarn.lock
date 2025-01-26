@@ -7680,6 +7680,13 @@ react-select@^5.2.1:
     prop-types "^15.6.0"
     react-transition-group "^4.3.0"
 
+react-toastify@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-7.0.1.tgz#c2193e771cdb9ec38e302451b0c789d7dbbf22a4"
+  integrity sha512-f17NjQcYb5MPiOENe8aqlf+nofsCbnSPlRaRkh6fF5lrrIS+q5EhNZojCiuT7p1ezm0W4Q59DZd5oWHBLeE1Wg==
+  dependencies:
+    clsx "^1.1.1"
+
 react-transition-group@^4.0.0, react-transition-group@^4.3.0, react-transition-group@^4.4.0:
   version "4.4.2"
   resolved "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.4.2.tgz"

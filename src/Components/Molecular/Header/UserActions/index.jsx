@@ -4,8 +4,8 @@ import { Avatar, Box, Menu, MenuItem, Tooltip } from "@material-ui/core";
 
 import { ROLES_DICT } from "Pages/Settings/PermissionsTab";
 import "./styles.css";
-import { Settings, ExitToApp, Create } from "@material-ui/icons";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { Create, ExitToApp } from "@material-ui/icons";
 
 function getInitials(name) {
   if (!name) return "";

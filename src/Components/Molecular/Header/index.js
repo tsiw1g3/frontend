@@ -35,9 +35,20 @@ const Header = () => {
       },
       third: {
         light: "#ff7961",
-        main: "#73D498",
+        main: "#00ff00",
         dark: "#ba000d",
         contrastText: "#000",
+      },
+    },
+  });
+
+  const evaluationTheme = createTheme({
+    palette: {
+      primary: {
+        light: "#329f5b",
+        main: "#329f5b",
+        dark: "#329f5b",
+        contrastText: "#fff",
       },
     },
   });
@@ -50,6 +61,13 @@ const Header = () => {
     logoutUser();
     setIsUserLogged(false);
     redirectTo("/");
+  };
+
+  const onClickEvaluate = () => {
+    window.open(
+      "https://docs.google.com/forms/d/1_kGlkMi9KywxwHiVuBCyJt-vfgcb93MwXQUuNAEUL6U",
+      "_blank"
+    );
   };
 
   return (
@@ -68,6 +86,16 @@ const Header = () => {
         {isUserLogged ? (
           <div className="authenticated-navigation">
             <ThemeProvider theme={theme}>
+              <ThemeProvider theme={evaluationTheme}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: 16 }}
+                  onClick={() => onClickEvaluate()}
+                >
+                  Avaliação do Sistema
+                </Button>
+              </ThemeProvider>
               <Button className="navigation-option" component={Link} to="/">
                 Home
               </Button>
@@ -98,6 +126,16 @@ const Header = () => {
         ) : (
           <div className="sign-in-buttons">
             <ThemeProvider theme={theme}>
+              <ThemeProvider theme={evaluationTheme}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: 16 }}
+                  onClick={() => onClickEvaluate()}
+                >
+                  Avaliação do Sistema
+                </Button>
+              </ThemeProvider>
               <Link
                 variant="contained"
                 color="primary"

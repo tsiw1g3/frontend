@@ -26,6 +26,7 @@ import { createTheme } from "@material-ui/core/styles";
 import api from "Config/http";
 import useTeachers from "Hooks/Users/useTeachers";
 import { isTeacher } from "Helpers/role";
+import { toast } from "react-toastify";
 
 /*
   Componente responsável pela página de criação de bancas
@@ -142,7 +143,7 @@ function ExaminingBoard() {
       })
       .catch((error) => {
         setLoading(false);
-        alert("Ocorreu um erro ao tentar cadastrar a banca");
+        toast.error("Ocorreu um erro ao tentar cadastrar a banca");
         goToDashboard();
       });
   };
@@ -164,8 +165,8 @@ function ExaminingBoard() {
 
     const FIELD_LENGHT_VALIDATION = {
       titulo_trabalho: 255,
-      resumo: 1024,
-      abstract: 1024,
+      resumo: 4096,
+      abstract: 4096,
       palavras_chave: 512,
       local: 255,
       tipo_banca: 10,
@@ -342,9 +343,6 @@ function ExaminingBoard() {
                         </MenuItem>
                         <MenuItem value="1" alignItems="flex-start">
                           Feminino
-                        </MenuItem>
-                        <MenuItem value="2" alignItems="flex-start">
-                          Outro
                         </MenuItem>
                       </Field>
                     </Grid>

@@ -104,10 +104,9 @@
 }
 
 #add-user {
-  padding: 0px;
-  margin: 0px 15px 0px 0px;
   width: 20px;
   height: 20px;
+  padding: 0px;
   padding: 0;
   border: none;
   background: none;
@@ -116,9 +115,8 @@
 }
 
 #edit-board {
-  margin: 0px 15px 0px 0px;
-  width: 20px;
   height: 20px;
+  width: 20px;
   padding: 0;
   border: none;
   background: none;
@@ -127,7 +125,6 @@
 }
 
 #send-email {
-  margin: 5px 15px 0px 0px;
   width: 25px;
   height: 25px;
   padding: 4px;
@@ -138,7 +135,6 @@
 }
 
 #give-score {
-  margin: 0px 15px 0px 0px;
   width: 20px;
   height: 20px;
   padding: 2px;
@@ -149,7 +145,6 @@
 }
 
 #give-score-solo {
-  margin: 0px 15px 0px 0px;
   width: 20px;
   height: 20px;
   padding: 4px;
@@ -172,4 +167,10 @@ a.local-cell {
 
 .MuiDataGrid-cell.lowercase {
   text-transform: lowercase;
+}
+
+.grid-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

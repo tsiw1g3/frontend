@@ -1,12 +1,11 @@
 .header {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 20%);
-  padding: 10px 16px;
+  padding: 0 16px;
   flex-wrap: wrap;
 }
-
 
 .logo-container {
   display: flex;
@@ -31,13 +30,11 @@
   text-align: center;
 }
 
-
 .authenticated-navigation {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
 
 .navigation-option {
   margin-top: -16px;
@@ -46,38 +43,38 @@
 .sign-in-buttons {
   display: flex;
   align-items: center;
-  justify-content: flex-end; 
-  gap: 8px; 
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 @media (max-width: 768px) {
   .header {
-    flex-direction: row; 
+    flex-direction: row;
     flex-wrap: wrap;
   }
 
   .logo-container {
-    flex: 1; 
+    flex: 1;
     text-align: left;
   }
 
   .logo {
-    margin-left: 0; 
-    font-size: 1.2rem; 
+    margin-left: 0;
+    font-size: 1.2rem;
   }
 
   .authenticated-navigation {
-    flex: 2; 
+    flex: 2;
     display: flex;
     justify-content: center;
   }
 
   .sign-in-buttons {
-    flex: 1; 
+    flex: 1;
     justify-content: flex-end;
   }
 
   .sign-in-buttons a {
-    width: auto; 
+    width: auto;
   }
 }

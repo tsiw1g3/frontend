@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./styles.css";
 import ReactLoading from "react-loading";
 import { Button, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
-import { DataGrid, ptBR } from "@mui/x-data-grid";
+import { DataGrid, GridEditInputCell, ptBR } from "@mui/x-data-grid";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -22,8 +22,10 @@ import api from "Config/http";
 import { isTeacher } from "Helpers/role";
 import { useBancas } from "Hooks/Banca/useBancas";
 import DataTable from "Components/Molecular/Table";
-import botonLock from './components/lock-alt-regular-24.png'
-import botomunloked from './components/lock-open-alt-regular-24.png'
+import botonLock from "./components/lock-alt-regular-24.png";
+import botomunloked from "./components/lock-open-alt-regular-24.png";
+import { ptBRGrid } from "Assets/Locales/grid.locale";
+import { toast } from "react-toastify";
 /*
   Componente responsável pela página de gerenciamento das minhas defesas
 */
@@ -40,6 +42,8 @@ function Dashboard() {
   const [loadingModal, setLoadingModal] = useState(false);
 
   const { bancas, loading: loadingBancas } = useBancas();
+
+  const [notas, setNotas] = useState([]);
 
   const history = useHistory();
   localStorage.removeItem("bancaId");
@@ -95,6 +99,10 @@ function Dashboard() {
     setOpenNotaOwner(false);
   };
 
+  const onSubmitSaveGradeBatch = () => {
+    onSubmitNotas(notas);
+  };
+
   const userId = localStorage.getItem("userId");
 
   const themeButton = createTheme({
@@ -140,14 +148,18 @@ function Dashboard() {
   const getBancaUsuarios = async (bancaId) => {
     setLoading(true);
     api.get(`/usuario-banca/usuarios/${bancaId}`).then(function (response) {
+      const notas = response.data.data;
       setLoading(false);
-      setInn(response.data.data);
+      setNotas(
+        notas.map(({ id, nota }) => ({ avaliador: id, nota: Number(nota) }))
+      );
+      setInn(notas);
       return response;
     });
   };
 
-  useEffect(() => {
-    api.get(`/usuario/${userId}/banca`).then(function (response) {
+  const refreshDefesasParticipo = useCallback(() => {
+    api.get(`/usuario/${userId}/banca`).then((response) => {
       var events = response.data.data;
       if (events) {
         events.forEach((e) => {
@@ -161,6 +173,10 @@ function Dashboard() {
       }
       setDataDefesasParticipo(events);
     });
+  }, [userId]);
+
+  useEffect(() => {
+    refreshDefesasParticipo();
 
     api.get(`/banca/${userId}/bancas`).then(function (response) {
       var events = response.data.data;
@@ -177,7 +193,7 @@ function Dashboard() {
       setDataMinhasDefesas(events);
       setDone(true);
     });
-  }, [userId]);
+  }, [userId, refreshDefesasParticipo]);
 
   function getFormData(object) {
     const formData = new FormData();
@@ -218,12 +234,12 @@ function Dashboard() {
       })
       .then(function (response) {
         setLoading(false);
-        alert(response.data.data);
+        toast.success(response.data.data);
         closeModal();
       })
       .catch(function (error) {
         setLoading(false);
-        alert("Ocorreu um erro ao tentar enviar o email");
+        toast.error("Ocorreu um erro ao tentar enviar o email");
         closeModal();
       });
   };
@@ -237,16 +253,34 @@ function Dashboard() {
       .post(`/usuario-banca/nota/${banca}/${id}`, getFormData(values))
       .then(function (response) {
         setLoadingModal(false);
-        alert("Nota enviada com sucesso");
+        toast.success("Nota enviada com sucesso");
         closeModalNotaOwner();
         if (!values.modalOwner) closeModalNota();
         else closeModalNotaOwner();
       })
       .catch(function (error) {
         setLoadingModal(false);
-        alert("Ocorreu um erro ao tentar dar a nota");
+        toast.error("Ocorreu um erro ao tentar dar a nota");
         if (!values.modalOwner) closeModalNota();
         else closeModalNotaOwner();
+      });
+  };
+
+  const onSubmitNotas = async (notas) => {
+    setLoadingModal(true);
+    const banca = JSON.parse(localStorage.getItem("banca"));
+
+    api
+      .post(`/usuario-banca/notas/${banca}`, { notas })
+      .then(function () {
+        toast.success("Notas enviadas com sucesso!");
+        setLoadingModal(false);
+        closeModalNotaOwner();
+      })
+      .catch(function () {
+        toast.error("Não foi possível salvar as notas atribuídas.");
+        setLoadingModal(false);
+        closeModalNotaOwner();
       });
   };
 
@@ -294,10 +328,6 @@ function Dashboard() {
 
   const [value, setValue] = React.useState(0);
 
-  const onSubmitNotaOwner = async (values) => {
-    onSubmitNota(values);
-  };
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -306,11 +336,11 @@ function Dashboard() {
     api
       .delete(`/banca/${bancaId}/delete`)
       .then(function (response) {
-        alert("Banca removida com sucesso");
+        toast.success("Banca removida com sucesso");
         window.location.reload();
       })
       .catch(function (error) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       });
   };
 
@@ -333,47 +363,56 @@ function Dashboard() {
       </>
     );
   };
-  /* const handleVisibilityToggle = async (row) => {
+  const handleVisibilityToggle = async (row) => {
     try {
-     
-      const updatedVisibility = !row.visible;
-  
-      
-      const response = await api.put(`/banca/${row.id}`, {
-        visible: updatedVisibility,
-      });
-  
-      if (response.status === 200 || response.status === 204) {
-       
-        alert(`A visibilidade foi alterada para ${updatedVisibility ? "Pública" : "Privada"}`);
+      const isWorkVisible = Boolean(row.visible !== "0");
 
-        row.visible = updatedVisibility;
+      const response = await api.put(`/banca/visibilidade/${row.id}`, {
+        visible: !isWorkVisible,
+      });
+
+      if (response.status === 200 || response.status === 204) {
+        toast.success(
+          `A visibilidade foi alterada para ${
+            !isWorkVisible ? "Pública" : "Privada"
+          }`
+        );
+        refreshDefesasParticipo();
       } else {
         throw new Error("Erro inesperado ao alterar a visibilidade.");
       }
     } catch (error) {
       console.error("Erro ao alterar a visibilidade: ", error);
-      alert("Erro ao alterar a visibilidade.");
+      toast.error("Erro ao alterar a visibilidade.");
     }
-  }; */
-  
+  };
 
   const renderDetailsTeacher = (params) => {
     return (
-      <>
-      {/* <button
-        title={`Visibilidade: ${params.row.visible ? "Pública" : "Privada"}`}
-        name="edit-publicprivate"
-        type="button"
-        onClick={() => handleVisibilityToggle(params.row)}
-        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-      >
-        <img
-          src={params.row.visible ? botomunloked : botonLock}
-          alt={params.row.visible ? "Destrancado" : "Trancado"}
-          style={{ width: 18, height: 18 }}
-        />
-      </button> */}
+      <div class="grid-actions">
+        <button
+          title={`${
+            params.row.visible !== "0" ? "Bloquear" : "Permitir"
+          } visualização da banca`}
+          name="edit-publicprivate"
+          type="button"
+          onClick={() => handleVisibilityToggle(params.row)}
+          hidden={!isTeacher()}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+          }}
+        >
+          <img
+            src={params.row.visible !== "0" ? botomunloked : botonLock}
+            alt={`${
+              params.row.visible !== "0" ? "Bloquear" : "Permitir"
+            } visualização da banca`}
+            style={{ width: 24, height: 24 }}
+          />
+        </button>
 
         <button
           title="Editar banca"
@@ -419,7 +458,7 @@ function Dashboard() {
             if (answer) excluirBanca(params.row.id);
           }}
         />
-      </>
+      </div>
     );
   };
 
@@ -483,7 +522,13 @@ function Dashboard() {
       minWidth: 150,
     },
     { field: "sigla_curso", headerName: "Curso", minWidth: 50 },
-    { field: "local", headerName: "Local ou link", minWidth: 300 },
+    {
+      field: "local",
+      headerName: "Local ou link",
+      minWidth: 300,
+      align: "center",
+      renderCell: RenderLocal,
+    },
     {
       field: "actions",
       headerName: "Ações",
@@ -492,46 +537,6 @@ function Dashboard() {
       disableClickEventBubbling: true,
     },
   ];
-
-  const renderDetailsButton3 = (params) => {
-    return (
-      <div>
-        <Form
-          onSubmit={onSubmitNotaOwner}
-          initialValues={{
-            avaliador: params.id,
-            nota: params.value,
-            modalOwner: true,
-          }}
-          validate={validateNota}
-          render={({ handleSubmit, submitting }) => (
-            <form onSubmit={handleSubmit} noValidate>
-              <Field
-                fullWidth
-                Obrigatório
-                name="nota"
-                component={TextField}
-                InputProps={{ inputProps: { min: 0, max: 10, type: "number" } }}
-                type="number"
-                label="Nota"
-              />
-              <ThemeProvider theme={themeButton}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={submitting}
-                  style={{ marginLeft: "15px", borderRadius: 10 }}
-                >
-                  Enviar
-                </Button>
-              </ThemeProvider>
-            </form>
-          )}
-        />
-      </div>
-    );
-  };
 
   const columns = [
     {
@@ -612,15 +617,40 @@ function Dashboard() {
       width: 200,
       align: "center",
     },
-    { field: "sigla_curso", headerName: "Curso", width: 200, align: "center" },
+    { field: "sigla_curso", headerName: "Curso", width: 100, align: "center" },
     {
       field: "local",
       headerName: "Local ou link",
-      flex: 1,
+      width: 200,
       align: "center",
       renderCell: RenderLocal,
     },
   ];
+
+  const RenderGradesCell = ({ row }) => {
+    const { nota } = row;
+    return (
+      <>
+        {nota ?? "0"}
+        <span
+          style={{ marginLeft: "0.5rem", width: 12, height: 12 }}
+          id="edit-board"
+        />
+      </>
+    );
+  };
+
+  const RenderGradesEditCell = (params) => {
+    return (
+      <GridEditInputCell
+        {...params}
+        inputProps={{
+          max: 10,
+          min: 0,
+        }}
+      />
+    );
+  };
 
   const columnsNota = [
     { field: "nome", headerName: "Avaliador", width: 400, align: "center" },
@@ -630,11 +660,27 @@ function Dashboard() {
       headerName: "Nota",
       minWidth: 300,
       flex: 1,
-      renderCell: renderDetailsButton3,
       disableClickEventBubbling: true,
       align: "center",
+      editable: true,
+      type: "number",
+      renderCell: RenderGradesCell,
+      renderEditCell: RenderGradesEditCell,
+      valueParser: (value) => {
+        return Math.min(10, Math.max(0, value));
+      },
     },
   ];
+
+  const onGradeCellEditCommit = ({ id, value }) => {
+    setNotas((grades) => [
+      ...grades.filter((grade) => grade.avaliador !== id),
+      {
+        avaliador: id,
+        nota: Number(Math.min(10, Math.max(0, value))).toFixed(2),
+      },
+    ]);
+  };
 
   const classesGrid = styles();
 
@@ -701,10 +747,11 @@ function Dashboard() {
                   <DataGrid
                     rows={dataMinhasDefesas}
                     columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
+                    pageSize={10}
+                    rowsPerPageOptions={[5, 10, 20]}
                     className={classesGrid.root}
                     localeText={{
+                      ...ptBRGrid,
                       noRowsLabel: "Não há bancas registradas",
                     }}
                     initialState={{
@@ -735,10 +782,11 @@ function Dashboard() {
                   <DataGrid
                     rows={dataDefesasParticipo}
                     columns={columns2}
-                    pageSize={5}
+                    pageSize={10}
                     rowsPerPageOptions={[5]}
                     className={classesGrid.root}
                     localeText={{
+                      ...ptBRGrid,
                       noRowsLabel: "Não há bancas registradas",
                     }}
                     classes={{
@@ -1013,11 +1061,13 @@ function Dashboard() {
                             <DataGrid
                               rows={inn}
                               columns={columnsNota}
-                              pageSize={5}
-                              rowsPerPageOptions={[5]}
+                              onCellEditCommit={onGradeCellEditCommit}
+                              pageSize={10}
+                              rowsPerPageOptions={[5, 10, 20]}
                               rowHeight={62}
                               className={classesGrid.root}
                               localeText={{
+                                ...ptBRGrid,
                                 noRowsLabel:
                                   "Não há membros registrados na banca",
                               }}
@@ -1028,6 +1078,26 @@ function Dashboard() {
                               disableColumnMenu={true}
                               disableColumnFilter={true}
                             />
+                            <Box
+                              marginTop={2}
+                              display="flex"
+                              justifyContent="flex-end"
+                            >
+                              <ThemeProvider theme={themeButton}>
+                                <Button
+                                  variant="contained"
+                                  type="button"
+                                  color="primary"
+                                  onClick={onSubmitSaveGradeBatch}
+                                  style={{
+                                    borderRadius: 10,
+                                    marginLeft: "auto",
+                                  }}
+                                >
+                                  Salvar Notas
+                                </Button>
+                              </ThemeProvider>
+                            </Box>
                           </div>
                         </Grid>
                       </Grid>
