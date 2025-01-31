@@ -28,6 +28,29 @@ const yupSync = (schema) => async (values) => {
 };
 
 // validação Yup
+const validationSchemaForTeachers = Yup.object().shape({
+  nome: Yup.string()
+    .max(255, "Máximo de 255 caracteres")
+    .required("Campo Obrigatório"),
+  email: Yup.string()
+    .email("Insira um e-mail válido")
+    .max(64, "Máximo de 64 caracteres")
+    .required("Campo Obrigatório"),
+  username: Yup.string()
+    .max(255, "Máximo de 255 caracteres")
+    .required("Campo Obrigatório"),
+  password: Yup.string()
+    .min(6, "Mínimo de 6 caracteres")
+    .max(16, "Máximo de 16 caracteres")
+    .required("Campo Obrigatório"),
+  universidade: Yup.string()
+    .max(64, "Máximo de 64 caracteres")
+    .required("Campo Obrigatório"),
+  pronoun: Yup.string().required("Campo Obrigatório"),
+  academic_title: Yup.string().required("Campo Obrigatório"),
+  registration_id: Yup.string().max(9, "Máximo de 9 caracteres"),
+});
+
 const validationSchema = Yup.object().shape({
   nome: Yup.string()
     .max(255, "Máximo de 255 caracteres")
@@ -49,11 +72,8 @@ const validationSchema = Yup.object().shape({
   pronoun: Yup.string().required("Campo Obrigatório"),
   academic_title: Yup.string().required("Campo Obrigatório"),
   registration_id: Yup.string()
-    .max(9, "Máximo de 9 caracteres")
-    .when("$requiresRegistrationId", {
-      is: true,
-      then: (schema) => schema.required("Campo Obrigatório"),
-    }),
+    .required("Campo Obrigatório")
+    .max(9, "Máximo de 9 caracteres"),
 });
 
 function Register() {
@@ -62,7 +82,13 @@ function Register() {
   const query = useQuery();
   const history = useHistory();
 
-  const validate = useMemo(() => yupSync(validationSchema), []);
+  const validate = useMemo(
+    () =>
+      yupSync(
+        query.get("inv") ? validationSchemaForTeachers : validationSchema
+      ),
+    [query]
+  );
 
   const [state, setState] = useState({
     errorMsg: "",

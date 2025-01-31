@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./styles.css";
 import ReactLoading from "react-loading";
 import { useHistory } from "react-router-dom";
@@ -64,6 +64,26 @@ const Home = () => {
     );
   };
 
+  const RenderLocal = ({ value, row }) => {
+    const isRemote = useMemo(() => row.tipo_banca === "remoto", [row]);
+    return (
+      <>
+        {isRemote ? (
+          <a
+            href={value}
+            target="_blank"
+            rel="noreferrer"
+            className="local-cell"
+          >
+            {value}
+          </a>
+        ) : (
+          value
+        )}
+      </>
+    );
+  };
+
   const columns = [
     {
       field: "formatedData",
@@ -84,7 +104,12 @@ const Home = () => {
       minWidth: 150,
     },
     { field: "sigla_curso", headerName: "Curso", minWidth: 50 },
-    { field: "local", headerName: "Local ou link", minWidth: 300 },
+    {
+      field: "local",
+      headerName: "Local ou link",
+      minWidth: 300,
+      renderCell: RenderLocal,
+    },
     {
       field: "actions",
       headerName: "Ações",

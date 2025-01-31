@@ -137,16 +137,16 @@ function ExaminingBoard() {
 
     api
       .post("/banca", values)
-      .then(function (response) {
+      .then(function () {
         setLoading(false);
         goToDashboard();
       })
-      .catch((error) => {
+      .catch(() => {
         setLoading(false);
         toast.error("Ocorreu um erro ao tentar cadastrar a banca");
-        goToDashboard();
       });
   };
+
   const validate = (values) => {
     const REQUIRED_FIELDS_VALIDATION = [
       "titulo_trabalho",
